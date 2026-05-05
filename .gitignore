@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+
+# LaTeX intermediates
+*.aux
+*.blg
+*.log
+*.out
+*.toc
+texput.log
+
+# Node
+node_modules/
+package-lock.json
+
+# IDE
+*.code-workspace
+
+# OS
+.DS_Store
+
+# Archive (local only, not tracked)
+archive/
+
+# Local-only publication and design work
+archive/
+assets/
+media/
+tools/
+Work_Plan-Publish.md
+
+# Intermediate banner design iterations (keep only Banner-3.png + email-banner.png)
+assets/Banner.png
+assets/Banner-2.png
+assets/Banner-Strong Blue.png
+assets/Darker-Background.png
+assets/EvaluatorDPT Email Banner.png
+assets/Top-section.png
+assets/Background_color.jpg
+assets/Background_color.png

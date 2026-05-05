@@ -1,0 +1,35 @@
+\begin{thebibliography}{1}
+
+\bibitem{caruana1997multitask}
+Rich Caruana.
+\newblock Multitask learning.
+\newblock {\em Machine Learning}, 28:41--75, 1997.
+
+\bibitem{devlin2019bert}
+Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.
+\newblock Bert: Pre-training of deep bidirectional transformers for language
+  understanding.
+\newblock In {\em Proceedings of NAACL-HLT}, 2019.
+
+\bibitem{elyaniv2010selective}
+Ran El-Yaniv.
+\newblock On the foundations of noise-free selective classification.
+\newblock {\em Journal of Machine Learning Research}, 11:1605--1641, 2010.
+
+\bibitem{franc2023reject}
+Vojtech Franc, Daniel Prusa, and Vojtech Voracek.
+\newblock Optimal strategies for reject option classifiers.
+\newblock {\em Journal of Machine Learning Research}, 24, 2023.
+
+\bibitem{geifman2017selective}
+Yonatan Geifman and Ran El-Yaniv.
+\newblock Selective classification for deep neural networks.
+\newblock In {\em Advances in Neural Information Processing Systems}, 2017.
+
+\bibitem{guo2017calibration}
+Chuan Guo, Geoff Pleiss, Yu~Sun, and Kilian~Q. Weinberger.
+\newblock On calibration of modern neural networks.
+\newblock {\em Proceedings of the 34th International Conference on Machine
+  Learning}, 2017.
+
+\end{thebibliography}
