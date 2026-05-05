@@ -18,6 +18,8 @@ EvaluatorDPT is a BERT-based multi-task model that produces three outputs for ev
 
 The auxiliary outputs are **not discarded after training**. They are retained at inference time as control variables for downstream steering, thresholding, and reason-code generation — making every decision auditable.
 
+Input/output contract: a context signal is mapped to a bounded decision, decision confidence, structured reason codes, and reason-code confidence scores.
+
 ---
 
 ## System Overview

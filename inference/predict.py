@@ -1,13 +1,15 @@
 """Non-proprietary example inference interface."""
 from typing import Dict, Any
 
-def predict(text: str) -> Dict[str, Any]:
+def predict(context_signal: str) -> Dict[str, Any]:
     return {
-        "input": text,
+        "context_signal": context_signal,
         "decision": "TBD",
         "decision_confidence": 0.72,
-        "human_values": [0] * 10,
-        "emotion_sentiment": [0] * 28,
+        "reason_codes": [
+            {"code": "VALUE_SECURITY", "label": "Security", "type": "human_value", "confidence": 0.81},
+            {"code": "EMOTION_CONFUSION", "label": "confusion", "type": "emotion_sentiment", "confidence": 0.74},
+        ],
         "metadata": {
             "model": "public-interface-placeholder",
             "max_length": 128,

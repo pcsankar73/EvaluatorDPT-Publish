@@ -16,6 +16,18 @@ metrics:
   - accuracy
 pipeline_tag: text-classification
 inference: true
+gated: true
+extra_gated_prompt: "Access is provided for research and evaluation use only. Redistribution, commercial use, or publication of model weights is not permitted without written approval from Simple Machine Mind."
+extra_gated_fields:
+  Organization: text
+  Intended use:
+    type: select
+    options:
+      - Research
+      - Evaluation
+      - Commercial evaluation
+      - Other
+  I agree to the access terms: checkbox
 ---
 
 # Evaluator v2 — Auditable AI Decision System (EvaluatorDPT)
@@ -41,6 +53,8 @@ The model predicts:
 - **Auxiliary Head 2** — Captures semantic value signals: ethical anchors such as fairness or caution (10 labels)
 
 Auxiliary outputs are **retained at inference time** as structured control variables for downstream steering, thresholding, and reason-code generation.
+
+Input/output contract: a context signal is mapped to a bounded decision, decision confidence, structured reason codes, and reason-code confidence scores.
 
 ---
 

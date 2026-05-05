@@ -4,8 +4,10 @@
 {
   "decision": "TBD",
   "decision_confidence": 0.72,
-  "human_values": [0,1,0,0,1,0,0,0,1,0],
-  "emotion_sentiment": [0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  "reason_codes": [
+    {"code": "VALUE_SECURITY", "label": "Security", "type": "human_value", "confidence": 0.81},
+    {"code": "EMOTION_CONFUSION", "label": "confusion", "type": "emotion_sentiment", "confidence": 0.74}
+  ]
 }
 ```
 

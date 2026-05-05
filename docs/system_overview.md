@@ -3,12 +3,12 @@
 This system performs multi-output prediction under ambiguity and production constraints.
 
 ## Inputs
-Text-like decision-event inputs tokenized to max sequence length 128.
+Context-signal decision-event inputs tokenized to max sequence length 128.
 
 ## Outputs
 1. Primary bounded output: YES, NO, TBD
-2. Human Values vector: 10 binary labels
-3. Emotion/Sentiment vector: 28 binary labels
+2. Decision confidence
+3. Structured reason codes with reason-code confidence scores
 
 ## Evaluation Summary
 - Decision accuracy: 0.8506

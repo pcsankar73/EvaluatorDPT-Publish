@@ -4,11 +4,11 @@ Example:
 ```json
 {
   "id": "sample_001",
-  "text": "Example decision-event input."
+  "context_signal": "Example decision-event input."
 }
 ```
 
 Constraints:
-- Text input
+- Context signal input
 - Maximum sequence length: 128 tokens after tokenization
 - Private dataset examples are not included

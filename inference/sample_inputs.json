@@ -1,6 +1,6 @@
 [
   {
     "id": "sample_001",
-    "text": "Example decision-event input for evaluating ambiguous conditions."
+    "context_signal": "Example decision-event input for evaluating ambiguous conditions."
   }
 ]
