@@ -158,6 +158,7 @@ outputs = model(**inputs)
 ## Links
 
 - GitHub: [pcsankar73/EvaluatorDPT-Publish](https://github.com/pcsankar73/EvaluatorDPT-Publish)
+- OSF preprint: [https://osf.io/ztnya/](https://osf.io/ztnya/)
 - Paper (arXiv): TBD
 - Contact: sankar@smsquared.ai
 

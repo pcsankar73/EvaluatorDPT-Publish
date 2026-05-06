@@ -17,10 +17,10 @@ EvaluatorDPT™ is a multi-output decision system designed to operate under ambi
 
 - GitHub (publication repo): `https://github.com/pcsankar73/EvaluatorDPT-Publish`
 - HuggingFace (model page): `https://huggingface.co/pcsankar73s/EvaluatorModel`
+- OSF preprint: `https://osf.io/ztnya/`
 - Docs hub: `https://docs.smsquared.ai/docs-next/index.html`
 - Trust Center: `https://demo.smsquared.ai/trust-center/trust-center.html`
 
 ## Contact
 
 - `sankar@smsquared.ai`
-

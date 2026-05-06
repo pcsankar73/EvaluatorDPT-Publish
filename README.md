@@ -66,6 +66,7 @@ The model uses `bert-base-uncased` as a shared encoder with three task-specific 
 Full methodology, evaluation, ablation, and confusion analysis:
 
 - [`paper/main.pdf`](paper/main.pdf) — compiled paper
+- OSF preprint: [https://osf.io/ztnya/](https://osf.io/ztnya/)
 - arXiv: `TBD` *(submission in progress)*
 
 ---
@@ -95,6 +96,7 @@ python inference/predict.py
 ## Links
 
 - HuggingFace: [pcsankar73s/EvaluatorModel](https://huggingface.co/pcsankar73s/EvaluatorModel)
+- OSF preprint: [https://osf.io/ztnya/](https://osf.io/ztnya/)
 - arXiv: TBD
 - Contact: sankar@smsquared.ai
 
