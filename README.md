@@ -65,7 +65,7 @@ The model uses `bert-base-uncased` as a shared encoder with three task-specific 
 
 Full methodology, evaluation, ablation, and confusion analysis:
 
-- [`paper/main.pdf`](paper/main.pdf) — compiled paper
+- [`paper/Auditable_AI_Decision_Systems_Bounded_Decisions.pdf.pdf`](paper/Auditable_AI_Decision_Systems_Bounded_Decisions.pdf.pdf) — compiled paper
 - OSF preprint: [https://osf.io/ztnya/](https://osf.io/ztnya/)
 - arXiv: `TBD` *(submission in progress)*
 
