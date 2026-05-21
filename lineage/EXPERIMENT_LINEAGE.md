@@ -17,6 +17,7 @@
 | S3A-v2  | exp_t90_S3A_v2_L9-11_Hds_v6nli_F8196_ep8    | Focal sharpening (corrected)   | 0.8215       | v6-corrected| weights 1.0/1.0/1.2 ✅    |
 | S3B     | exp_t90_S3B_HdsOnly_v6nli_F8215_ep3          | Final heads-only calibration   | 0.8215       | v6-corrected| No improvement vs S3A-v2 ✅ |
 | S4      | S4_threshold_sweep_S3A_v2_ep3                 | Threshold sweep + policy lock  | 0.8222       | v6-corrected| TBD fallback certified ✅  |
+| S5      | exp_t90_S5_AuxHeads_v6nli_ep3                 | Aux head calibration (frozen)  | 0.8215       | v6-corrected| Encoder frozen insufficient; S6 needed |
 
 ## S3A-v2 Reproducibility Configuration
 
@@ -52,8 +53,31 @@
 
 ## Artifact Index
 
+## S5 Reproducibility Configuration
+
+| Parameter               | Value                                                        |
+|-------------------------|--------------------------------------------------------------|
+| Base model              | bert-base-uncased                                            |
+| Parent checkpoint       | exp_t90_S3A_v2_L9-11_Hds_v6nli_F8196_ep8 ep3               |
+| Dataset                 | v6-nli-corrected (tokenized_v6_nli_20260520)                 |
+| Encoder                 | Fully frozen (unfreeze_layers="" encoder_lr_map="")          |
+| Decision head           | Frozen (--freeze_decision_head)                              |
+| Trainable               | emotion_head + value_head only (4 tensors)                   |
+| Loss weights            | 0.0 / 1.0 / 1.0 (decision / emotion / value)                |
+| Emotion pos_weights     | 28-dim, cap=50 (from aux_label_stats.py)                     |
+| Value pos_weights       | 10-dim, no cap needed (max=2.76)                             |
+| Learning rate           | 1e-4                                                         |
+| Scheduler               | cosine, warmup 0.05                                          |
+| Seed                    | 42                                                           |
+| Epochs completed        | 2 (ep3 killed — zero marginal value)                         |
+| Best checkpoint         | best_model_epoch_1.pt                                        |
+| Outcome                 | Emotion still collapsed P=0.027/R=1.000 — S6 required        |
+
+## Artifact Index
+
 | Stage   | Experiment Package                    |
 |---------|---------------------------------------|
 | S3A-v2  | experiments/S3A_v2_20260520/          |
 | S3B     | experiments/S3B_20260521/             |
 | S4      | experiments/S4_threshold_20260521/    |
+| S5      | No blob push (no decision F1 improvement; diagnostic only)  |

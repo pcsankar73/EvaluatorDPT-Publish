@@ -17,6 +17,7 @@ Show which design choices materially improve performance.
 | S3A-v2              | 0.8215   | +0.0019       | weights 1.0/1.0/1.2, emotion loss 0.3             |
 | S3B                 | 0.8215   | 0.0000        | heads-only calibration; no improvement vs S3A-v2   |
 | S4 threshold policy | 0.8222   | +0.0013       | TBD fallback: YES=0.322 NO=0.456 TBD=0.544        |
+| S5 aux calibration  | 0.8215   |  0.0000       | Frozen encoder+decision; weighted BCE pos_weights. Emotion still collapsed. S6 required. |
 
 ## Additional Ablations
 
