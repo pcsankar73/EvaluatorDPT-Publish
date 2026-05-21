@@ -1,0 +1,30 @@
+Category,Dataset,Priority,Keep/Add/Remove,Primary Value,Notes
+Ethics,ETHICS Local,High,Keep,Moral reasoning,Strong YES/NO grounding
+Ethics,ETHICS Virtue,High,Keep,Virtue/social ethics,Useful for evaluator semantics
+Emotion,GoEmotions,High,Keep,28-emotion supervision,Excellent aux-head alignment
+Social Norms,NormBank,High,Keep,Social acceptability,Strong TBD learning
+Bias/Moderation,Social Bias Frames,High,Keep,Contextual offense/bias,Excellent ambiguity signal
+NLI,MultiNLI,High,Keep,Entailment/contradiction,Helps TBD calibration
+NLI,SNLI,High,Keep,Semantic conflict,Good uncertainty learning
+Fact Verification,FEVER,Medium-High,Keep,Verification reasoning,Useful for contradiction
+Toxicity,Civil Comments,High,Keep,Toxicity moderation,Good production signal
+Conversation Emotion,MELD,Medium,Keep,Dialogue emotion,Useful for conversational context
+Sentiment,SemEval2017,Medium,Keep,3-class sentiment,Small but clean
+Financial Sentiment,Financial PhraseBank,Medium,Keep,Domain sentiment,Limited but clean
+Sentiment,TweetEval Sentiment,Medium,Keep,Social sentiment,Useful but secondary
+Offensive,TweetEval Offensive,Medium,Keep,Offensive detection,Helps moderation
+Sentiment,Sentiment140,Low,Remove/Downweight,Generic polarity,Can corrupt moderation semantics
+Reviews,IMDB,Low,Remove/Downweight,Review sentiment,Weak evaluator alignment
+Dialogue,Empathetic Dialogues,Low,Remove,Empathy bias,Weak governance value
+Hate Speech,HateXplain,Very High,Add,Hate/offensive/normal + disagreement,Excellent TBD training
+Offensive,OLID / OffensEval,High,Add,Hierarchical offense,Strong moderation learning
+Hate Speech,Dynahate,Very High,Add,Adversarial hate,Excellent hard negatives
+Toxicity,Measuring Hate Speech,High,Add,Continuous toxicity,Great calibration signal
+Toxicity,Jigsaw Unintended Bias,Very High,Add,Bias-aware moderation,Reduces false positives
+Hate Speech,SemEval 2019 Task 5,Medium-High,Add,Contextual hate speech,Useful nuance
+Explainability,ToxicSpans,Medium,Add Later,Toxic token spans,Attention/rationale learning
+Sarcasm,SARC,Medium,Add Later,Sarcasm understanding,Reduces over-triggering
+Conversational Abuse,ConvAbuse,Medium,Add Later,Multi-turn abuse,Conversation reasoning
+Hate Speech,Implicit Hate Corpus,Medium,Add Later,Subtle hostility,Strong edge-case learning
+Commonsense,WinoGrande,Low,Skip,Commonsense reasoning,Weak evaluator alignment
+Commonsense,HellaSwag,Low,Skip,Completion reasoning,Low moderation value

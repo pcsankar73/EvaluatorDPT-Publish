@@ -42,3 +42,18 @@ assets/EvaluatorDPT Email Banner.png
 assets/Top-section.png
 assets/Background_color.jpg
 assets/Background_color.png
+
+# Internal-only resume work (never publish)
+Resume-Update/
+
+# Dataset publishing artifacts (added later via Git LFS or external upload)
+VEGD/data/*.parquet
+VEGD/data/*.arrow
+VEGD/data/*.jsonl
+VEGD/data/*.csv
+
+# Common local build artifacts
+*.zip
+*.tar
+*.tar.gz
+*.parquet

@@ -1,0 +1,14 @@
+{
+  "package": "VEGD_dataset_docs",
+  "version": "v1",
+  "files": [
+    "README.md",
+    "DATASET_CARD.md",
+    "ONTOLOGY.md",
+    "SCHEMA.md",
+    "LICENSE.md",
+    "LAUNCH_NOTE.md",
+    "EXAMPLES.md"
+  ],
+  "description": "Complete first-pass documentation package for the Value-Emotion Governance Dataset."
+}
