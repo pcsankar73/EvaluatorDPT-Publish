@@ -1,0 +1,14 @@
+{
+  "experiment": "exp_t90_S3B_HdsOnly_v6nli_F8215_ep3",
+  "stage": "S3B",
+  "date": "2026-05-21",
+  "checkpoint": "best_model_epoch_1.pt",
+  "dataset_version": "v6-nli-corrected",
+  "split_evaluated": "validation",
+  "macro_f1": 0.8215,
+  "yes_f1": 0.8215,
+  "no_f1": 0.8420,
+  "tbd_f1": 0.8010,
+  "ece": 0.0649,
+  "seed": 42
+}

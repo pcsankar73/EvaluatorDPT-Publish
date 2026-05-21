@@ -15,7 +15,7 @@ Show which design choices materially improve performance.
 | S2C                 | 0.8076   | -0.0003       | Heads-only, freeze_heads bug fixed                 |
 | S3A focal           | 0.8196   | +0.0120       | gamma=2.0, stopped ep2 (weight redesign needed)    |
 | S3A-v2              | 0.8215   | +0.0019       | weights 1.0/1.0/1.2, emotion loss 0.3             |
-| S3B                 | PENDING  | PENDING       | heads-only calibration, running 2026-05-21         |
+| S3B                 | 0.8215   | 0.0000        | heads-only calibration; no improvement vs S3A-v2   |
 | S4 threshold policy | PENDING  | PENDING       | no training, post-S3B                             |
 
 ## Additional Ablations
