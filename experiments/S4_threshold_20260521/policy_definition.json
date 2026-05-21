@@ -1,0 +1,22 @@
+{
+  "policy_version": "1.0",
+  "policy_date": "2026-05-21",
+  "checkpoint": "output/checkpoints/exp_t90_S3A_v2_L9-11_Hds_v6nli_F8196_ep8/best_model_epoch_3.pt",
+  "dataset_version": "tokenized_v6_nli_20260520",
+  "routing_rule": "independent_per_class_threshold",
+  "routing_description": "Each class is assigned an independent probability threshold. If exactly one class clears its threshold, that class is predicted. If multiple classes clear their thresholds, the highest-probability qualifying class wins. If no class clears its threshold, predict TBD (fallback_mode=tbd).",
+  "fallback_mode": "tbd",
+  "thresholds": {
+    "YES": 0.3222,
+    "NO": 0.4556,
+    "TBD": 0.5444
+  },
+  "macro_f1_on_validation": 0.822195,
+  "baseline_argmax_f1": 0.820946,
+  "delta_vs_baseline": 0.001249,
+  "class_index_map": {
+    "0": "YES",
+    "1": "NO",
+    "2": "TBD"
+  }
+}

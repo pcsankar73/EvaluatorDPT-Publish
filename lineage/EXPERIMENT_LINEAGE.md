@@ -16,7 +16,7 @@
 | S3A     | exp_t90_S3A_L9-11_Hds_v6nli_F8076_ep3        | Focal sharpening (first run)   | 0.8196       | v6-corrected| gamma=2.0, stopped ep2    |
 | S3A-v2  | exp_t90_S3A_v2_L9-11_Hds_v6nli_F8196_ep8    | Focal sharpening (corrected)   | 0.8215       | v6-corrected| weights 1.0/1.0/1.2 ✅    |
 | S3B     | exp_t90_S3B_HdsOnly_v6nli_F8215_ep3          | Final heads-only calibration   | 0.8215       | v6-corrected| No improvement vs S3A-v2 ✅ |
-| S4      | —                                             | Threshold sweep                | PENDING      | v6-corrected| Against S3A-v2 ep3        |
+| S4      | S4_threshold_sweep_S3A_v2_ep3                 | Threshold sweep + policy lock  | 0.8222       | v6-corrected| TBD fallback certified ✅  |
 
 ## S3A-v2 Reproducibility Configuration
 
@@ -56,3 +56,4 @@
 |---------|---------------------------------------|
 | S3A-v2  | experiments/S3A_v2_20260520/          |
 | S3B     | experiments/S3B_20260521/             |
+| S4      | experiments/S4_threshold_20260521/    |
