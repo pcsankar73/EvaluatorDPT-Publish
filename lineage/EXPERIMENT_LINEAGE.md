@@ -18,6 +18,7 @@
 | S3B     | exp_t90_S3B_HdsOnly_v6nli_F8215_ep3          | Final heads-only calibration   | 0.8215       | v6-corrected| No improvement vs S3A-v2 ✅ |
 | S4      | S4_threshold_sweep_S3A_v2_ep3                 | Threshold sweep + policy lock  | 0.8222       | v6-corrected| TBD fallback certified ✅  |
 | S5      | exp_t90_S5_AuxHeads_v6nli_ep3                 | Aux head calibration (frozen)  | 0.8215       | v6-corrected| Encoder frozen insufficient; S6 needed |
+| S6      | exp_t90_S6_AuxEncoderAnchor01_v6nli_ep3       | Encoder-anchor aux fix (ABORTED)| 0.8210      | v6-corrected| Emotion 0.027/1.000 unchanged 2 epochs; data problem confirmed |
 
 ## S3A-v2 Reproducibility Configuration
 
@@ -81,3 +82,4 @@
 | S3B     | experiments/S3B_20260521/             |
 | S4      | experiments/S4_threshold_20260521/    |
 | S5      | No blob push (no decision F1 improvement; diagnostic only)  |
+| S6      | experiments/S6_20260521/ (ABORTED — emotion collapse root cause confirmed) |

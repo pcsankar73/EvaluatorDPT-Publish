@@ -18,6 +18,7 @@ Show which design choices materially improve performance.
 | S3B                 | 0.8215   | 0.0000        | heads-only calibration; no improvement vs S3A-v2   |
 | S4 threshold policy | 0.8222   | +0.0013       | TBD fallback: YES=0.322 NO=0.456 TBD=0.544        |
 | S5 aux calibration  | 0.8215   |  0.0000       | Frozen encoder+decision; weighted BCE pos_weights. Emotion still collapsed. S6 required. |
+| S6 encoder-anchor   | 0.8210   | -0.0005       | ABORTED. Unfreeze L10+11, anchor 10% decision loss. Emotion P=0.027 unchanged 2 epochs. Root cause confirmed: data not architecture. S7 required. |
 
 ## Additional Ablations
 
