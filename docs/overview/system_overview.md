@@ -1,27 +1,28 @@
 # System Overview
 
-This system performs multi-output prediction under ambiguity and production constraints.
+EvaluatorDPT is an auditable operational decision-control system with learned deferral.
 
-## Inputs
-Context-signal decision-event inputs tokenized to max sequence length 128.
+## Operational Interface
 
-## Outputs
-1. Primary bounded output: YES, NO, TBD
-2. Decision confidence
-3. Structured reason codes with reason-code confidence scores
+The model receives a decision-event context and emits a bounded decision distribution over:
 
-## Evaluation Summary (current publish candidate: S12B)
-- Dataset/split: DS-L validation (n=44,404) and DS-L test (n=44,597)
-- Validation decision metrics: Macro F1=0.8213, Accuracy=0.8224
-- Test decision metrics: Macro F1=0.8252, Accuracy=0.8260
-- Calibration (validation): ECE=0.0338
-- Checkpoint: `exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt` (see `experiments/S12B_20260526/`)
+- YES — sufficient support to proceed
+- NO — sufficient support to reject or block
+- TBD — insufficient evidence; route to governed deferral
 
-Notes:
-- Emotion head is masked in the DS-L lineage; do not claim emotion performance for S12B.
+A deployment policy applies versioned thresholds and fallback rules to this distribution. The final routed label is therefore policy-governed and auditable.
 
-## Latency (re-measure if needed)
-- p50 latency: ~200 ms
-- p95 latency: ~415 ms
+## Current Release Candidate
 
-This document intentionally provides a high-level description only.
+| Field | Value |
+|---|---|
+| Candidate | S12B |
+| Run ID | `S12B_20260526` |
+| Validation Macro F1 | 0.8213 |
+| Test Macro F1 | 0.8252 |
+| Validation ECE | 0.0338 |
+| Validated output | YES / NO / TBD decision head |
+
+## Audit Record
+
+Each deployment decision should preserve model identifier, policy version, probabilities, final routed label, and fallback reason. Auxiliary channels may be recorded only when validated for the lineage.

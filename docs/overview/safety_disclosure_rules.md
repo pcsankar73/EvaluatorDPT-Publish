@@ -1,18 +1,24 @@
-# Safety and Disclosure Rules
+# Safety Disclosure Rules
 
-## Safe to Publish
-- High-level architecture
-- Evaluation metrics
-- Dataset size
-- Input/output schema
-- Latency results
-- Non-proprietary example code
+This repository is intended for public model, paper, and certification materials. Public-facing documents should disclose enough information for evaluation and review without exposing raw datasets, credentials, or non-public operational configuration.
 
-## Do Not Publish
-- Patent-sensitive mechanisms
-- Proprietary training method
-- Internal optimization details
-- Full private dataset
-- Anything enabling reconstruction of protected invention
+## May Disclose
 
-Before publishing any file, ask: Could a reader reconstruct the protected invention from this?
+- Model purpose and intended use
+- YES / NO / TBD output contract
+- Evaluation metrics and certification evidence
+- Calibration and threshold-sweep summaries
+- Dataset source categories and licensing responsibilities
+- Governance and escalation requirements
+
+## Do Not Disclose
+
+- Credentials or signed access URLs
+- Raw training data
+- Personal data or sensitive source examples beyond approved audit excerpts
+- Deployment customer information
+- Non-public infrastructure configuration
+
+## Required Framing
+
+Claims should be scoped to S12B and DS-L unless additional validation is completed. Auxiliary value and emotion/sentiment channels should be described as architectural capabilities, not validated S12B performance claims.

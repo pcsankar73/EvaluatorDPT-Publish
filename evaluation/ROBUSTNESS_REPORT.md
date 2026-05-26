@@ -1,68 +1,26 @@
-# Robustness Report
+# Robustness and Error Review
 
-## Objective
+## Scope
 
-Validate model behavior under perturbation, ambiguity, and domain shift.
+This report summarizes robustness evidence available for S12B from the certification package. Dedicated external domain-transfer robustness suites are future work.
 
-## Test Suites
+## Available Evidence
 
-### 1. Negation Robustness
+| Evidence | Result | Interpretation |
+|---|---:|---|
+| Full validation split | n=44,404 | Evaluates the fixed DS-L validation distribution |
+| Full test split | n=44,597 | Evaluates the fixed DS-L test distribution |
+| TBD qualitative audit | 7,758 errors / 44,597 | Residual errors concentrate around over-commit and false-deferral boundaries |
+| High-confidence error comparison | 0.0558 → 0.0485 | S12B reduces high-confidence errors relative to S12 under paired comparison |
+| Multi-seed validation stability | std=0.0 | Scoring procedure is stable under recorded seeds |
 
-Examples:
-- not
-- never
-- cannot
-- no longer
-- unlikely
-- failed to
-- denied
+## Known Failure Modes
 
-Metrics:
-- accuracy
-- macro F1
-- YES↔NO flip rate
+- True TBD routed as YES or NO when the text appears plausible but lacks sufficient evidence.
+- NO or YES routed to TBD when the model is conservative around difficult semantic boundaries.
+- Long inputs may be truncated at 128 tokens.
+- Domain-transfer behavior is not established by the DS-L result.
 
-### 2. Long-Text Robustness
+## Required Deployment Review
 
-Because max_length=128, measure:
-- performance by token length bucket
-- truncation failure rate
-- long-text confusion matrix
-
-### 3. Ambiguity Robustness
-
-Evaluate borderline:
-- weak entailment
-- missing context
-- conflicting claims
-- modal statements
-
-### 4. Paraphrase Robustness
-
-Same semantic decision with varied wording.
-
-### 5. OOD Validation
-
-Test on unseen:
-- domains
-- styles
-- vocabulary
-- social-media text
-- formal text
-
-## Summary Table (status)
-
-No dedicated robustness suites have been executed in the publish repo as of 2026-05-23.
-
-| Suite | Macro F1 | Main Failure Mode | Status |
-|---|---:|---|---|
-| Negation | n/a | not yet measured | pending run |
-| Long text | n/a | not yet measured | pending run |
-| Ambiguity | n/a | not yet measured | pending run |
-| OOD | n/a | not yet measured | pending run |
-
-## How to run
-
-Recommended starting point (experiment repo):
-- Run post-stage diagnostics for the target checkpoint (produces length buckets + error buckets): `scripts/post_stage_diagnostics.py`
-- Add dedicated perturbation suites after S7 series closes so results don’t churn.
+Before use in a new domain, run domain-specific validation, calibration review, threshold selection, and representative error audit.

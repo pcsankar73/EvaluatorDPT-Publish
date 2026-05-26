@@ -49,7 +49,7 @@ Deferral is how you buy safety and interpretability:
 - If you need **higher safety**, allow a higher TBD rate (more human review).
 - If you need **higher autonomy**, accept a lower TBD rate (more automated action) and enforce strict guardrails.
 
-## Output: what you should publish internally
+## Output: what should be reviewed for deployment
 
 For each candidate operating point, record:
 - Threshold/policy definition (human-readable)
@@ -59,4 +59,3 @@ For each candidate operating point, record:
 - Latency p50/p95 (if policy changes affect it)
 
 That table/plot is your decision record; the Pareto frontier makes tradeoffs explicit.
-

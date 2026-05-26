@@ -1,33 +1,27 @@
-# Training Data Sources (High Level)
+# Training Data Sources
 
-This document describes, at a high level, the types of public NLP data sources and processing modules used across the EvaluatorDPT lineage.
+This document describes the source scope at publication level. Raw training data is not redistributed in this repository.
 
-- The raw training data is not redistributed in this repository.
-- Public datasets each have their own licenses/terms; consult the original dataset licenses before reuse.
-- This document is descriptive; exact run composition should be traced via `lineage/EXPERIMENT_LINEAGE.md` and per-run artifacts under `experiments/<RUN_ID>/`.
+## Source Scope
 
-## Source Types Used Across the Lineage
+The EvaluatorDPT lineage combines:
 
-### Natural Language Inference (NLI)
-- Premise/hypothesis style pairs used for semantic entailment vs contradiction boundaries.
+- Natural-language inference style examples for entailment, contradiction, and insufficient-evidence boundaries.
+- Curated decision examples mapped to YES, NO, and TBD.
+- Targeted boundary material for negation, role swaps, number changes, high lexical overlap contradictions, low-overlap support, long-context stress, and modal or hedged language.
+- Auxiliary source families for value, sentiment, emotion, social-norm, and ethical context signals.
 
-### Sentiment / Emotion signals
-- Datasets used to provide weak/auxiliary supervision signals for emotional turbulence and sentiment cues.
+## Licensing
 
-### Values / ethics signals
-- Datasets used to provide auxiliary supervision signals for value-alignment / ethical anchors.
+Public source datasets remain governed by their original licenses and terms. Users must verify those licenses before reusing source data. This publication repository provides documentation and evaluation artifacts, not raw dataset redistribution.
 
-### Robustness and corner-case coverage
-- Targeted additions for known failure modes such as:
-  - negation and scope flips
-  - high lexical overlap contradictions
-  - low lexical overlap entailments
-  - long-text truncation stress cases
-  - hedge/modal ambiguity
+## Current Evaluation Dataset
 
-## Repo-Visible Processing Modules
+S12B is evaluated on DS-L validation and test splits:
 
-The publish repository includes processing module names in the Hugging Face card for transparency and traceability.
-Those module names indicate what code exists, not a guarantee that every source is included in every run.
+| Split | Rows |
+|---|---:|
+| Validation | 44,404 |
+| Test | 44,597 |
 
-See: `huggingface/README.md` → Data Processing Modules.
+The S12B boundary pack contains 323 targeted training examples used for one sharpening epoch. It is not a separate benchmark and is not used as the full validation or test split.

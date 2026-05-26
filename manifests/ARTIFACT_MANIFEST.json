@@ -1,25 +1,32 @@
 {
-    "notes":  "Release artifact manifest for S12B (DS-L + boundary pack).",
-    "created":  "2026-05-26T05:04:10Z",
-    "commit":  "unknown",
-    "artifact_version":  "best_up_to_s12b_2026-05-26",
-    "threshold_policy":  {
-                             "sha256":  "unknown",
-                             "directory":  "experiments/S12B_20260526/certification/threshold_sweep_decision_20260526"
-                         },
-    "project":  "EvaluatorDPT",
-    "dataset":  {
-                    "version":  "DS-L (tokenized_s12_20260525_dsl)",
-                    "sha256":  "unknown",
-                    "tokenized_s2_url":  "https://myevaluatorstorage.blob.core.windows.net/modelartifacts/EvaluatorDPT-ModelArtifacts/data/tokenized_s12_20260525_dsl/",
-                    "tokenized_s1_url":  "https://evaluatorstorageaccount.blob.core.windows.net/modelartifacts/data/tokenized_s12_20260525_dsl/"
-                },
-    "model":  {
-                  "checkpoint_s2_url":  "https://myevaluatorstorage.blob.core.windows.net/modelartifacts/EvaluatorDPT-ModelArtifacts/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt",
-                  "sha256":  "unknown",
-                  "hf_export_s1_url":  "https://evaluatorstorageaccount.blob.core.windows.net/modelartifacts/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/exp_t90_S12B_boundarypack_ep1_fromS12ep3/hf_format/",
-                  "checkpoint":  "exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt",
-                  "hf_export_s2_url":  "https://myevaluatorstorage.blob.core.windows.net/modelartifacts/EvaluatorDPT-ModelArtifacts/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/exp_t90_S12B_boundarypack_ep1_fromS12ep3/hf_format/",
-                  "checkpoint_s1_url":  "https://evaluatorstorageaccount.blob.core.windows.net/modelartifacts/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt"
-              }
+  "validated_output": "YES/NO/TBD decision head",
+  "metrics": {
+    "validation_accuracy": 0.8224,
+    "test_macro_f1": 0.8252,
+    "validation_macro_f1": 0.8213,
+    "test_accuracy": 0.826,
+    "validation_ece": 0.0338
+  },
+  "model": {
+    "checkpoint_identifier": "checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt",
+    "access": "controlled artifact storage or approved model-hosting channel",
+    "hf_export_identifier": "checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/hf_format/"
+  },
+  "paper_title": "Auditable Operational Decision Control with Learned Deferral",
+  "project": "EvaluatorDPT",
+  "certification_pack": "certification/runs/S12B_20260526/pack/",
+  "dataset": {
+    "tokenized_identifier": "data/tokenized_s12_20260525_dsl/",
+    "boundary_pack_identifier": "data/tokenized_s12_boundarypack_20260526/",
+    "version": "DS-L",
+    "test_rows": 44597,
+    "validation_rows": 44404
+  },
+  "artifact_version": "s12b_2026-05-26",
+  "threshold_policy": {
+    "fallback_mode": "TBD",
+    "evidence_directory": "certification/runs/S12B_20260526/pack/artifacts/threshold_sweep_decision_20260526/"
+  },
+  "release_candidate": "S12B_20260526",
+  "created_utc": "2026-05-26T05:04:10Z"
 }

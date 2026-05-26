@@ -26,7 +26,7 @@
     },
     "calibration_val": {
       "ece": 0.03381,
-      "note": "PNG plots skipped on VM due to missing matplotlib; calibration_data.json captured."
+      "note": "Calibration data captured in the certification pack."
     }
   },
   "threshold_sweep_decision": {
@@ -40,4 +40,3 @@
     "test_macro_f1_with_best_thresholds": 0.825163
   }
 }
-

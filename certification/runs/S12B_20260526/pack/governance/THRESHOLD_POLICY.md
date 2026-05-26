@@ -2,73 +2,46 @@
 
 ## Objective
 
-Define the production decision policy applied after model probability generation.
+Define how a deployment converts EvaluatorDPT probabilities into a governed YES, NO, or TBD routing decision.
 
-## Inference Pipeline
+## Policy-Separable Inference
 
 ```text
 input
 → tokenizer
 → BERT encoder
 → decision logits
-→ probabilities
-→ threshold policy
-→ final YES/NO/TBD label
+→ YES / NO / TBD probabilities
+→ versioned threshold policy
+→ routed YES / NO / TBD decision
+→ audit log
 ```
 
-## Certified Policy — v1.0 (2026-05-21)
+The checkpoint supplies the probability distribution. The deployment policy supplies thresholds, fallback behavior, and escalation rules. This separation allows runtime operating behavior to change without retraining the model, while preserving auditability through policy versioning.
 
-| Parameter       | Value                                           |
-|-----------------|-------------------------------------------------|
-| Policy version  | 1.0                                             |
-| Policy date     | 2026-05-21                                      |
-| Checkpoint      | exp_t90_S3A_v2_L9-11_Hds_v6nli_F8196_ep8 ep3   |
-| Dataset         | v6-nli-corrected (tokenized_v6_nli_20260520)    |
-| Routing rule    | Independent per-class threshold                 |
-| Fallback mode   | TBD                                             |
+## S12B Evidence
 
-### Thresholds
+S12B threshold-sweep artifacts are included at:
 
-```json
-{
-  "YES": 0.3222,
-  "NO":  0.4556,
-  "TBD": 0.5444,
-  "fallback_mode": "tbd",
-  "routing_rule": "independent_per_class_threshold"
-}
-```
+`certification/runs/S12B_20260526/pack/artifacts/threshold_sweep_decision_20260526/`
 
-### Routing Logic
+The sweep evaluates threshold-governed routing with TBD fallback. It should be used as evidence for selecting an operating point, not as a universal deployment policy.
 
-1. Compute softmax probabilities over YES / NO / TBD.
-2. For each class, check if `prob >= threshold`.
-3. If exactly one class clears its threshold → predict that class.
-4. If multiple classes clear their thresholds → predict the highest-probability qualifying class.
-5. If no class clears its threshold → predict **TBD** (governed deferral).
+## Routing Logic
 
-### Validation Results
-
-| Mode            | YES thr | NO thr | TBD thr | Macro F1 | Δ baseline |
-|-----------------|---------|--------|---------|----------|------------|
-| Baseline argmax | 0.500   | 0.500  | 0.500   | 0.8209   | —          |
-| Argmax fallback | 0.278   | 0.544  | 0.456   | 0.8227   | +0.0017    |
-| **TBD fallback**| **0.322** | **0.456** | **0.544** | **0.8222** | **+0.0012** |
-
-Evaluated on validation split, n=10,000. Sweep: 19-step grid, 6,859 combinations per mode.
+1. Compute softmax probabilities over YES, NO, and TBD.
+2. Apply the deployment's recorded thresholds and fallback rules.
+3. Route low-confidence or low-margin cases to TBD when the policy requires conservative handling.
+4. Log the model identifier, policy version, probabilities, final routed label, and fallback reason.
 
 ## Policy Principles
 
-- Do not force YES/NO when confidence is insufficient.
-- Route uncertain or low-margin cases to TBD.
-- Use TBD as governed deferral, not model failure.
-- TBD fallback preferred over argmax fallback for deployment: avoids forced decisions on ambiguous samples even at marginal F1 cost.
+- Do not force YES or NO when evidence is insufficient under the deployment policy.
+- Use TBD as governed deferral.
+- Select thresholds using validation evidence and deployment risk tolerance.
+- Recheck calibration and threshold behavior after domain transfer or fine-tuning.
+- Preserve every deployed threshold policy as a versioned artifact.
 
-## Validation
+## Certification Evidence
 
-Thresholds selected on validation split. Must be confirmed once on test split before final deployment.
-
-## Artifact Reference
-
-Full sweep data: `experiments/S4_threshold_20260521/threshold_sweep_results.csv`
-Policy definition: `experiments/S4_threshold_20260521/policy_definition.json`
+S12B reports validation ECE=0.0338 and test Macro F1=0.8252 on DS-L. The certification pack also includes retained-coverage abstention baselines and S12/S12B paired comparison evidence. These artifacts support threshold review but do not replace deployment-specific governance.

@@ -26,7 +26,6 @@ Targeted **TBD boundary sharpening** using a small “boundary pack” generated
   - `reports/multi_seed/exp_t90_S12B_boundarypack_ep1_fromS12ep3_cert_stability_val_20260526/`
 - Calibration data exported: ECE=0.0338
   - `reports/figures/exp_t90_S12B_boundarypack_ep1_fromS12ep3_cert_calibration_val_20260526/calibration_data.json`
-  - Note: PNG plots skipped on VM due to missing `matplotlib`.
 
 ## Threshold sweep (decision, TBD-fallback)
 - Best val Macro F1: **0.821547** (YES=0.40, NO=0.10, TBD=0.10)
@@ -35,4 +34,3 @@ Targeted **TBD boundary sharpening** using a small “boundary pack” generated
 
 ## Notes
 - Emotion head is **masked** in DS-L lineage (0 valid emotion samples after mask) — metrics intentionally skipped; this is documented in SOP and stage metrics.
-

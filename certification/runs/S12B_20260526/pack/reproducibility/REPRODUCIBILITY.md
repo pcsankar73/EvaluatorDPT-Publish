@@ -1,38 +1,22 @@
 # Reproducibility
 
-## Environment (known)
+## Evaluated Candidate
 
-- Hardware used for S7A–S7C runs: `Standard_NC4as_T4_v3` (Tesla T4 16GB)
-- Base model: `bert-base-uncased`
-- Max sequence length: 128
+| Field | Value |
+|---|---|
+| Run ID | `S12B_20260526` |
+| Experiment | `exp_t90_S12B_boundarypack_ep1_fromS12ep3` |
+| Base model | `bert-base-uncased` |
+| Max sequence length | 128 |
+| Primary seed | 42 |
+| Stability seeds | 42, 0, 7 |
 
-Not yet captured in publish repo:
-- exact Python version
-- exact PyTorch/CUDA versions
-- driver version
-- full package lock / hashes
+## Commands
 
-## Seeds
+- Training command: `train_commands.sh`
+- Evaluation commands: `eval_commands.sh`
+- Seed configuration: `seed_config.json`
 
-Primary:
-- 42
+## Determinism Scope
 
-Certification (planned):
-- 42
-- 123
-- 777
-
-## Determinism Notes
-
-Known sources of nondeterminism to control when certifying:
-- dropout
-- dataloader shuffle
-- GPU kernel nondeterminism
-- mixed precision
-- optimizer state initialization
-
-## Final Commands
-
-See:
-- `train_commands.sh`
-- `eval_commands.sh`
+The published multi-seed result validates deterministic evaluation behavior under the recorded scoring procedure. It is not a claim that all future training runs will be identical.

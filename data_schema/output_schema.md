@@ -2,13 +2,19 @@
 
 ```json
 {
-  "decision": "TBD",
-  "decision_confidence": 0.72,
-  "reason_codes": [
-    {"code": "VALUE_SECURITY", "label": "Security", "type": "human_value", "confidence": 0.81},
-    {"code": "EMOTION_CONFUSION", "label": "confusion", "type": "emotion_sentiment", "confidence": 0.74}
-  ]
+  "model_id": "EvaluatorDPT-S12B",
+  "policy_version": "deployment-policy-version",
+  "decision_probabilities": {
+    "YES": 0.18,
+    "NO": 0.12,
+    "TBD": 0.70
+  },
+  "routed_decision": "TBD",
+  "fallback_reason": "TBD probability selected by policy",
+  "auxiliary_signals": []
 }
 ```
 
-Allowed primary decisions: YES, NO, TBD.
+Allowed routed decisions are `YES`, `NO`, and `TBD`.
+
+Auxiliary signals should be included only when the corresponding auxiliary channel has been validated for the deployed lineage.

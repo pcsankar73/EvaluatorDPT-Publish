@@ -1,27 +1,29 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Post-stage diagnostics (produces confusion matrix, calibration bins, error buckets, etc.)
-# Template from training SOP; adjust split/limit as needed.
+# Full validation and test evaluation for S12B.
 
-# S7C best (epoch 2) — validation full set
-nohup python scripts/post_stage_diagnostics.py \
-  --checkpoint_dir output/checkpoints/exp_t90_S7C_HeadsOnly_v6b \
-  --checkpoint     output/checkpoints/exp_t90_S7C_HeadsOnly_v6b/best_model_epoch_2.pt \
-  --experiment     exp_t90_S7C_HeadsOnly_v6b \
-  --tokenized_dir  data/tokenized_v6b_20260522 \
-  --split validation --seed 42 \
-  --output_dir reports/diagnostics/exp_t90_S7C_HeadsOnly_v6b_ep2 \
-  > logs/diag_exp_t90_S7C_HeadsOnly_v6b_ep2.log 2>&1 &
+python scripts/evaluate_only.py \
+  --checkpoint output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt \
+  --tokenized_pt data/tokenized_s12_20260525_dsl/validation_tokenized.pt \
+  --out_dir reports/exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL \
+  --limit 0
 
-# S7A diagnostic example (test subset 10k)
-nohup python scripts/post_stage_diagnostics.py \
-  --checkpoint_dir output/checkpoints/exp_t90_S7A_AuxHeads_v6b \
-  --checkpoint     output/checkpoints/exp_t90_S7A_AuxHeads_v6b/best_model_epoch_3.pt \
-  --experiment     exp_t90_S7A_AuxHeads_v6b \
-  --tokenized_dir  data/tokenized_v6b_20260522 \
-  --split test --limit 10000 --seed 42 \
-  --output_dir reports/diagnostics/exp_t90_S7A_AuxHeads_v6b_ep3 \
-  > logs/diag_exp_t90_S7A_AuxHeads_v6b_10k.log 2>&1 &
+python scripts/evaluate_only.py \
+  --checkpoint output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt \
+  --tokenized_pt data/tokenized_s12_20260525_dsl/test_tokenized.pt \
+  --out_dir reports/exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLTEST \
+  --limit 0
 
-# Threshold policy sweep is tracked in `governance/THRESHOLD_POLICY.md` (certified v1.0 on DS-F).
+python scripts/multi_seed_eval.py \
+  --checkpoint output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt \
+  --tokenized_dir data/tokenized_s12_20260525_dsl \
+  --experiment exp_t90_S12B_boundarypack_ep1_fromS12ep3_cert_stability_val_20260526 \
+  --seeds 42,0,7 \
+  --split validation
+
+python scripts/calibration_plots.py \
+  --checkpoint output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt \
+  --tokenized_dir data/tokenized_s12_20260525_dsl \
+  --experiment exp_t90_S12B_boundarypack_ep1_fromS12ep3_cert_calibration_val_20260526 \
+  --split validation

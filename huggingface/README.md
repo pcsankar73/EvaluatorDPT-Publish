@@ -2,15 +2,14 @@
 license: cc-by-nc-4.0
 language: en
 tags:
-  - decision-making
   - auditable-ai
-  - bounded-decisions
-  - multi-task
+  - decision-control
+  - learned-deferral
+  - governed-ai
+  - policy-routing
+  - trustworthy-ai
+  - uncertainty-routing
   - transformers
-  - explainability
-  - confidence-scoring
-  - human-values
-  - sentiment-analysis
 metrics:
   - f1
   - accuracy
@@ -30,62 +29,39 @@ extra_gated_fields:
   I agree to the access terms: checkbox
 ---
 
-# Evaluator v2 — Auditable AI Decision System (EvaluatorDPT)
+# EvaluatorDPT — Auditable Operational Decision Control with Learned Deferral
 
 **Model ID:** `pcsankar73s/EvaluatorModel`
-**License:** CC BY-NC 4.0 (non-commercial; approval required for inference)
-**Access:** 🔒 Gated — visible to all, usable only with explicit approval
-**Author:** Sankaranarayanan Palamadai Chandrasekaran · [Simple Machine Mind](https://www.smsquared.ai)
+**Author:** Sankaranarayanan Palamadai Chandrasekaran, Simple Machine Mind
+**License:** CC BY-NC 4.0 for non-commercial research and evaluation use
+**Access:** Gated model access
 
----
+## Summary
 
-## Overview
+EvaluatorDPT is a bounded decision-control model for AI workflows that need explicit, auditable handling of uncertainty. It emits a decision distribution over **YES**, **NO**, and **TBD**. TBD is a learned deferral outcome, not only a post-hoc rejection threshold.
 
-Most AI systems are built to always give an answer — even when they shouldn't. EvaluatorDPT is built differently: it reads structured signals, doesn't generate text, and produces a bounded decision of **YES**, **NO**, or **defer to a human**.
+The model is intended as an operational routing layer. A deployment domain supplies evidence, risk tolerance, and threshold policy; the checkpoint supplies a bounded distribution that can be governed at inference time through recorded thresholds, fallback rules, and review paths. This makes the model useful for auditable decision routing rather than free-form answer generation.
 
-It is designed for governed decision routing: it outputs a bounded label plus confidence and preserves audit evidence (threshold sweep, calibration, and multi-seed stability) for the published release candidate.
+## Current Release Candidate
 
-For the current candidate (S12B), full-split evaluation results and certification evidence are referenced below and bundled under `certification/runs/S12B_20260526/`.
+| Field | Value |
+|---|---|
+| Release candidate | S12B |
+| Run ID | `S12B_20260526` |
+| Experiment | `exp_t90_S12B_boundarypack_ep1_fromS12ep3` |
+| Base model | `bert-base-uncased` |
+| Max sequence length | 128 |
+| Primary output | YES / NO / TBD |
+| Dataset lineage | DS-L validation/test, with S12B boundary-pack sharpening |
 
-EvaluatorDPT is a BERT-based multi-task model for **auditable decision control under ambiguity**. It produces a bounded three-class decision (YES / NO / TBD) alongside structured auxiliary outputs that remain available at inference time as explainability signals and control variables.
+## Evaluation Results
 
-Unlike conventional classifiers that force a binary output regardless of evidence quality, EvaluatorDPT treats **TBD (defer)** as a trained first-class outcome — enabling uncertain cases to be routed to conservative handling without retraining the core model.
+| Split | N | Accuracy | Macro F1 |
+|---|---:|---:|---:|
+| Validation | 44,404 | 0.8224 | 0.8213 |
+| Test | 44,597 | 0.8260 | 0.8252 |
 
-The model predicts:
-- **Decision** — YES / NO / TBD (defer)
-- **Auxiliary Head 1** — Detects sentiment turbulence: emotional noise affecting decision clarity (28 labels)
-- **Auxiliary Head 2** — Captures semantic value signals: ethical anchors such as fairness or caution (10 labels)
-
-Auxiliary outputs are **retained at inference time** as structured control variables for downstream steering, thresholding, and reason-code generation.
-
-Input/output contract: a context signal is mapped to a bounded decision, decision confidence, structured reason codes, and reason-code confidence scores.
-
----
-
-## Architecture
-
-**Backbone:** `bert-base-uncased` (12-layer Transformer)
-
-**Heads:**
-- `decision` — primary 3-class classifier (YES / NO / TBD) with confidence score
-- `auxiliary_head_1` — multi-label signal layer for sentiment turbulence (28 labels)
-- `auxiliary_head_2` — multi-label signal layer for value alignment (10 labels)
-
-All inputs are tokenized to a maximum sequence length of 128 tokens.
-
-**Training recipe (high level):** staged fine-tuning with layer-wise differential learning rates, cosine schedule + warmup, and threshold sweep recorded for auditability.
-
----
-
-## Performance
-
-Latest publish candidate: **S12B** (`exp_t90_S12B_boundarypack_ep1_fromS12ep3`, DS-L + boundary pack).
-
-Evaluation (DS-L):
-- Validation split (n=44,404): Accuracy **0.8224**, Macro F1 **0.8213**
-- Test split (n=44,597): Accuracy **0.8260**, Macro F1 **0.8252**
-
-**Per-class breakdown (test):**
+### Test Per-Class Performance
 
 | Class | Precision | Recall | F1 | Support |
 |---|---:|---:|---:|---:|
@@ -93,97 +69,80 @@ Evaluation (DS-L):
 | NO | 0.8598 | 0.8376 | 0.8486 | 15,650 |
 | TBD | 0.7955 | 0.7958 | 0.7956 | 14,064 |
 
-Notes:
-- Emotion head is masked in DS-L lineage (0 valid samples after mask), so emotion metrics are intentionally skipped for this publish candidate.
-- Certification pack (self-contained evidence bundle): certification/runs/S12B_20260526/
-- Decision threshold sweep artifacts (TBD-fallback): experiments/S12B_20260526/certification/threshold_sweep_decision_20260526/
+### Additional Evidence
 
+| Evidence | Result | Interpretation |
+|---|---:|---|
+| Validation ECE | 0.0338 | Confidence is suitable for threshold review under the DS-L validation split |
+| Multi-seed validation stability | std=0.0 | Deterministic evaluation behavior under recorded seeds 42, 0, and 7 |
+| Forced binary YES/NO view | Macro F1=0.4945 | Removing deferral collapses the TBD class |
+| S12B vs S12 high-confidence error @0.85 | 0.0558 → 0.0485 | Boundary-pack sharpening improves high-confidence error behavior more than raw F1 |
 
-## Training Data & Licensing Notes
+Certification artifacts are stored in `certification/runs/S12B_20260526/` in the publication repository.
 
-Additional high-level source notes: docs/dataset/TRAINING_DATA_SOURCES.md.
+## Intended Use
 
-- The model is trained on a mixture of **public NLP datasets** and **curated/internal decision examples**. The training data itself is **not redistributed** in this repository.
-- Public datasets each have their own licenses/terms; users should consult the original dataset licenses before reuse.
-- Base model `bert-base-uncased` and the Transformers ecosystem are used under their respective licenses.
+EvaluatorDPT is intended for research and evaluation of auditable decision-routing systems, including:
 
-## Data Processing Modules
+- Policy-governed approval or rejection routing
+- Compliance and risk triage
+- Moderation escalation
+- Enterprise workflow gating
+- Human-in-the-loop review queues
 
-| Included for Further Progress | Cited (for Reference / Citation) |
-|---|---|
-| process_semeval2017_local | process_sentiment140 |
-| process_financial_phrasebank | process_imdb |
-| process_tweeteval | process_multinli |
-| process_goemotions | process_tweeteval_health |
-| process_normbank_csv_concatenated | |
-| process_mft_from_json | |
-| process_meld | |
-| process_empathetic_dialogues | |
-| process_social_bias_frames | |
-| process_ethics_local | |
-| process_ethics_virtue | |
+The model should be used with a deployment-specific threshold policy. A deployment can route low-confidence or low-margin predictions to TBD without retraining the checkpoint.
 
----
+## Outputs
 
-## Use Cases
+| Output | Status in S12B | Description |
+|---|---|---|
+| Decision distribution | Validated | Probability distribution over YES, NO, and TBD |
+| Decision confidence | Validated | Confidence used for threshold and fallback review |
+| Value auxiliary channel | Architectural / lineage-dependent | Decision-semantic signal requiring separate validation before use as a claim |
+| Emotion/sentiment auxiliary channel | Masked in DS-L | No S12B emotion-head performance claim is made |
 
-**Decision gating under ambiguity** — route inputs to YES, NO, or deferred handling based on evidence quality without forcing a binary commit.
-
-**Auditable AI workflows** — every decision ships with a confidence score, value alignment signal, and sentiment turbulence signal that downstream systems can log, inspect, and act on.
-
-**Risk-sensitive deployments** — use the stored threshold-sweep artifacts and confidence distributions to calibrate deployment routing without retraining.
-
-**Reason-code generation** — auxiliary outputs provide structured context for human-readable explanations alongside each decision.
-
----
+Auxiliary channels are retained as part of the architecture because future validated lineages can use them as policy-control signals. They should not be treated as validated S12B outputs unless separately evaluated.
 
 ## Example Usage
 
 ```python
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
 
-tokenizer = AutoTokenizer.from_pretrained("pcsankar73s/EvaluatorModel")
-model = AutoModelForSequenceClassification.from_pretrained("pcsankar73s/EvaluatorModel")
+model_id = "pcsankar73s/EvaluatorModel"
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForSequenceClassification.from_pretrained(model_id)
 
 inputs = tokenizer(
-    "Should we proceed given the current context?",
+    "The available evidence is incomplete, but the request may qualify for approval.",
     return_tensors="pt",
     max_length=128,
     truncation=True,
 )
-outputs = model(**inputs)
-# outputs.logits → decision probabilities (YES / NO / TBD)
-# confidence score derived from softmax of decision logits
-```
 
----
+with torch.no_grad():
+    logits = model(**inputs).logits
+    probabilities = torch.softmax(logits, dim=-1)
+
+# Label order must be read from the model config before deployment.
+# Apply a recorded threshold policy outside the checkpoint to produce the routed label.
+```
 
 ## Limitations
 
-- Results are specific to the training distribution; generalization to other domains requires separate validation.
-- Class imbalance in the NO class (13.9% of test split) limits NO performance; targeted sampling may improve this.
-- Inputs exceeding 128 tokens are truncated; longer documents require chunking or preprocessing.
-- Reported latency is hardware-dependent; re-characterize for your inference environment.
-- Auxiliary heads provide structured signals, not ground-truth classifiers for values or emotions.
+- Results are specific to DS-L and the S12B evaluation setup.
+- The interface is domain-agnostic, but performance is not a domain-transfer claim.
+- New domains require calibration review, threshold selection, policy-version review, and error audit.
+- Inputs longer than 128 tokens require chunking or preprocessing.
+- TBD is a governed deferral output, not a substitute for human or policy review.
+- Auxiliary value and emotion/sentiment claims require separate validation before deployment use.
 
----
+## Data and Licensing
+
+The training data is not redistributed with this model. The dataset lineage combines public NLP sources and curated decision examples. Public source datasets remain subject to their original licenses and terms. Users must verify source-data licensing before reuse.
 
 ## Links
 
-- GitHub: [pcsankar73/EvaluatorDPT-Publish](https://github.com/pcsankar73/EvaluatorDPT-Publish)
-- OSF preprint: [https://osf.io/ztnya/](https://osf.io/ztnya/)
-- Paper (arXiv): TBD
+- Publication repository: <https://github.com/pcsankar73/EvaluatorDPT-Publish>
+- OSF preprint record: <https://osf.io/ztnya/>
 - Contact: sankar@smsquared.ai
-
----
-
-## License
-
-Model artifacts: [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) — non-commercial use; contact for commercial licensing.
-Code and documentation: see repository [LICENSE](https://github.com/pcsankar73/EvaluatorDPT-Publish/blob/main/LICENSE).
-
----
-
-
-
-

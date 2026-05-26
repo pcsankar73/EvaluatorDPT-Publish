@@ -97,7 +97,7 @@
         "3,462 TBD\u2192NO label corrections"
       ],
       "f1_impact": "+0.013 vs DS-E",
-      "notes": "Production text+label baseline. All subsequent datasets share this text."
+      "notes": "Stable text+label baseline. All subsequent datasets share this text."
     },
     {
       "label": "DS-G",
@@ -120,7 +120,7 @@
     },
     {
       "label": "DS-J (canonical, read-only)",
-      "description": "DS-G + hypothesis filter + correct value dims + emotion alignment fix. Final consolidated canonical dataset. Never alter.",
+      "description": "DS-G + hypothesis filter + correct value dims + emotion alignment fix. Final consolidated dataset for this lineage.",
       "role": "Canonical dataset \u2014 all subsequent datasets build from DS-J CSVs. Val and test splits are permanently fixed here.",
       "tokenized_path_vm": "/data1tb/data/tokenized_s9_20260524",
       "csv_path_vm": "/data1tb/data/clean_s9_20260524/  [CANONICAL \u2014 READ-ONLY]",
@@ -143,7 +143,7 @@
     {
       "label": "DS-L (current training set)",
       "description": "DS-J base + DS-K unique hard cases + capped reasoning/negation pattern boost. Masks: emotion_mask=0.0 (skip emotion supervision), value_mask=0.3 (weak).",
-      "role": "Primary training dataset for S12 and S12B. Adds targeted hard cases (negation, numbers, role/value swaps) without the oversampling explosion of DS-K (which was rejected at 908K train rows).",
+      "role": "Primary training dataset for S12 and S12B. Adds targeted hard cases (negation, numbers, role/value swaps) using capped targeted hard-case additions.",
       "tokenized_path_vm": "/data1tb/data/tokenized_s12_20260525_dsl",
       "csv_path_vm": "/data1tb/data/clean_s12_20260525_dsl/",
       "build_date": "2026-05-25",

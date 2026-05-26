@@ -1,80 +1,35 @@
-# Dataset Datasheet
-
-## Dataset Name
-
-EvaluatorDPT NLI Decision Corpus
-
-## Current Version
-
-- v6b (DS-G): `data/tokenized_v6b_20260522`
-- v6 (DS-F): `data/tokenized_v6_nli_20260520`
-- Prior major version: v5 (DS-E) NLI-only corpus — `data/tokenized_v5_nli_only_20260519`
+# Dataset Datasheet — DS-L
 
 ## Dataset Purpose
 
-Train and evaluate bounded semantic decision classification:
-- YES
-- NO
-- TBD
+DS-L supports evaluation of auditable operational decision control with learned deferral. The primary labels are YES, NO, and TBD.
 
-## Dataset Lineage
+## Current Evaluation Splits
 
-| Version | Purpose | Notes |
-|---|---|---|
-| v5 (DS-E) | NLI-only semantic cleanup | All single-text sources removed; NLI premise/hypothesis only. 814K→444K reduction with quality gain; class balance improved (per the lineage narrative). |
-| v6 (DS-F) | TBD→NO correction pass | 3,462 corrected rows |
-| v6b (DS-G) | Corrected auxiliary supervision vectors | Same NLI text as DS-F with rebuilt aux vectors (diversity fix); used for S7A–S7C |
+| Split | YES | NO | TBD | Total |
+|---|---:|---:|---:|---:|
+| Validation | 14,962 | 15,534 | 13,908 | 44,404 |
+| Test | 14,883 | 15,650 | 14,064 | 44,597 |
 
-## v6 Corrections
+## Training Scope
 
-| Split | TBD→NO Corrections |
-|---|---:|
-| Train | 2,287 |
-| Validation | 577 |
-| Test | 598 |
-| Total | 3,462 |
+DS-L contains 418,725 training examples. S12B adds a 323-row boundary pack for one sharpening epoch. The validation and test splits remain fixed for S12 and S12B evaluation.
 
-## Label Policy
+## Label Semantics
 
-### YES
-Supported / entailed / sufficiently justified decision.
+| Label | Meaning |
+|---|---|
+| YES | Sufficient evidence supports the affirmative decision or action |
+| NO | Sufficient evidence supports rejection, blocking, or contradiction |
+| TBD | Evidence is insufficient, ambiguous, modal, or not strong enough for direct action or direct rejection |
 
-### NO
-Contradicted / blocked / unsupported due to explicit opposition.
+## Data Transparency
 
-### TBD
-Insufficient evidence, ambiguity, unresolved semantic uncertainty, or not enough confidence to act.
-
-## Splits
-
-### v6b / DS-G counts
-
-- Train: 355,408
-- Validation: 44,404
-- Test: 44,597
-
-Source: S7A stage record (`evaluator-model-dev/docs/SuperImportant-Modelparams.txt`, 2026-05-23).
-
-### Decision-class distribution (validation, v6b / DS-G)
-
-From S7C validation diagnostics (n=44,404):
-
-| Class | Count | Share |
-|---|---:|---:|
-| YES | 14,962 | 33.7% |
-| NO  | 15,534 | 35.0% |
-| TBD | 13,908 | 31.3% |
-
-Source: `experiments/S7C_20260523/metrics.json` and `experiments/S7C_20260523/confusion_matrix.csv`.
+The dataset lineage uses public NLP sources and curated decision examples. Raw training data is not redistributed in this repository. Source datasets retain their original licenses and terms.
 
 ## Known Limitations
 
-- Long-text truncation at 128 tokens
-- Semantic overlap between weak entailment and TBD
-- Contradiction-vs-neutral boundary requires careful policy enforcement
-
-## Audit History
-
-- 30-point audit: PASS
-- smoke test: PASS
-- 1,000-row focal functionality test: PASS
+- Maximum sequence length is 128 tokens.
+- The TBD boundary is semantically difficult because insufficient evidence can resemble support or contradiction at the surface level.
+- Domain transfer requires separate validation and calibration review.
+- Emotion-head evaluation is not claimed for S12B because the emotion head is masked in DS-L.

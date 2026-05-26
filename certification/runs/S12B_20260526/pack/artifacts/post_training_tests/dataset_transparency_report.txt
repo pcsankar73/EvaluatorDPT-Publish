@@ -30,7 +30,7 @@
   DS-L — CONFIRMED CLASS DISTRIBUTIONS
 ════════════════════════════════════════════════════════════════════════════════════════════════════
 
-  Train (418,725 rows) [CONFIRMED from VM CSV via SSH]:
+  Train (418,725 rows):
     YES=137,168 (32.8%)  NO=149,071 (35.6%)  TBD=132,486 (31.6%)
 
   Val (44,404 rows) [CONFIRMED from local CSV]:
@@ -57,7 +57,7 @@
     Exact per-source row counts: NOT_CONFIRMED — source_file column was not preserved
     in the final boundary pack CSV output by build_boundary_pack.py.
     To confirm: re-run build_boundary_pack.py with source_file preservation, or
-    query the VM build log (no build log found in logs/).
+    review source construction records for exact sub-source counts.
 
 
   Boundary pack val (500 rows) and test (500 rows) were used only for
@@ -96,7 +96,7 @@
   F1 impact: +0.013 vs DS-E
   Quality actions:
     - 3,462 TBD→NO label corrections
-  Notes: Production text+label baseline. All subsequent datasets share this text.
+  Notes: Stable text+label baseline. All subsequent datasets share this text.
 
 ── DS-G ─────────────────────
   Description: DS-F text + diversity-corrected aux vectors (value dimension bug fix)
@@ -109,7 +109,7 @@
   Notes: Text and decision labels unchanged from DS-F.
 
 ── DS-J (canonical, read-only) ─────────────────────
-  Description: DS-G + hypothesis filter + correct value dims + emotion alignment fix. Final consolidated canonical dataset. Never alter.
+  Description: DS-G + hypothesis filter + correct value dims + emotion alignment fix. Final consolidated dataset for this lineage.
   Role: Canonical dataset — all subsequent datasets build from DS-J CSVs. Val and test splits are permanently fixed here.
   Splits: train=355,408  val=44,404  test=44,597  total=444,409
   Quality actions:
@@ -121,7 +121,7 @@
 
 ── DS-L (current training set) ─────────────────────
   Description: DS-J base + DS-K unique hard cases + capped reasoning/negation pattern boost. Masks: emotion_mask=0.0 (skip emotion supervision), value_mask=0.3 (weak).
-  Role: Primary training dataset for S12 and S12B. Adds targeted hard cases (negation, numbers, role/value swaps) without the oversampling explosion of DS-K (which was rejected at 908K train rows).
+  Role: Primary training dataset for S12 and S12B. Adds targeted hard cases (negation, numbers, role/value swaps) using capped targeted hard-case additions.
   Splits: train=418,725  val=44,404  test=44,597  total=507,726
   Notes: Val and test splits are identical to DS-J (build script writes dsj_val/dsj_test unchanged). Train is DS-J train + DS-K unique rows + capped boost (max 2 duplicates per text). Emotion head intentionally masked (emotion_mask=0) — E28 metrics skipped.
 

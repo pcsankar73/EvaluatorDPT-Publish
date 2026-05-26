@@ -1,113 +1,83 @@
 # EvaluatorDPT
 
-**Auditable AI Decision System with Bounded Decisions, Explainability, and Confidence Scores**
+**Auditable Operational Decision Control with Learned Deferral**
 
 *Sankaranarayanan Palamadai Chandrasekaran — Simple Machine Mind*
 
----
+EvaluatorDPT is a bounded decision-control system for AI workflows where uncertainty must be routed, governed, and audited. It does not generate free-form decisions. It emits a constrained decision distribution over **YES**, **NO**, and **TBD** so downstream policy can decide whether to act, block, or defer.
 
-## What It Does
+The current release candidate is **S12B** (`S12B_20260526`). It is best understood as an auditable operational decision-control checkpoint: the model produces a bounded distribution, and deployment policy controls runtime routing through recorded thresholds, fallback rules, and review paths.
 
-EvaluatorDPT is a BERT-based multi-task model that produces three outputs for every decision event:
+## What It Produces
 
-| Output | Type | Description |
+| Output | Status in S12B | Purpose |
 |---|---|---|
-| **Decision** | 3-class | YES / NO / TBD (defer) |
-| **Human Values** | 10-label multi-label | Structured context signal |
-| **Emotions/Sentiments** | 28-label multi-label | Structured context signal |
+| Decision | Validated | YES / NO / TBD bounded decision distribution |
+| Confidence | Validated | Softmax-derived decision confidence for threshold review |
+| Value signals | Architectural / lineage-dependent | Decision-semantic auxiliary channel for future policy control |
+| Emotion/sentiment signals | Masked in DS-L | Not claimed for S12B; future validation required |
 
-The auxiliary outputs are **not discarded after training**. They are retained at inference time as control variables for downstream steering, thresholding, and reason-code generation — making every decision auditable.
+TBD is a learned deferral class, not only a post-hoc confidence rejection rule. This allows insufficient-evidence cases to shape the model representation while still allowing deployment owners to apply external, versioned operating thresholds.
 
-Input/output contract: a context signal is mapped to a bounded decision, decision confidence, structured reason codes, and reason-code confidence scores.
+## Operational Use
 
----
+EvaluatorDPT is intended for governed AI routing workflows:
 
-## System Overview
+- Policy approval or rejection routing
+- Compliance and risk triage
+- Moderation escalation
+- Enterprise workflow gating
+- Human-in-the-loop review queues
 
-![EvaluatorDPT System Overview](paper/architecture.png)
+A deployment can increase or reduce automation without retraining the checkpoint by changing the recorded threshold policy. This separation between model distribution and operating policy is the core auditability mechanism.
 
----
+## Current Evidence
 
-## Key Results
+Release candidate: **S12B** (`exp_t90_S12B_boundarypack_ep1_fromS12ep3`)
 
-Latest publish candidate: **S12B** (`exp_t90_S12B_boundarypack_ep1_fromS12ep3`, DS-L + boundary pack).
+| Split | N | Accuracy | Macro F1 |
+|---|---:|---:|---:|
+| Validation | 44,404 | 0.8224 | 0.8213 |
+| Test | 44,597 | 0.8260 | 0.8252 |
 
-Full validation (DS-L, n=44,404):
-- Accuracy: **0.8224**
-- Macro F1: **0.8213**
-- YES/NO/TBD F1: 0.8252 / 0.8496 / 0.7892
+Test per-class F1:
 
-Full test (DS-L, n=44,597):
-- Accuracy: **0.8260**
-- Macro F1: **0.8252**
-- YES/NO/TBD F1: 0.8314 / 0.8486 / 0.7956
+| Class | F1 |
+|---|---:|
+| YES | 0.8314 |
+| NO | 0.8486 |
+| TBD | 0.7956 |
 
-Certification evidence (validation):
-- Multi-seed stability (seeds 42/0/7): **PASS** (std=0.0) — `experiments/S12B_20260526/certification/multi_seed_00_summary.txt`
-- Calibration: **ECE=0.0338** — `experiments/S12B_20260526/certification/calibration_data_val.json`
-- Threshold sweep artifacts: `experiments/S12B_20260526/certification/threshold_sweep_decision_20260526/`
+Additional certification evidence:
 
-Notes:
-- Emotion head is **masked** in the DS-L lineage; do not claim emotion performance for S12B.
+- Validation ECE: **0.0338**
+- Multi-seed validation stability: **PASS** (`std=0.0` over seeds 42, 0, 7)
+- Forced binary YES/NO view without deferral: **Macro F1=0.4945**
+- S12B vs S12: raw F1 is essentially flat, but high-confidence error rate improves on test from **0.0558** to **0.0485** under the paired comparison procedure
 
-## Architecture
+## Documentation Map
 
-The model uses `bert-base-uncased` as a shared encoder with three task-specific heads:
-
-- **Decision head** — YES / NO / TBD + confidence score
-- **Value head** — 10 Human Values labels
-- **Emotion head** — 28 Emotions/Sentiments labels
-
-![EvaluatorDPT Model Architecture](paper/architecture_l2.png)
-
----
+| Area | Location |
+|---|---|
+| Hugging Face model card | `huggingface/README.md` |
+| Certification package | `certification/runs/S12B_20260526/CERTIFIER_README.md` |
+| Model card | `model_card/MODEL_CARD.md` |
+| Evaluation reports | `evaluation/` |
+| Governance policy | `governance/` |
+| Data schema | `data_schema/` |
+| Reproducibility | `reproducibility/` |
+| Paper source and PDF | `paper/arxiv_v2/` |
 
 ## Paper
 
-Full methodology, evaluation, ablation, and confusion analysis:
+Current arXiv working title: **Auditable Operational Decision Control with Learned Deferral**.
 
-- [`paper/Auditable_AI_Decision_Systems_Bounded_Decisions.pdf.pdf`](paper/Auditable_AI_Decision_Systems_Bounded_Decisions.pdf.pdf) — compiled paper
-- OSF preprint: [https://osf.io/ztnya/](https://osf.io/ztnya/)
-- arXiv: `TBD` *(submission in progress)*
-
----
-
-## Repository Layout
-
-```
-paper/          arXiv submission package (tex, bib, bbl, pdf, diagrams)
-huggingface/    HuggingFace model card
-inference/      Example inference interface
-model/          Model configuration
-data_schema/    Input / output schema definitions
-docs/           System documentation
-```
-
----
-
-## Quickstart
-
-```bash
-pip install -r requirements.txt
-python inference/predict.py
-```
-
----
-
-## Links
-
-- HuggingFace: [pcsankar73s/EvaluatorModel](https://huggingface.co/pcsankar73s/EvaluatorModel)
-- OSF preprint: [https://osf.io/ztnya/](https://osf.io/ztnya/)
-- arXiv: TBD
-- Pareto optimization notes: [`docs/methodology/pareto_optimization.md`](docs/methodology/pareto_optimization.md)
-- Contact: sankar@smsquared.ai
-
----
+- Paper package: `paper/arxiv_v2/`
+- Compiled PDF: `paper/arxiv_v2/main.pdf`
+- OSF preprint record: <https://osf.io/ztnya/>
 
 ## License
 
-- Repository code + documentation: MIT (see LICENSE).
-- Model weights (Hugging Face): CC BY-NC 4.0 (see huggingface/README.md).
-- Training data is not redistributed; public datasets remain under their original licenses/terms.
-
-
+- Repository code and documentation: MIT, see `LICENSE`.
+- Model artifacts: CC BY-NC 4.0 for non-commercial research and evaluation use.
+- Training data is not redistributed in this repository. Source datasets remain governed by their original licenses and terms.
