@@ -69,3 +69,7 @@ F18211-score.txt
 # Press/outreach drafts are internal-only (keep in archive/local_only_internal)
 docs/press/
 
+
+# Dataset release repo (internal until finalized)
+VEGD/
+

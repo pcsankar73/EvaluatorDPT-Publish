@@ -1,9 +1,0 @@
-dataset:
-  name: VEGD
-  version: "1.0.0"
-  splits:
-    train: data/train.parquet
-    validation: data/validation.parquet
-    test: data/test.parquet
-    sample_1k: data/sample_1k.parquet
-
