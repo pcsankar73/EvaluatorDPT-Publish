@@ -101,6 +101,8 @@ Notes:
 
 ## Training Data & Licensing Notes
 
+Additional high-level source notes: docs/dataset/TRAINING_DATA_SOURCES.md.
+
 - The model is trained on a mixture of **public NLP datasets** and **curated/internal decision examples**. The training data itself is **not redistributed** in this repository.
 - Public datasets each have their own licenses/terms; users should consult the original dataset licenses before reuse.
 - Base model `bert-base-uncased` and the Transformers ecosystem are used under their respective licenses.
@@ -181,6 +183,7 @@ Model artifacts: [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
 Code and documentation: see repository [LICENSE](https://github.com/pcsankar73/EvaluatorDPT-Publish/blob/main/LICENSE).
 
 ---
+
 
 
 
