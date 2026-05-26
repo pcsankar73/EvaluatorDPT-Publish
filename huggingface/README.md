@@ -17,7 +17,7 @@ metrics:
 pipeline_tag: text-classification
 inference: true
 gated: true
-extra_gated_prompt: "Access is provided for research and evaluation use only. Redistribution, commercial use, or publication of model weights is not permitted without written approval from Simple Machine Mind."
+extra_gated_prompt: "Access is provided for non-commercial research and evaluation use. Commercial use requires written approval from Simple Machine Mind."
 extra_gated_fields:
   Organization: text
   Intended use:
@@ -41,7 +41,7 @@ extra_gated_fields:
 
 ## Overview
 
-Most AI systems are built to always give an answer — even when they shouldn't. EvaluatorDPT is built differently: it reads structured signals, doesn't generate text, and produces a bounded decision of **YES**, **NO**, or **defer to a human**. Because it is signal-based and deterministic, it doesn't hallucinate. When it flags a case as uncertain, it is right to do so **93% of the time** (TBD precision: 0.9306). The deferral threshold is tunable at deployment — teams can steer decisions toward their risk tolerance or business objective without retraining the underlying model.
+Most AI systems are built to always give an answer — even when they shouldn't. EvaluatorDPT is built differently: it reads structured signals, doesn't generate text, and produces a bounded decision of **YES**, **NO**, or **defer to a human**.
 
 EvaluatorDPT is a BERT-based multi-task model for **auditable decision control under ambiguity**. It produces a bounded three-class decision (YES / NO / TBD) alongside structured auxiliary outputs that remain available at inference time as explainability signals and control variables.
 
@@ -69,7 +69,7 @@ Input/output contract: a context signal is mapped to a bounded decision, decisio
 
 All inputs are tokenized to a maximum sequence length of 128 tokens.
 
-**Training recipe:** Gradual unfreeze → full unfreeze · LR = 1e-5 · Batch size = 32 · Early stopping (patience = 2) · Threshold sweep · Layer-wise differential learning rates · Cosine decay with warmup ratio 0.1 · Class weights on decision head for imbalance handling
+**Training recipe (high level):** staged fine-tuning with layer-wise differential learning rates, cosine schedule + warmup, and threshold sweep recorded for auditability.
 
 ---
 
@@ -92,6 +92,13 @@ Evaluation (DS-L):
 Notes:
 - Emotion head is **masked** in DS-L lineage (0 valid samples after mask), so emotion metrics are intentionally skipped for this publish candidate.
 - Decision threshold sweep artifacts (TBD-fallback) are stored for auditability: `experiments/S12B_20260526/certification/threshold_sweep_decision_20260526/`.
+
+
+## Training Data & Licensing Notes
+
+- The model is trained on a mixture of **public NLP datasets** and **curated/internal decision examples**. The training data itself is **not redistributed** in this repository.
+- Public datasets each have their own licenses/terms; users should consult the original dataset licenses before reuse.
+- Base model `bert-base-uncased` and the Transformers ecosystem are used under their respective licenses.
 
 ## Data Processing Modules
 
@@ -117,7 +124,7 @@ Notes:
 
 **Auditable AI workflows** — every decision ships with a confidence score, value alignment signal, and sentiment turbulence signal that downstream systems can log, inspect, and act on.
 
-**Risk-sensitive deployments** — use TBD precision (0.9306) and confidence scores to calibrate the YES execution threshold for deployment-specific risk tolerance without retraining.
+**Risk-sensitive deployments** — use the stored threshold-sweep artifacts and confidence distributions to calibrate deployment routing without retraining.
 
 **Reason-code generation** — auxiliary outputs provide structured context for human-readable explanations alongside each decision.
 

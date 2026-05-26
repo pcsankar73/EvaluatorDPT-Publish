@@ -30,24 +30,25 @@ Input/output contract: a context signal is mapped to a bounded decision, decisio
 
 ## Key Results
 
-Evaluated on a stratified held-out test split of **22,748 examples** from a corpus of up to **181,000** labeled decision events (TBD majority class at 60.3%).
+Latest publish candidate: **S12B** (`exp_t90_S12B_boundarypack_ep1_fromS12ep3`, DS-L + boundary pack).
 
-| Method | Accuracy | Macro F1 | Micro F1 | Weighted F1 |
-|---|---|---|---|---|
-| Majority baseline (always TBD) | 0.6030 | 0.2508 | 0.6030 | 0.4537 |
-| **EvaluatorDPT** | **0.8485** | **0.8215** | **0.8485** | **0.8506** |
+Full validation (DS-L, n=44,404):
+- Accuracy: **0.8224**
+- Macro F1: **0.8213**
+- YES/NO/TBD F1: 0.8252 / 0.8496 / 0.7892
 
-**Per-class F1:**
+Full test (DS-L, n=44,597):
+- Accuracy: **0.8260**
+- Macro F1: **0.8252**
+- YES/NO/TBD F1: 0.8314 / 0.8486 / 0.7956
 
-| Class | Precision | Recall | F1 | Support |
-|---|---|---|---|---|
-| YES | 0.7683 | 0.9029 | 0.8302 | 5,871 |
-| NO | 0.7164 | 0.7923 | 0.7524 | 3,159 |
-| TBD | 0.9306 | 0.8381 | 0.8819 | 13,718 |
+Certification evidence (validation):
+- Multi-seed stability (seeds 42/0/7): **PASS** (std=0.0) — `experiments/S12B_20260526/certification/multi_seed_00_summary.txt`
+- Calibration: **ECE=0.0338** — `experiments/S12B_20260526/certification/calibration_data_val.json`
+- Threshold sweep artifacts: `experiments/S12B_20260526/certification/threshold_sweep_decision_20260526/`
 
-**Inference latency** (NVIDIA Tesla T4, 200 runs): p50 = 200 ms · p95 = 415 ms
-
----
+Notes:
+- Emotion head is **masked** in the DS-L lineage; do not claim emotion performance for S12B.
 
 ## Architecture
 
@@ -106,4 +107,7 @@ python inference/predict.py
 
 ## License
 
-See [LICENSE](LICENSE).
+- Repository code + documentation: MIT (see LICENSE).
+- Model weights (Hugging Face): CC BY-NC 4.0 (see huggingface/README.md).
+- Training data is not redistributed; public datasets remain under their original licenses/terms.
+
