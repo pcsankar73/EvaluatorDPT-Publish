@@ -11,11 +11,12 @@ def predict(context_signal: str) -> Dict[str, Any]:
             {"code": "EMOTION_CONFUSION", "label": "confusion", "type": "emotion_sentiment", "confidence": 0.74},
         ],
         "metadata": {
-            "model": "public-interface-placeholder",
+            "model": "pcsankar73s/EvaluatorModel",
             "max_length": 128,
-            "note": "Non-proprietary example interface."
+            "note": "Example-only interface for documentation."
         }
     }
 
 if __name__ == "__main__":
     print(predict("Example decision-event input."))
+
