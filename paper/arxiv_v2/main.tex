@@ -131,6 +131,19 @@ The work is guided by six design principles for auditable decision routing:
   \item The evaluated artifact, split, threshold policy, and commands should be reconstructable.
 \end{enumerate}
 
+\subsection{Auditability Properties}
+
+The auditability claim in this paper refers to review properties of the evaluated decision system, not to a guarantee of correctness. The relevant properties are:
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Traceability}: the evaluated checkpoint, dataset split, metrics, and threshold policy can be identified.
+  \item \textbf{Replayability}: the evaluation can be rerun from recorded commands, logits, labels, and configuration.
+  \item \textbf{Threshold reconstructability}: the final routing rule can be reconstructed from stored class thresholds and fallback behavior.
+  \item \textbf{Calibration observability}: confidence behavior is reported through reliability bins and ECE rather than assumed from softmax scores.
+  \item \textbf{Policy separability}: the model distribution and deployment threshold policy are documented separately.
+\end{itemize}
+
+These properties define a practical review standard for decision-routing systems. They do not replace external validation, domain-specific governance, or prospective monitoring.
+
 \section{Related Work}
 
 The proposed model is related to selective classification and reject-option models, which abstain from prediction under uncertainty \cite{elyaniv2010selective, geifman2017selective, franc2023reject}. In many such systems, abstention is applied after prediction using confidence thresholds. Here, the model instead learns a deferral label directly while still preserving threshold sweeps for operating-point selection. A learned TBD class allows ambiguous examples to shape the representation during training, while thresholding remains a deployment policy rather than the only source of abstention.
@@ -388,6 +401,8 @@ From an operational perspective, the highest-risk error is a true TBD routed as 
 
 The qualitative audit on the full test split records 7,758 errors out of 44,597 examples (17.4\%). The largest error categories are TBD routed to YES (1,729), NO routed to TBD (1,528), YES routed to TBD (1,350), and TBD routed to NO (1,143). Hard binary confusions are smaller but operationally important: YES routed to NO occurs 994 times and NO routed to YES occurs 1,014 times. The audit examples indicate that the residual errors concentrate around lexical overlap, missing evidence, negation/polarity ambiguity, and cases where a plausible inference goes beyond the premise.
 
+Examples from the full test-set audit illustrate the boundary. In a TBD$\rightarrow$YES case, ``well maybe something will open up for you'' was paired with ``maybe there will be an opening for you in the company''; the model predicted YES with probability 0.564, while the true label was TBD because the statement remains modal. In a TBD$\rightarrow$NO case, ``clever man, Bauerstein'' was paired with ``Bauerstein was an old man''; the model predicted NO with probability 0.715, while the premise does not establish age. In a NO$\rightarrow$TBD case, ``Whillan Beck'' referred to a water source powering a mill, while the hypothesis treated it as the man who built the mill; the model deferred despite a contradiction. These examples show why the residual boundary is semantic rather than purely lexical.
+
 \begin{center}
 \begin{tabular}{lrrr}
 \toprule
@@ -489,6 +504,10 @@ The paper also does not claim that TBD is always the correct action under uncert
 The abstention experiments are diagnostic baselines, not a complete comparison against independently trained abstention systems. The forced binary baseline tests the loss of the TBD class, while confidence, entropy, and margin rejection test retained-set behavior under thresholded abstention. A stronger conference version should include separately trained binary and selective-classification baselines, conformal abstention, and domain-transfer evaluations.
 
 Finally, the audit evidence should be understood as a review aid, not as a guarantee of universal safety. It makes the evidence inspectable, but each deployment still requires application-specific validation and monitoring.
+
+\section{Future Work}
+
+Three extensions would strengthen the research claim beyond the current arXiv version. First, independently trained baselines should be added, including binary classifiers with rejection, selective-classification objectives, conformal prediction wrappers, and abstention-trained models. Second, domain-transfer evaluations should test whether learned deferral and calibration behavior hold outside DS-L, for example in policy approval, moderation escalation, compliance review, financial triage, or enterprise workflow routing. Third, auxiliary value and emotion heads should be re-enabled and evaluated as independent decision-semantic outputs before they are treated as validated model claims.
 
 \section{Conclusion}
 
