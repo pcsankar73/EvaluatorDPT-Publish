@@ -36,6 +36,10 @@ Production AI systems frequently operate under incomplete, conflicting, or insuf
 
 AI systems increasingly sit between language inputs and downstream actions. In such settings, the operational question is not only whether a model can classify text, but whether it can provide a governed decision interface: act, block, or defer. Inputs may be incomplete, contradictory, or ambiguous; forcing a YES or NO decision in these cases produces brittle automation and weak auditability.
 
+This problem is especially visible when language models or automated agents are connected to business workflows, policy enforcement, moderation, approvals, safety checks, or other action-taking systems. In these environments, a model output is not merely a label. It becomes an operational control signal. A false YES may trigger an unsafe or unauthorized action; a false NO may block a valid action; and a failure to defer may hide uncertainty from the surrounding workflow. A useful decision model therefore needs an explicit way to represent uncertainty, not only a confidence score attached to a forced label.
+
+The goal of EvaluatorDPT is to provide that decision interface. It is not positioned as a general-purpose language generator, nor as a replacement for domain-specific review. Instead, it is a bounded routing layer that converts a context signal into a constrained decision with confidence and supporting evidence. The system is designed so that downstream policies can inspect the decision distribution, choose operating thresholds, route deferred cases, and preserve an audit trail for review.
+
 EvaluatorDPT addresses this problem by modeling decision control as a bounded three-way output space:
 \[
 \mathcal{Y}_d = \{\text{YES}, \text{NO}, \text{TBD}\}.
@@ -48,17 +52,20 @@ The signature contribution of this work is \textbf{learned deferral as an audita
 \begin{itemize}[leftmargin=1.5em]
   \item We formulate decision routing as bounded control over YES, NO, and learned TBD deferral.
   \item We present a transformer-based multi-head architecture that separates primary decision prediction from structured auxiliary context signals.
+  \item We describe targeted boundary refinement for hard ambiguity cases, including negation, contradiction, lexical-overlap traps, and modal/hedged statements.
   \item We evaluate the S12B publish candidate on full validation and test splits and report per-class behavior, calibration, threshold-sweep evidence, and stability checks.
   \item We provide a certifier-facing artifact structure that turns model evaluation into a reviewable evidence bundle rather than a single headline score.
 \end{itemize}
 
 \section{Related Work}
 
-EvaluatorDPT is related to selective classification and reject-option models, which abstain from prediction under uncertainty \cite{elyaniv2010selective, geifman2017selective, franc2023reject}. In many such systems, abstention is applied after prediction using confidence thresholds. EvaluatorDPT differs by learning a deferral label directly while still preserving threshold sweeps for operating-point selection.
+EvaluatorDPT is related to selective classification and reject-option models, which abstain from prediction under uncertainty \cite{elyaniv2010selective, geifman2017selective, franc2023reject}. In many such systems, abstention is applied after prediction using confidence thresholds. EvaluatorDPT differs by learning a deferral label directly while still preserving threshold sweeps for operating-point selection. This distinction is important operationally: a learned TBD class allows ambiguous examples to shape the representation during training, while thresholding remains available as a deployment policy rather than the only source of abstention.
 
 The architecture builds on transformer language models such as BERT \cite{devlin2019bert} and multi-task learning \cite{caruana1997multitask}. The distinction in this work is operational: auxiliary outputs are treated as structured context signals available at inference time rather than only as training regularizers.
 
 Calibration is also central. Neural confidence scores can be miscalibrated \cite{guo2017calibration}, so EvaluatorDPT pairs decision outputs with calibration evidence and threshold-sweep artifacts. This is relevant for governance because the operating policy should be inspectable rather than implicit.
+
+The paper is also related to model cards and governance-oriented reporting practices. Those artifacts often document intended use, limitations, and evaluation results after training. EvaluatorDPT treats this evidence as part of the release surface itself: the model is accompanied by a structured certification pack containing metrics, calibration data, threshold sweeps, stability checks, and reproducibility commands. This shifts the emphasis from model reporting as a static narrative to model reporting as a reviewable evidence bundle.
 
 \section{System Overview}
 
@@ -69,6 +76,8 @@ The model receives a context signal and returns:
   \item structured auxiliary signals for values and emotions/sentiments, where enabled by the lineage;
   \item evidence artifacts that support threshold selection and audit.
 \end{itemize}
+
+The intended deployment pattern is conservative. YES and NO represent bounded action signals. TBD represents a decision that should be routed to a human, a policy engine, additional evidence collection, or another conservative fallback. Because the outputs are bounded, downstream systems can log the decision distribution and threshold policy without parsing free-form generated text.
 
 \begin{figure}[h]
 \centering
@@ -84,6 +93,8 @@ Let $x$ be a decision-event input. EvaluatorDPT predicts a primary decision dist
 
 Deployment policies may still choose operating thresholds over the predicted probabilities. In this formulation, thresholding is an operating policy layered over a bounded decision model, not the sole mechanism by which uncertainty is represented.
 
+This distinction gives the system two mechanisms for risk control. The first is learned: ambiguous or insufficient contexts can be labeled TBD during training. The second is operational: deployment owners can choose thresholds over the learned distribution to match risk tolerance. A high-assurance setting may route more cases to TBD, while a low-risk setting may accept a lower margin for YES or NO. The model therefore separates the representation of uncertainty from the policy decision about how much uncertainty is acceptable.
+
 \subsection{Architecture}
 
 EvaluatorDPT uses a BERT-base encoder \cite{devlin2019bert} with a maximum sequence length of 128 tokens. The shared encoder feeds task-specific heads:
@@ -95,9 +106,17 @@ EvaluatorDPT uses a BERT-base encoder \cite{devlin2019bert} with a maximum seque
 
 For S12B, the decision head is the validated output reported in this paper. The emotion head is masked in the DS-L lineage, so emotion metrics are intentionally not claimed for this release candidate. The auxiliary-head architecture remains part of the interface design, but this paper scopes empirical claims to the validated S12B decision behavior and certification evidence.
 
+\subsection{Data and Source Scope}
+
+The DS-L lineage is a curated decision-event corpus built from public NLP sources and curated decision examples. The corpus is organized around bounded decision labels and auxiliary context signals. The release does not redistribute raw training data. Instead, it provides dataset documentation, processing notes, and artifact pointers sufficient for review of the published model candidate.
+
+The dataset should be interpreted as a research and evaluation corpus for bounded decision behavior, not as a universal production benchmark. This framing matters: the paper evaluates whether learned deferral and audit-ready release artifacts provide a credible decision-control interface under the reported distribution. It does not claim universal generalization to all domains.
+
 \subsection{Boundary Refinement}
 
 A recurring challenge in bounded decision systems is the boundary between action and deferral. S12B uses DS-L with a targeted boundary pack that focuses on hard semantic regions such as contradiction, negation, low lexical overlap entailment, high lexical overlap contradiction, long-text stress cases, and hedge/modal ambiguity. This is a controlled refinement strategy: the goal is to improve boundary behavior using targeted examples rather than relying only on broad dataset scale.
+
+This boundary-pack design reflects an important empirical lesson from the development lineage: simply adding more data is not enough if the added examples do not target the decision boundary that fails. The boundary pack focuses on cases where surface overlap can be misleading, where a negation changes the decision, where numbers or roles alter entailment, or where a statement is too hedged to support a direct YES or NO. These cases are central to learned deferral because the model must distinguish confident action from insufficient evidence.
 
 \section{Evaluation Setup}
 
@@ -108,6 +127,8 @@ The current publish candidate is \texttt{exp\_t90\_S12B\_boundarypack\_ep1\_from
 \end{itemize}
 
 The release artifacts include full-split metrics, confusion matrices, calibration data, threshold sweeps, and reproducibility commands under the public certification bundle.
+
+The primary metric is Macro F1 because the decision labels must be evaluated across all three outcomes rather than dominated by the largest class. Accuracy is reported as a secondary metric. Per-class precision, recall, and F1 are reported to expose tradeoffs among action, rejection, and deferral.
 
 \section{Results}
 
@@ -124,6 +145,8 @@ Test (n=44,597) & 0.8260 & 0.8252 \\
 \end{tabular}
 \end{center}
 
+The validation and test results are close, which supports the stability of the reported decision behavior under the fixed DS-L split. The test Macro F1 of 0.8252 should be interpreted together with the per-class table below rather than as a single sufficient measure, because the operational meaning of errors differs across YES, NO, and TBD.
+
 \subsection{Per-Class Test Performance}
 
 \begin{center}
@@ -138,6 +161,8 @@ TBD & 0.7955 & 0.7958 & 0.7956 & 14,064 \\
 \end{tabular}
 \end{center}
 
+The strongest class in the S12B test result is NO (F1 = 0.8486), indicating that the model learned a useful rejection boundary. TBD remains the hardest class (F1 = 0.7956), which is expected in a defer-aware system because the deferral region is defined by ambiguity rather than by a single semantic pattern. This is precisely why the model must expose threshold sweeps and calibration evidence instead of presenting a single argmax policy as final.
+
 \subsection{Validation Confusion Matrix}
 
 \begin{center}
@@ -151,6 +176,8 @@ True TBD & 1,793 & 1,160 & 10,955 \\
 \bottomrule
 \end{tabular}
 \end{center}
+
+The validation confusion matrix shows that the largest residual issue is confusion between true TBD and direct action labels, especially TBD predicted as YES. This is the central operational boundary for future improvement: reducing premature action while preserving useful YES/NO coverage.
 
 \section{Audit and Certification Evidence}
 
@@ -170,6 +197,12 @@ The pack includes:
 
 This certification structure is part of the system contribution. It makes the model reviewable by exposing the evidence needed to inspect operating behavior, not just the final checkpoint.
 
+\subsection{Why Certification Evidence Matters}
+
+For decision-control models, reproducibility and auditability are not secondary documentation tasks. They determine whether a model can be safely reviewed before deployment. A headline score does not show whether the confidence distribution is calibrated, whether thresholds were selected after inspecting tradeoffs, whether results are stable across seeds, or whether the exact evaluated artifact can be located.
+
+EvaluatorDPT therefore packages evaluation as evidence. The certification pack is designed to answer concrete reviewer questions: Which checkpoint was evaluated? Which data split was used? What were the per-class outcomes? What threshold sweeps were run? How stable are the results? Where are the reproducibility commands? This makes the release closer to an operational model handoff than a standalone benchmark table.
+
 \section{Discussion}
 
 The results show that bounded decision control can be evaluated as a decision interface rather than as ordinary classification alone. S12B achieves balanced performance across YES, NO, and TBD, with NO F1 = 0.8486 and TBD F1 = 0.7956 on the full test split. The remaining difficulty is the boundary between actionable decisions and deferral, especially ambiguous cases where a human or downstream policy may prefer conservative routing.
@@ -178,9 +211,15 @@ The audit evidence is as important as the score. Calibration, threshold sweeps, 
 
 The auxiliary architecture also matters, but empirical claims should remain scoped. In S12B, decision behavior is validated; emotion metrics are not reported because the emotion head is masked. Future releases can separately validate auxiliary value and emotion behavior as independent outputs.
 
+The main result is therefore not that S12B maximizes an isolated leaderboard metric. The result is that a learned-deferral decision model can be released with the artifacts needed to reason about its use: classwise behavior, calibration, threshold tradeoffs, stability, and artifact identity. This is the form of evidence required when a model is used as a decision interface rather than a passive classifier.
+
 \section{Limitations}
 
 Results are specific to DS-L, the S12B checkpoint, and the evaluation setup reported here. Additional domains require separate validation. Inputs are truncated to 128 tokens, so long-context use cases require chunking or preprocessing. The emotion head is masked in this lineage, so this paper does not claim validated emotion-head performance for S12B. The dataset composition includes public NLP sources and curated decision examples, but raw training data is not redistributed in this repository. Users should consult original dataset licenses before reusing source datasets.
+
+The paper also does not claim that TBD is always the correct action under uncertainty. TBD is a model output and an operating-policy option, not a substitute for domain governance. Deployment owners must decide how deferred cases are routed and what thresholds are acceptable for their risk environment. Similarly, the reported calibration value is tied to the validation split and should be remeasured after domain transfer, threshold changes, or additional fine-tuning.
+
+Finally, the certification pack should be understood as a review aid, not as a guarantee of universal safety. It makes the evidence inspectable, which is necessary for governance, but each deployment still requires application-specific validation and monitoring.
 
 \section{Conclusion}
 
