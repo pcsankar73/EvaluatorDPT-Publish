@@ -1,23 +1,21 @@
 # EvaluatorDPT
 
-**Auditable Operational Decision Control with Learned Deferral**
+**Auditable Decision Models with Learned Abstention and Real-Time Steering**
 
 *Sankaranarayanan Palamadai Chandrasekaran — Simple Machine Mind*
 
-EvaluatorDPT is a bounded decision-control system for AI workflows where uncertainty must be routed, governed, and audited. It does not generate free-form decisions. It emits a constrained decision distribution over **YES**, **NO**, and **TBD** so downstream policy can decide whether to act, block, or defer.
+EvaluatorDPT is a bounded operational decision-control layer for AI workflows where uncertainty must be routed, governed, and audited. It does not generate free-form decisions. It emits a constrained decision distribution over **YES**, **NO**, and **TBD** so downstream policy can decide whether to act, block, or defer.
 
-The current release candidate is **S12B** (`S12B_20260526`). It is best understood as an auditable operational decision-control checkpoint: the model produces a bounded distribution, and deployment policy controls runtime routing through recorded thresholds, fallback rules, and review paths.
+TBD is a learned deferral class, not only a post-hoc confidence rejection rule. This allows insufficient-evidence cases to shape the model representation while still allowing deployment owners to apply external, versioned operating thresholds.
 
 ## What It Produces
 
-| Output | Status in S12B | Purpose |
+| Output | Current status | Purpose |
 |---|---|---|
-| Decision | Validated | YES / NO / TBD bounded decision distribution |
-| Confidence | Validated | Softmax-derived decision confidence for threshold review |
-| Value signals | Architectural / lineage-dependent | Decision-semantic auxiliary channel for future policy control |
-| Emotion/sentiment signals | Masked in DS-L | Not claimed for S12B; future validation required |
-
-TBD is a learned deferral class, not only a post-hoc confidence rejection rule. This allows insufficient-evidence cases to shape the model representation while still allowing deployment owners to apply external, versioned operating thresholds.
+| Decision distribution | Validated | Probability distribution over YES / NO / TBD |
+| Decision confidence | Validated | Confidence for threshold and fallback review |
+| Value signals | Architectural / staged validation | Decision-relative auxiliary channel requiring separate validation before deployment claims |
+| Emotion/sentiment signals | Disabled for the evaluated model version | No emotion-head performance claim is made |
 
 ## Operational Use
 
@@ -29,11 +27,9 @@ EvaluatorDPT is intended for governed AI routing workflows:
 - Enterprise workflow gating
 - Human-in-the-loop review queues
 
-A deployment can increase or reduce automation without retraining the checkpoint by changing the recorded threshold policy. This separation between model distribution and operating policy is the core auditability mechanism.
+A deployment can increase or reduce automation without retraining the model by changing the recorded threshold policy. This separation between model distribution and operating policy is the core auditability mechanism.
 
-## Current Evidence
-
-Release candidate: **S12B** (`exp_t90_S12B_boundarypack_ep1_fromS12ep3`)
+## Evaluation Evidence
 
 | Split | N | Accuracy | Macro F1 |
 |---|---:|---:|---:|
@@ -48,19 +44,19 @@ Test per-class F1:
 | NO | 0.8486 |
 | TBD | 0.7956 |
 
-Additional certification evidence:
+Additional evidence:
 
 - Validation ECE: **0.0338**
 - Multi-seed validation stability: **PASS** (`std=0.0` over seeds 42, 0, 7)
 - Forced binary YES/NO view without deferral: **Macro F1=0.4945**
-- S12B vs S12: raw F1 is essentially flat, but high-confidence error rate improves on test from **0.0558** to **0.0485** under the paired comparison procedure
+- Targeted boundary refinement keeps raw F1 essentially flat while reducing high-confidence error rate on the test split from **0.0558** to **0.0485** under the paired comparison procedure
 
 ## Documentation Map
 
 | Area | Location |
 |---|---|
 | Hugging Face model card | `huggingface/README.md` |
-| Certification package | `certification/runs/S12B_20260526/CERTIFIER_README.md` |
+| Certification evidence package | `certification/runs/S12B_20260526/CERTIFIER_README.md` |
 | Model card | `model_card/MODEL_CARD.md` |
 | Evaluation reports | `evaluation/` |
 | Governance policy | `governance/` |
@@ -70,7 +66,7 @@ Additional certification evidence:
 
 ## Paper
 
-Current arXiv working title: **Auditable Operational Decision Control with Learned Deferral**.
+Current arXiv submission title: **Auditable Decision Models with Learned Abstention and Real-Time Steering**.
 
 - Paper package: `paper/arxiv_v2/`
 - Compiled PDF: `paper/arxiv_v2/main.pdf`

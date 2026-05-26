@@ -1,16 +1,15 @@
-# arXiv v2 Draft
+# arXiv Submission Draft
 
-This folder contains the revised arXiv draft built from the original preprint while preserving `paper/main.tex` unchanged.
+This folder contains the arXiv submission source for the paper, with the original preprint preserved separately.
 
 Primary framing:
-- learned TBD deferral as a first-class decision outcome
-- bounded YES/NO/TBD decision control instead of free-form generation
-- audit-ready release evidence: calibration, threshold sweep, multi-seed stability, confusion matrix, and certification pack
+- learned deferral as a first-class YES/NO/TBD decision outcome
+- bounded operational decision control instead of free-form generation
+- audit-oriented evaluation evidence: calibration, threshold sweeps, multi-seed stability, confusion matrices, abstention baselines, and reproducibility materials
 
-Current result source:
-- S12B evaluated checkpoint: `exp_t90_S12B_boundarypack_ep1_fromS12ep3`
-- Summary file: `paper/RESULTS_UPDATE_20260526.md`
-- Certification pack: `certification/runs/S12B_20260526/`
+Submission source:
+- top-level TeX file: `main.tex`
+- references: `references.bib` and generated `main.bbl`
+- figures: architecture, abstention coverage, calibration, confusion matrix, and parent-to-refined comparison
 
-Build target:
-- `main.tex`
+The paper reports the final evaluated model version using named public source families and held-out split counts confirmed from the tokenized evaluation files used for scoring.

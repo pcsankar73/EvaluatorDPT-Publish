@@ -73,3 +73,6 @@ docs/press/
 # Dataset release repo (internal until finalized)
 VEGD/
 
+
+# Local reviewer notes for paper iteration
+paper/arxiv_v2/Reviewer-Comment-*

@@ -14,7 +14,7 @@
 
 \geometry{margin=1in}
 
-\title{\textbf{Auditable Operational Decision Control with Learned Deferral}}
+\title{\textbf{Auditable Decision Models with Learned Abstention and Real-Time Steering}}
 
 \author{
 Sankaranarayanan Palamadai Chandrasekaran \\
@@ -29,7 +29,7 @@ Simple Machine Mind \\
 \maketitle
 
 \begin{abstract}
-Production AI systems often operate with incomplete, conflicting, or insufficient evidence. Forced classifiers collapse such cases into action labels, while generative systems can produce outputs that are difficult to interpret as auditable execution decisions. This paper studies operational decision control for AI systems, where uncertainty must be explicitly routable, policy-governed, and auditable rather than hidden inside forced predictions or free-form generation. We present EvaluatorDPT, a bounded decision-control model that predicts YES, NO, or TBD, where TBD is learned as a deferral outcome rather than added only as a post-hoc confidence rule. The model uses a transformer encoder with a primary bounded-decision head and structured auxiliary channels for values and emotions/sentiments. The interface is domain-agnostic in form: a deployment domain supplies evidence and policy thresholds, while the checkpoint emits a bounded distribution that can be controlled at inference time through recorded operating thresholds and, when validated, auxiliary decision-semantic signals. For the evaluated S12B checkpoint, we report decision performance on DS-L validation and test splits; auxiliary emotion metrics are omitted because the emotion head is masked in this lineage. On the full DS-L test split (n=44,597), S12B achieves Accuracy = 0.8260 and Macro F1 = 0.8252, with per-class F1 of 0.8314 (YES), 0.8486 (NO), and 0.7956 (TBD). The evaluation record also includes calibration evidence (ECE = 0.0338 on validation), threshold-sweep artifacts, multi-seed stability checks, confusion matrices, and reproducibility commands. The main contribution is a bounded execution interface in which deferral is learned, runtime routing remains inspectable, auxiliary signals provide a path to auditable behavior control, and evaluation artifacts support external review.
+Production AI systems often operate with incomplete, conflicting, or insufficient evidence. Forced classifiers collapse such cases into action labels, while generative systems can produce outputs that are difficult to interpret as auditable execution decisions. We study operational decision control for AI systems, where uncertainty must be explicitly routable, policy-governed, and auditable rather than hidden inside forced predictions or free-form generation. We present EvaluatorDPT, a bounded decision-control model that predicts YES, NO, or TBD, where TBD is learned as a deferral outcome rather than added only as a post-hoc confidence rule. The model uses a transformer encoder with a primary bounded-decision head and structured auxiliary channels for values and emotions/sentiments. The interface is domain-agnostic in form: a deployment domain supplies evidence and policy thresholds, while the model emits a bounded distribution that can be controlled at inference time through recorded operating thresholds and, when validated, auxiliary semantic signals. For the evaluated model version, we report decision performance on held-out validation and test splits; auxiliary emotion metrics are omitted because the emotion head is disabled for this evaluation. On the held-out test split (n=44,597), the model achieves Accuracy = 0.8260 and Macro F1 = 0.8252, with per-class F1 of 0.8314 (YES), 0.8486 (NO), and 0.7956 (TBD). The evaluation record also includes calibration evidence (ECE = 0.0338 on validation), threshold-sweep outputs, multi-seed stability checks, confusion matrices, and reproducibility commands. Our main contribution is a bounded execution interface in which deferral is learned, inference-time routing remains inspectable, auxiliary signals provide a path to auditable behavior control, and evaluation evidence supports external review.
 \end{abstract}
 
 \section{Introduction}
@@ -46,18 +46,18 @@ The proposed formulation models decision control as a bounded three-way output s
 \]
 The TBD outcome is not merely a post-hoc rejection threshold. It is a learned class that allows the model to internalize deferral boundaries during training. Thresholding remains useful at deployment time, but it is applied on top of a model that already represents ambiguity as part of the label space.
 
-The contribution of this work is \textbf{learned deferral as an auditable operational decision-control formulation}. The model does not generate free-form decisions. It emits bounded labels, confidence scores, and structured auxiliary signals, while the evaluation package provides the artifacts needed to inspect behavior: calibration, threshold sweeps, multi-seed stability, confusion matrices, and reproducibility materials. The same interface can be applied across domains because the output is a policy-facing control surface rather than a domain-specific action generator; however, each new domain still requires its own calibration and validation. This makes real-time decision control possible: an operator can change threshold policy, deferral routing, or auxiliary-signal use without modifying the checkpoint, provided those changes are recorded as operating policy.
+The contribution of this work is \textbf{learned deferral as an auditable operational decision-control formulation}. The model does not generate free-form decisions. It emits bounded labels, confidence scores, and structured auxiliary signals, while the evaluation package provides the evidence needed to inspect behavior: calibration, threshold sweeps, multi-seed stability, confusion matrices, and reproducibility materials. The same interface can be applied across domains because the output is a policy-facing decision interface rather than a domain-specific action generator; however, each new domain still requires its own calibration and validation. This supports inference-time decision control: an operator can change threshold policy, deferral routing, or auxiliary-signal use without modifying the model weights, provided those changes are recorded as operating policy.
 
 This framing is intentionally narrower than many general language-model evaluations. The paper does not argue that a single model can resolve all downstream governance questions. Instead, it studies a smaller but operationally important problem: how to expose an explicit, learned deferral decision in a form that can be evaluated, thresholded, logged, and reviewed. The design goal is not maximal automation. It is controlled routing under ambiguity.
 
 \paragraph{Contributions.}
 \begin{itemize}[leftmargin=1.5em]
   \item We formulate decision routing as bounded control over YES, NO, and learned TBD deferral.
-  \item We show how runtime operating thresholds turn the model distribution into an auditable control surface for decision routing.
+  \item We show how operating thresholds turn the model distribution into an auditable decision-routing interface.
   \item We present a transformer-based multi-head architecture that separates primary decision prediction from structured auxiliary context signals.
-  \item We define auxiliary value and emotion/sentiment channels as decision-semantic signals that can support auditable policy control when they are enabled and separately validated.
+  \item We define auxiliary value and emotion/sentiment channels as decision-relative semantic signals that can support auditable policy control when they are enabled and separately validated.
   \item We describe targeted boundary refinement for hard ambiguity cases, including negation, contradiction, lexical-overlap traps, and modal/hedged statements.
-  \item We evaluate the S12B checkpoint on full validation and test splits and report per-class behavior, calibration, threshold-sweep evidence, and stability checks.
+  \item We evaluate the reported model version on full validation and test splits and report per-class behavior, calibration, threshold-sweep evidence, and stability checks.
   \item We organize evaluation results, calibration data, threshold sweeps, and reproducibility materials into a coherent review structure.
 \end{itemize}
 
@@ -73,7 +73,7 @@ YES denotes sufficient support for action, NO denotes sufficient support for rej
 
 This formulation differs from binary classification with a reject threshold in two ways. First, deferral is represented in the supervised label space, so ambiguous examples can influence the learned representation. Second, thresholding remains available as an operating-policy layer over a three-way decision distribution. The model can learn the semantic structure of deferral, while deployment owners can still select thresholds that reflect local risk tolerance.
 
-The practical requirement is not only high aggregate performance. A decision-control model should also expose the evidence needed to review its behavior: per-class outcomes, confusion patterns, calibration, threshold tradeoffs, stability under repeated evaluation, and artifact identity. These requirements motivate the certification-oriented release structure described later in the paper.
+The practical requirement is not only high aggregate performance. A decision-control model should also expose the evidence needed to review its behavior: per-class outcomes, confusion patterns, calibration, threshold tradeoffs, stability under repeated evaluation, and model identity. These requirements motivate the audit-evidence reporting structure described later in the paper.
 
 \subsection{Operational Risk}
 
@@ -113,17 +113,17 @@ TBD is treated as a supervised outcome, not only as a threshold applied after a 
 \paragraph{Separation of decision and operating policy.}
 The model emits a bounded decision distribution, while deployment thresholds remain external and inspectable. This separates the representation of uncertainty from the choice of how conservatively the system should act in a particular environment.
 
-\paragraph{Runtime decision control.}
-The bounded distribution is also a runtime control interface. A deployment can increase or decrease automation by changing class thresholds, route low-margin predictions to TBD, or make TBD the default fallback under higher-risk conditions. These changes affect behavior at inference time without retraining or replacing the checkpoint. The routing policy is auditable because it can be recorded as thresholds, fallback rules, and enabled auxiliary channels rather than embedded in free-form generation.
+\paragraph{Inference-time decision control.}
+The bounded distribution is also an inference-time control interface. A deployment can increase or decrease automation by changing class thresholds, route low-margin predictions to TBD, or make TBD the default fallback under higher-risk conditions. These changes affect routing behavior at inference time without retraining or replacing the model. The routing policy is auditable because it can be recorded as thresholds, fallback rules, and enabled auxiliary channels rather than embedded in free-form generation.
 
 \paragraph{Domain-agnostic control interface.}
 The output space is intentionally independent of any single downstream domain. A moderation system, approval workflow, compliance review, or financial triage system can attach different operating thresholds and escalation rules to the same bounded labels. This does not imply zero-shot production readiness across domains; it means that the interface separates domain policy from the model's learned decision distribution, making domain transfer a validation question rather than a redesign of the output space.
 
 \paragraph{Auxiliary policy control.}
-The multi-head design allows auxiliary value and emotion/sentiment signals to be treated as structured decision-semantic channels. When those channels are enabled and validated, they can be logged, thresholded, or used by a downstream policy engine to control routing behavior in real time without changing the checkpoint. In the evaluated S12B lineage, empirical claims remain limited to the decision head because the emotion head is masked; auxiliary policy control is therefore presented as an architectural capability and a future empirical claim, not as a validated S12B result.
+The multi-head design allows auxiliary value and emotion/sentiment signals to be treated as structured decision-relative semantic channels. When those channels are enabled and validated, they can be logged, thresholded, or used by a downstream policy engine to control routing behavior in real time via versioned thresholds and routing policy, without changing the model weights. In the evaluated model version, empirical claims remain limited to the decision head because the emotion head is disabled for this evaluation; auxiliary policy control is therefore presented as an architectural capability and a future empirical claim, not as a validated result for the reported model.
 
 \paragraph{Release-level auditability.}
-The evaluation package includes calibration data, threshold-sweep artifacts, multi-seed stability checks, confusion matrices, reproducibility commands, and model/data pointers. These artifacts make the evaluated behavior reviewable. This is a different standard from publishing only model weights and a top-line score.
+The evaluation package includes calibration data, threshold-sweep outputs, multi-seed stability checks, confusion matrices, reproducibility commands, and model/data pointers. These materials make the evaluated behavior reviewable. This is a different standard from publishing only model weights and a top-line score.
 
 \paragraph{Boundary-focused refinement.}
 The development process identifies deferral boundaries as the key failure region and uses targeted boundary examples rather than undifferentiated data growth. This is especially relevant for negation, contradiction, lexical-overlap traps, long-text stress cases, and hedged statements.
@@ -136,17 +136,17 @@ The work is guided by six design principles for auditable decision routing:
 \begin{enumerate}[leftmargin=1.5em]
   \item Uncertainty should be explicit, not hidden inside a forced YES/NO decision.
   \item Deferral should be represented as a first-class outcome when training data supports it.
-  \item Operating thresholds should remain external to the checkpoint and be recorded as policy.
+  \item Operating thresholds should remain external to the model weights and be recorded as policy.
   \item Confidence should be accompanied by calibration evidence.
   \item Evaluation should report classwise behavior, not only aggregate accuracy.
-  \item The evaluated artifact, split, threshold policy, and commands should be reconstructable.
+  \item The evaluated model version, split, threshold policy, and commands should be reconstructable.
 \end{enumerate}
 
 \subsection{Auditability Properties}
 
 The auditability claim in this paper refers to review properties of the evaluated decision system, not to a guarantee of correctness. The relevant properties are:
 \begin{itemize}[leftmargin=1.5em]
-  \item \textbf{Traceability}: the evaluated checkpoint, dataset split, metrics, and threshold policy can be identified.
+  \item \textbf{Traceability}: the evaluated model version, dataset split, metrics, and threshold policy can be identified.
   \item \textbf{Replayability}: the evaluation can be rerun from recorded commands, logits, labels, and configuration.
   \item \textbf{Threshold reconstructability}: the final routing rule can be reconstructed from stored class thresholds and fallback behavior.
   \item \textbf{Calibration observability}: confidence behavior is reported through reliability bins and ECE rather than assumed from softmax scores.
@@ -163,9 +163,9 @@ The architecture builds on transformer language models such as BERT \cite{devlin
 
 The auxiliary channels also differ from conventional sentiment or lexical classification tasks. In this work, value and emotion/sentiment signals are interpreted relative to the decision event. They are intended to encode decision-relevant semantic context rather than surface affect alone. This distinction is important because a sentence can contain positive or negative language without providing sufficient support for a YES or NO decision.
 
-Neural confidence scores can be miscalibrated \cite{guo2017calibration}, so the evaluation pairs decision outputs with calibration evidence and threshold-sweep artifacts. This is relevant for governance because the operating policy should be inspectable rather than implicit.
+Neural confidence scores can be miscalibrated \cite{guo2017calibration}, so the evaluation pairs decision outputs with calibration evidence and threshold-sweep outputs. This is relevant for governance because the operating policy should be inspectable rather than implicit.
 
-The paper is also related to model cards and governance-oriented reporting practices. Such artifacts often document intended use, limitations, and evaluation results after training. In this work, these materials are treated as part of the evaluation record: the model is accompanied by structured metrics, calibration data, threshold sweeps, stability checks, and reproducibility commands.
+The paper is also related to model cards and governance-oriented reporting practices. Such documents often record intended use, limitations, and evaluation results after training. In this work, these materials are treated as part of the evaluation record: the model is accompanied by structured metrics, calibration data, threshold sweeps, stability checks, and reproducibility commands.
 
 \section{System Overview}
 
@@ -173,25 +173,25 @@ The model receives a context signal and returns:
 \begin{itemize}[leftmargin=1.5em]
   \item a bounded decision: YES, NO, or TBD;
   \item decision confidence derived from the primary decision head;
-  \item structured auxiliary signals for values and emotions/sentiments, where enabled by the lineage;
-  \item evidence artifacts that support threshold selection and audit.
+  \item structured auxiliary signals for values and emotions/sentiments, where enabled and validated;
+  \item evaluation evidence that supports threshold selection and audit.
 \end{itemize}
 
 The intended deployment pattern is conservative. YES and NO represent bounded action signals. TBD represents a case for human review, a policy engine, additional evidence collection, or another fallback. Because the outputs are bounded, downstream systems can log the decision distribution and threshold policy without parsing generated text.
 
-The system boundary is therefore clear. The model does not execute the downstream action, resolve policy conflicts, or replace review. It provides a decision-control signal that can be consumed by another system. A deployment can use the raw argmax decision, enforce a minimum confidence margin, route all TBD cases to review, or apply a more conservative threshold policy derived from the threshold-sweep artifacts. This keeps the model output separate from the operational decision rule.
+The system boundary is therefore clear. The model does not execute the downstream action, resolve policy conflicts, or replace review. It provides a decision-control signal that can be consumed by another system. A deployment can use the raw argmax decision, enforce a minimum confidence margin, route all TBD cases to review, or apply a more conservative threshold policy derived from the threshold-sweep outputs. This keeps the model output separate from the operational decision rule.
 
 \subsection{Operational Interface}
 
-In an operational setting, each prediction produces a record containing the input identifier, model version, checkpoint identity, decision probabilities, selected operating threshold, final routed label, and any auxiliary channels enabled for the lineage. This structure is important because reviewability depends on reconstructing not only the model score but also the policy applied at the time of decision.
+In an operational setting, each prediction produces a record containing the input identifier, model version, model identifier, decision probabilities, selected operating threshold, final routed label, and any auxiliary channels enabled for the model version. This structure is important because reviewability depends on reconstructing not only the model score but also the policy applied at the time of decision.
 
-The interface also supports conservative fallback and runtime decision control. A downstream system can treat low-confidence YES or NO predictions as TBD without retraining the model. Conversely, if a use case tolerates more automation, it can lower the deferral threshold while preserving the same model artifact. The same mechanism can be changed by operating condition: for example, a high-risk workflow can increase TBD routing during audit periods, while a lower-risk workflow can accept more direct YES or NO decisions. This is the reason threshold selection is treated as release evidence rather than as an implementation detail.
+The interface also supports conservative fallback and inference-time decision control. A downstream system can treat low-confidence YES or NO predictions as TBD without retraining the model. Conversely, if a use case tolerates more automation, it can lower the deferral threshold while preserving the same trained model. The same mechanism can be changed by operating condition: for example, a high-risk workflow can increase TBD routing during audit periods, while a lower-risk workflow can accept more direct YES or NO decisions. Accordingly, threshold selection is treated as part of the recorded evaluation evidence rather than as an implementation detail.
 
-Auxiliary channels extend this control pattern when they are validated for a lineage. A policy engine can use auxiliary value or emotion/sentiment scores as additional routing conditions, for example by requiring review when the primary decision is high-confidence but an auxiliary signal indicates a sensitive or adversarial context. This paper does not claim validated auxiliary policy control for S12B; it defines the interface and reports the validated decision-head evidence.
+Auxiliary channels extend this control pattern when they are validated for a model version. A policy engine can use auxiliary value or emotion/sentiment scores as additional routing conditions, for example by requiring review when the primary decision is high-confidence but an auxiliary signal indicates a sensitive or adversarial context. This paper does not claim validated auxiliary policy control for this model version; it defines the interface and reports the validated decision-head evidence.
 
 \subsection{Operational Lifecycle}
 
-The intended lifecycle is policy-separable. First, the checkpoint emits a bounded decision distribution and any validated auxiliary channels. Second, a policy layer applies versioned thresholds and fallback rules. Third, the routing layer returns YES, NO, or TBD to the downstream workflow. Fourth, the audit record stores the checkpoint identity, policy version, class probabilities, final routed label, and enabled auxiliary channels. Finally, governance review can replay decisions, compare policy versions, and change operating thresholds without retraining the model. This lifecycle is the operational object of study: the model is an implementation component inside a governed routing architecture.
+The intended lifecycle separates model estimation from policy: thresholding and routing policy remain external to the model weights. First, the model emits a bounded decision distribution and any validated auxiliary channels. Second, a policy layer applies versioned thresholds and fallback rules. Third, the routing layer returns YES, NO, or TBD to the downstream workflow. Fourth, the audit record stores the model identifier, policy version, class probabilities, final routed label, and enabled auxiliary channels. Finally, governance review can replay decisions, compare policy versions, and change operating thresholds without retraining the model. This lifecycle is the operational object of study: the model is an implementation component inside a governed routing architecture.
 
 \begin{figure}[htbp]
 \centering
@@ -207,7 +207,7 @@ Let $x$ be a decision-event input. The model predicts a primary decision distrib
 
 Deployment policies may still choose operating thresholds over the predicted probabilities. In this formulation, thresholding is an operating policy layered over a bounded decision model, not the sole mechanism by which uncertainty is represented.
 
-This formulation gives the system two mechanisms for risk control. The first is learned: ambiguous or insufficient contexts can be labeled TBD during training. The second is operational: deployment owners can choose thresholds over the learned distribution to match risk tolerance. A high-assurance setting may route more cases to TBD, while a lower-risk setting may accept a smaller margin for YES or NO. The model separates the representation of uncertainty from the policy decision about how much uncertainty is acceptable. Runtime control is therefore expressed as a change in recorded policy rather than as an untracked change to model behavior.
+This formulation gives the system two mechanisms for risk control. The first is learned: ambiguous or insufficient contexts can be labeled TBD during training. The second is operational: deployment owners can choose thresholds over the learned distribution to match risk tolerance. A high-assurance setting may route more cases to TBD, while a lower-risk setting may accept a smaller margin for YES or NO. The model separates the representation of uncertainty from the policy decision about how much uncertainty is acceptable. Inference-time control is therefore expressed as a change in recorded policy rather than as an untracked change to model behavior.
 
 \subsection{Architecture}
 
@@ -218,19 +218,19 @@ The architecture uses a BERT-base encoder \cite{devlin2019bert} with a maximum s
   \item a 28-label emotion/sentiment head.
 \end{itemize}
 
-For S12B, the decision head is the validated output reported in this paper. The emotion head is masked in the DS-L lineage, so emotion metrics are intentionally not claimed for this checkpoint. The auxiliary-head architecture remains part of the model design, but this paper scopes empirical claims to the validated S12B decision behavior and evaluation evidence.
+For the reported model version, the decision head is the validated output analyzed in this paper. The emotion head is disabled for this evaluation, so emotion metrics are intentionally not claimed. The auxiliary-head architecture remains part of the model design, but this paper scopes empirical claims to the validated decision behavior and evaluation evidence.
 
 \subsection{Training Configuration}
 
-S12B starts from the S12 DS-L checkpoint and applies one boundary-pack sharpening epoch. The training configuration uses BERT-base-uncased, maximum sequence length 128, batch size 32, evaluation batch size 64, cosine scheduling with warmup ratio 0.05, label smoothing 0.05, and loss weights 1.0, 0.3, and 0.3 for the decision, value, and emotion/sentiment heads respectively. Encoder layers 9--11 are unfrozen with layer-wise learning rates $1.0{\times}10^{-6}$, $7.5{\times}10^{-7}$, and $5.0{\times}10^{-7}$. The global learning rate is $5.0{\times}10^{-6}$ and the recorded seed is 42. The emotion head is masked in the DS-L lineage during evaluation, so no emotion-head metric is reported for S12B.
+The reported model starts from the preceding fixed-split decision model and applies one boundary-refinement epoch. The training configuration uses BERT-base-uncased, maximum sequence length 128, batch size 32, evaluation batch size 64, cosine scheduling with warmup ratio 0.05, label smoothing 0.05, and loss weights 1.0, 0.3, and 0.3 for the decision, value, and emotion/sentiment heads respectively. Encoder layers 9--11 are unfrozen with layer-wise learning rates $1.0{\times}10^{-6}$, $7.5{\times}10^{-7}$, and $5.0{\times}10^{-7}$. The global learning rate is $5.0{\times}10^{-6}$ and the recorded seed is 42. The emotion head is disabled during this evaluation, so no emotion-head metric is reported for the evaluated model.
 
 \subsection{Data and Source Scope}
 
-The DS-L lineage is a curated decision-event corpus built from public NLP sources and curated decision examples. The corpus is organized around bounded decision labels and auxiliary context signals. The repository does not redistribute raw training data. Instead, it provides dataset documentation, processing notes, and artifact pointers sufficient for review of the evaluated checkpoint.
+The evaluated corpus is a curated decision-event dataset built primarily from natural-language inference and stance-style material. The construction scripts map entailment, contradiction, and neutral or insufficient-evidence cases into the bounded YES/NO/TBD decision space. The sources identified in the construction and annotation scripts are SNLI \cite{bowman2015snli}, MultiNLI \cite{williams2018broad}, and SemEval-style rumor/stance material. The repository does not redistribute raw training data. Instead, it provides dataset documentation, processing notes, evaluation outputs, and reproducibility pointers sufficient for review of the evaluated model.
 
 The dataset should be interpreted as a research and evaluation corpus for bounded decision behavior, not as a universal production benchmark. The paper evaluates learned deferral under the reported distribution; it does not claim universal generalization to all domains.
 
-The lineage includes three broad kinds of material. First, it uses natural-language inference style examples to expose entailment, contradiction, and neutral/insufficient-evidence patterns, including sources in the SNLI and MultiNLI family \cite{bowman2015snli,williams2018broad}. Second, it includes curated decision examples that map language contexts into the bounded YES/NO/TBD control space. Third, it adds targeted boundary material for cases that were difficult in earlier diagnostics, including number changes, role changes, negation, high-overlap contradiction, low-overlap support, long-context stress, and modal or hedged language. These categories are described at a level suitable for publication; reuse of upstream datasets must follow the licenses of the original sources.
+The dataset includes three broad kinds of material. First, natural-language inference examples expose entailment, contradiction, and neutral/insufficient-evidence patterns. Second, stance-style examples contribute support, denial, query, and uncertainty patterns that are mapped into the bounded decision space. Third, targeted boundary material is added for cases that were difficult in earlier diagnostics, including number changes, role changes, negation, high-overlap contradiction, low-overlap support, long-context stress, and modal or hedged language. These categories are described at a level suitable for publication; reuse of upstream datasets must follow the licenses of the original sources.
 
 \begin{table}[htbp]
 \centering
@@ -238,21 +238,20 @@ The lineage includes three broad kinds of material. First, it uses natural-langu
 \toprule
 Split & YES & NO & TBD \\
 \midrule
-Train & 137,168 & 149,071 & 132,486 \\
 Validation & 14,962 & 15,534 & 13,908 \\
 Test & 14,883 & 15,650 & 14,064 \\
 \bottomrule
 \end{tabular}
-\caption{Decision-class support for the evaluated DS-L validation and test splits.}
+\caption{Decision-class support for the evaluated held-out splits, confirmed from the tokenized evaluation files used for scoring.}
 \end{table}
 
-DS-L contains 418,725 training examples, 44,404 validation examples, and 44,597 test examples. The validation and test splits are fixed from the DS-J lineage and are reused unchanged for the S12/S12B evaluations. The S12B boundary pack contains 323 training examples mined from S12 diagnostics; it is used only for one sharpening epoch and is less than 0.1\% of the DS-L training volume.
+The evaluated validation and test splits contain 44,404 and 44,597 examples respectively. These counts and class supports are taken from the tokenized evaluation files used for the reported scoring run. The training corpus contains approximately 419K examples after targeted hard-case construction. The boundary-refinement subset contains 323 training examples mined from prior diagnostic errors; it is used only for one sharpening epoch and is less than 0.1\% of the training volume.
 
 \subsection{Annotation and Construction Transparency}
 
-The decision labels are derived from a natural-language inference formulation. Entailment maps to YES, contradiction maps to NO, and neutral or insufficient evidence maps to TBD. No new project-specific inter-annotator agreement study was conducted for S12B. The project inherits the annotation assumptions of the source NLI datasets, including reported agreement for SNLI and MultiNLI, and applies documented correction passes where diagnostics identified systematic label errors.
+The decision labels are derived from a natural-language inference formulation. Entailment maps to YES, contradiction maps to NO, and neutral or insufficient evidence maps to TBD. No new project-specific inter-annotator agreement study was conducted for the reported model version. The project inherits the annotation assumptions of the source NLI datasets, including reported agreement for SNLI and MultiNLI, and applies documented correction passes where diagnostics identified systematic label errors.
 
-The main dataset construction steps are also recorded. DS-B contained approximately 814K examples after initial cleaning. DS-E reduced the corpus to the NLI-compatible subset, producing the largest quality gain in the lineage. DS-J became the canonical fixed split baseline. DS-L expanded the DS-J training split to 418,725 rows by adding targeted hard cases and capped pattern boosts while keeping validation and test splits unchanged. The exact per-source breakdown inside the 323-row boundary pack was not preserved in the final CSV; this is recorded as a dataset-transparency limitation rather than inferred after the fact.
+The main dataset construction steps are also recorded. The initial cleaned corpus contained approximately 814K examples. A subsequent construction step reduced the corpus to the NLI-compatible subset, producing the largest quality gain in the dataset construction process. A canonical fixed-split baseline was then established. The final training split was expanded by adding targeted hard cases and capped pattern boosts while keeping the evaluated validation and test splits fixed. The final CSV files do not preserve a row-level source column, so the paper does not claim an exact per-source row breakdown. The exact per-source breakdown inside the 323-row boundary-refinement subset was likewise not preserved in the final CSV; this is recorded as a dataset-transparency limitation rather than inferred after the fact.
 
 \subsection{Label Semantics}
 
@@ -260,7 +259,7 @@ The labels are defined by decision sufficiency rather than by surface sentiment.
 
 The auxiliary value and emotion/sentiment channels are designed to represent structured context, not to replace the primary decision label. Their intended semantics are decision-relative: the labels describe values and affective context as they bear on the decision event, not merely the linguistic tone of the text. The project documentation references established value, sentiment, emotion, and social-norm resources when describing auxiliary source scope \cite{schwartz2012overview,rosenthal2017semeval,malo2014good,barbieri2020tweeteval,demszky2020goemotions,ziems2023normbank,hoover2020mftc,poria2019meld,rashkin2019empathetic,sap2020socialbias,hendrycks2021ethics,go2009twitter,maas2011learning}. For example, lexical positivity does not imply a YES label, and lexical negativity does not imply a NO label. The relevant question is whether the text provides decision-sufficient support, rejection, or uncertainty.
 
-In S12B, the empirical claims are restricted to the decision head because the emotion head is masked in the DS-L lineage. This avoids overstating auxiliary performance and keeps the paper aligned with the validated artifact. Future auxiliary-head evaluation should therefore test decision-semantic alignment rather than only agreement with surface sentiment or keyword-based labels.
+For the evaluated model, the empirical claims are restricted to the decision head because the emotion head is disabled in this evaluation. This avoids overstating auxiliary performance and keeps the paper aligned with the validated evaluation evidence. Future auxiliary-head evaluation should therefore test decision-relative semantic alignment rather than only agreement with surface sentiment or keyword-based labels.
 
 Representative label examples are:
 \begin{itemize}[leftmargin=1.5em]
@@ -272,13 +271,16 @@ Representative label examples are:
 
 \subsection{Boundary Refinement}
 
-A recurring challenge in bounded decision systems is the boundary between action and deferral. S12B uses DS-L with a targeted boundary pack focused on hard semantic regions such as contradiction, negation, low lexical overlap entailment, high lexical overlap contradiction, long-text stress cases, and hedge/modal ambiguity. The goal is to improve boundary behavior using targeted examples rather than relying only on broad dataset scale.
+A recurring challenge in bounded decision systems is the boundary between action and deferral. The reported model uses the evaluated corpus with a targeted boundary-refinement subset focused on hard semantic regions such as contradiction, negation, low lexical overlap entailment, high lexical overlap contradiction, long-text stress cases, and hedge/modal ambiguity. The goal is to improve boundary behavior using targeted examples rather than relying only on broad dataset scale.
 
-This design reflects an empirical lesson from the development lineage: additional data is most useful when it targets the failing boundary. The boundary pack focuses on cases where surface overlap can be misleading, where negation changes the decision, where numbers or roles alter entailment, or where a statement is too hedged to support a direct YES or NO. These cases matter for learned deferral because the model must distinguish confident action from insufficient evidence.
+This design reflects an empirical lesson from the development process: additional data is most useful when it targets the failing boundary. The boundary-refinement subset focuses on cases where surface overlap can be misleading, where negation changes the decision, where numbers or roles alter entailment, or where a statement is too hedged to support a direct YES or NO. These cases matter for learned deferral because the model must distinguish confident action from insufficient evidence.
 
 \section{Evaluation Setup}
+\subsection{Dataset and model versions}
 
-The evaluated checkpoint is \texttt{exp\_t90\_S12B\_boundarypack\_ep1\_fromS12ep3}. Results are reported for DS-L validation and test splits:
+The evaluation uses a fixed-split decision-routing corpus constructed from named public NLI and stance-style sources, primarily SNLI, MultiNLI, and SemEval-style rumor/stance material, together with targeted hard-case examples designed to stress semantic ambiguity. The held-out validation and test splits remain fixed across the parent and refined model evaluations so that changes can be attributed to the refinement stage rather than to split variation.
+
+The reported model is the refined model in this fixed-split evaluation sequence. It starts from a parent decision model and adds one boundary-refinement epoch using a small hard-example subset mined from prior diagnostic errors. Results are reported for the fixed validation and test splits:
 \begin{itemize}[leftmargin=1.5em]
   \item validation: n = 44,404;
   \item test: n = 44,597.
@@ -295,16 +297,16 @@ The evaluation is organized around four questions:
   \item Does the model maintain balanced decision performance across YES, NO, and TBD?
   \item Does the deferral class behave as a learned outcome rather than as an afterthought to binary classification?
   \item Are the confidence scores sufficiently calibrated to support threshold review?
-  \item Can an external reviewer identify the evaluated checkpoint, data split, metrics, and commands used to reproduce the reported evidence?
+  \item Can an external reviewer identify the evaluated model version, data split, metrics, and commands used to reproduce the reported evidence?
 \end{enumerate}
 
-These questions are deliberately practical. A model used as a decision-control layer must be evaluated not only by aggregate score but also by the quality of its failure modes and the traceability of its evaluation artifacts.
+These questions are deliberately practical. A model used as a decision-control layer must be evaluated not only by aggregate score but also by the quality of its failure modes and the traceability of its evaluation evidence.
 
 \subsection{Metrics and Their Roles}
 
 Macro F1 measures whether performance is balanced across the bounded decision classes. Per-class F1 identifies which operational boundary is weakest. Precision and recall show whether each class is over-selected or under-selected. The confusion matrix exposes where errors move: for example, whether true TBD cases are being turned into action labels. Calibration error measures whether predicted confidence can be used in threshold policies. Threshold sweeps expose the coverage and deferral tradeoffs available to deployment owners.
 
-The paper reports these metrics together because no single number captures the quality of a deferral-aware system. A higher aggregate F1 would be less useful if it concealed premature action on ambiguous inputs. Conversely, a conservative threshold could increase deferral while reducing automation. The evaluation artifacts are intended to make these tradeoffs explicit.
+The paper reports these metrics together because no single number captures the quality of a deferral-aware system. A higher aggregate F1 would be less useful if it concealed premature action on ambiguous inputs. Conversely, a conservative threshold could increase deferral while reducing automation. The evaluation evidence is intended to make these tradeoffs explicit.
 
 \section{Results}
 
@@ -321,7 +323,7 @@ Test (n=44,597) & 0.8260 & 0.8252 \\
 \end{tabular}
 \end{center}
 
-The validation and test results are close, which supports the stability of the reported behavior under the fixed DS-L split. The test Macro F1 of 0.8252 should be interpreted together with the per-class table below because the operational meaning of errors differs across YES, NO, and TBD.
+The validation and test results are close, which supports the stability of the reported behavior under the fixed data split. The test Macro F1 of 0.8252 should be interpreted together with the per-class table below because the operational meaning of errors differs across YES, NO, and TBD.
 
 \subsection{Per-Class Test Performance}
 
@@ -337,7 +339,7 @@ TBD & 0.7955 & 0.7958 & 0.7956 & 14,064 \\
 \end{tabular}
 \end{center}
 
-NO has the highest class F1 in the S12B test result (F1 = 0.8486), indicating that the model learned a useful rejection boundary. TBD remains the hardest class (F1 = 0.7956), which is expected in a defer-aware system because the deferral region is defined by ambiguity rather than by a single semantic pattern. For this reason, the evaluation includes threshold sweeps and calibration evidence rather than relying only on a single argmax policy.
+NO has the highest class F1 in the reported test result (F1 = 0.8486), indicating that the model learned a useful rejection boundary. TBD remains the hardest class (F1 = 0.7956), which is expected in a defer-aware system because the deferral region is defined by ambiguity rather than by a single semantic pattern. For this reason, the evaluation includes threshold sweeps and calibration evidence rather than relying only on a single argmax policy.
 
 \subsection{Abstention and Coverage Baselines}
 
@@ -383,18 +385,18 @@ The validation confusion matrix shows that the largest residual issue is confusi
 
 \subsection{Calibration and Stability}
 
-The S12B evaluation reports validation ECE = 0.0338. This value indicates that the confidence distribution is suitable for inspection, but it should not be treated as a universal guarantee. Calibration is evaluated on the DS-L validation split and should be rechecked after domain transfer or threshold changes.
+The reported evaluation records validation ECE = 0.0338. This value indicates that the confidence distribution is suitable for inspection, but it should not be treated as a universal guarantee. Calibration is evaluated on the fixed validation split and should be rechecked after domain transfer or threshold changes.
 
 The evaluation also includes a multi-seed stability check over validation seeds 42, 0, and 7, which produced identical Macro F1 values in the published validation procedure (std = 0.0). This is not a claim that all future training runs will be identical. It shows that the evaluated inference and scoring procedure is deterministic under the recorded configuration.
 
-\subsection{S12 to S12B Boundary-Pack Effect}
+\subsection{Parent-to-Refined Model Effect}
 
-S12B should not be interpreted as a material raw-F1 improvement over S12. On the fixed test split, Macro F1 is essentially unchanged: S12 = 0.8254 and S12B = 0.8252. The measurable effect of the 323-row boundary pack is instead calibration and high-confidence error reduction. In the paired S12/S12B comparison script, validation ECE improves from 0.0461 to 0.0413, test ECE improves from 0.0426 to 0.0411, and high-confidence error rate at threshold 0.85 drops from 0.0558 to 0.0485 on the test split. These paired-comparison ECE values are reported separately from the certification calibration report, which records validation ECE = 0.0338 under its stored binning procedure.
+The refined model should not be interpreted as a material raw-F1 improvement over its parent model. On the fixed test split, Macro F1 is essentially unchanged: parent model = 0.8254 and refined model = 0.8252. The measurable effect of the 323-row boundary-refinement subset is instead calibration and high-confidence error reduction. In the paired-comparison script, validation ECE improves from 0.0461 to 0.0413, test ECE improves from 0.0426 to 0.0411, and high-confidence error rate at threshold 0.85 drops from 0.0558 to 0.0485 on the test split. These paired-comparison ECE values are reported separately from the stored calibration report, which records validation ECE = 0.0338 under its stored binning procedure.
 
 \begin{center}
 \begin{tabular}{lrrrr}
 \toprule
-Metric & S12 val & S12B val & S12 test & S12B test \\
+Metric & Parent val & Refined val & Parent test & Refined test \\
 \midrule
 Macro F1 & 0.8211 & 0.8213 & 0.8254 & 0.8252 \\
 ECE & 0.0461 & 0.0413 & 0.0426 & 0.0411 \\
@@ -407,14 +409,14 @@ TBD rate & 0.3183 & 0.3120 & 0.3221 & 0.3155 \\
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.78\linewidth]{s12_s12b_calibration_hc_errors.png}
-\caption{S12 to S12B comparison. The boundary-pack sharpening pass leaves Macro F1 nearly flat but reduces calibration error and high-confidence error rates.}
+\caption{Parent-to-refined comparison. The boundary-refinement pass leaves Macro F1 nearly flat but reduces calibration error and high-confidence error rates.}
 \end{figure}
 
 \subsection{Interpretation of the Remaining Error Mode}
 
-The most important residual error is not a simple lack of class balance. YES, NO, and TBD have comparable support in the test split, and the model performs strongly on NO. The remaining difficulty is semantic: a true TBD case may resemble a YES or NO case because it shares terms, roles, or surface structure while lacking decisive evidence. This is why the boundary pack emphasizes contradiction, negation, role and number swaps, high-overlap non-entailment, and hedged or modal statements.
+The most important residual error is not a simple lack of class balance. YES, NO, and TBD have comparable support in the test split, and the model performs strongly on NO. The remaining difficulty is semantic: a true TBD case may resemble a YES or NO case because it shares terms, roles, or surface structure while lacking decisive evidence. This is why the boundary-refinement subset emphasizes contradiction, negation, role and number swaps, high-overlap non-entailment, and hedged or modal statements.
 
-From an operational perspective, the highest-risk error is a true TBD routed as YES or NO. Such cases reduce the value of deferral because they turn ambiguous inputs into direct actions. The threshold-sweep artifacts are therefore not optional supplementary material; they are part of how a deployment owner decides how much automation to allow.
+From an operational perspective, the highest-risk error is a true TBD routed as YES or NO. Such cases reduce the value of deferral because they turn ambiguous inputs into direct actions. The threshold-sweep outputs are therefore part of the evaluation evidence used to select an operating point.
 
 The qualitative audit on the full test split records 7,758 errors out of 44,597 examples (17.4\%). The largest error categories are TBD routed to YES (1,729), NO routed to TBD (1,528), YES routed to TBD (1,350), and TBD routed to NO (1,143). Hard binary confusions are smaller but operationally important: YES routed to NO occurs 994 times and NO routed to YES occurs 1,014 times. The audit examples indicate that the residual errors concentrate around lexical overlap, missing evidence, negation/polarity ambiguity, and cases where a plausible inference goes beyond the premise.
 
@@ -446,63 +448,58 @@ NO$\rightarrow$YES & 1,014 & 0.7165 & 0.5107 \\
 \centering
 \includegraphics[width=\linewidth]{calibration_curve_s12b.png}
 \end{minipage}
-\caption{Evaluation artifacts derived from the S12B certification record. Left: validation confusion matrix. Right: validation calibration curve with ECE = 0.0338.}
+\caption{Evaluation evidence for the reported model version. Left: validation confusion matrix. Right: validation calibration curve with ECE = 0.0338.}
 \end{figure}
 
 \section{Audit-Oriented Evaluation Evidence}
 
-The checkpoint is documented with audit-oriented artifacts in addition to evaluation scores. For S12B, the public evidence directory is:
-\begin{quote}
-\texttt{certification/runs/S12B\_20260526/}
-\end{quote}
-
-The directory includes:
+The model version is documented with audit-oriented evidence in addition to evaluation scores. For the reported model version, the public release includes an evidence directory containing the following materials:
 \begin{itemize}[leftmargin=1.5em]
   \item evaluation and calibration reports;
   \item calibration data with validation ECE = 0.0338;
-  \item threshold-sweep artifacts for TBD-fallback operating policies;
+  \item threshold-sweep outputs for TBD-fallback operating policies;
   \item multi-seed stability evidence, with validation seeds 42, 0, and 7 producing identical Macro F1 (std = 0.0);
-  \item post-training abstention, dataset-transparency, annotation-policy, TBD-audit, and S12/S12B comparison reports;
+  \item abstention, dataset, annotation, deferral-error, and parent/refined comparison reports;
   \item run metrics, confusion matrix, diagnostics, and reproducibility commands.
 \end{itemize}
 
-This structure is part of the evaluation contribution. It exposes the evidence needed to inspect operating behavior rather than only the final checkpoint.
+This structure is part of the evaluation contribution. It exposes the evidence needed to inspect operating behavior rather than only the final model version.
 
 \begin{center}
 \begin{tabular}{ll}
 \toprule
-Artifact type & Review purpose \\
+Evidence type & Review purpose \\
 \midrule
 Metrics reports & Verify full-split accuracy, Macro F1, and per-class behavior \\
 Confusion matrices & Inspect movement among YES, NO, and TBD outcomes \\
 Calibration data & Assess whether confidence supports threshold policies \\
 Threshold sweeps & Select operating points for automation versus deferral \\
 Stability checks & Confirm deterministic evaluation behavior for the release \\
-Reproducibility commands & Reconstruct the evaluated checkpoint and procedure \\
-Post-training tests & Review abstention, dataset, annotation, and error-audit evidence \\
+Reproducibility commands & Reconstruct the evaluation procedure \\
+Post-training tests & Review abstention, dataset, and error evidence \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \subsection{Why Audit Evidence Matters}
 
-For decision-control models, reproducibility and auditability are not secondary documentation tasks. They determine whether a model can be reviewed before deployment. A headline score does not show whether the confidence distribution is calibrated, whether thresholds were selected after inspecting tradeoffs, whether results are stable across seeds, or whether the exact evaluated artifact can be located.
+For decision-control models, reproducibility and auditability are not secondary documentation tasks. They determine whether a model can be reviewed before deployment. A headline score does not show whether the confidence distribution is calibrated, whether thresholds were selected after inspecting tradeoffs, whether results are stable across seeds, or whether the exact evaluated model version can be located.
 
-The evaluation is therefore recorded as a set of review artifacts. The evidence directory is designed to answer reviewer questions: Which checkpoint was evaluated? Which data split was used? What were the per-class outcomes? What threshold sweeps were run? How stable are the results? Where are the reproducibility commands? This makes the reported result more transparent than a standalone benchmark table.
+The evaluation is therefore recorded as a set of review evidence. The evidence directory is designed to answer reviewer questions: Which model version was evaluated? Which data split was used? What were the per-class outcomes? What threshold sweeps were run? How stable are the results? Where are the reproducibility commands? This makes the reported result more transparent than a standalone benchmark table.
 
 \section{Discussion}
 
-The results show that bounded decision control can be evaluated as a decision interface rather than as ordinary classification alone. S12B achieves balanced performance across YES, NO, and TBD, with NO F1 = 0.8486 and TBD F1 = 0.7956 on the full test split. The remaining difficulty is the boundary between actionable decisions and deferral, especially ambiguous cases where a human reviewer or downstream policy may prefer conservative routing.
+The results show that bounded decision control can be evaluated as a decision interface rather than as ordinary classification alone. The reported model achieves balanced performance across YES, NO, and TBD, with NO F1 = 0.8486 and TBD F1 = 0.7956 on the full test split. The remaining difficulty is the boundary between actionable decisions and deferral, especially ambiguous cases where a human reviewer or downstream policy may prefer conservative routing.
 
-Calibration, threshold sweeps, and multi-seed stability make the model's operating behavior inspectable. Downstream systems can select operating thresholds and document tradeoffs without retraining the core model. This is the practical meaning of decision control in the paper: the checkpoint supplies a bounded distribution, while the deployment layer controls routing through recorded thresholds, fallback rules, and, in future validated lineages, auxiliary decision-semantic channels.
+Calibration, threshold sweeps, and multi-seed stability make the model's operating behavior inspectable. Downstream systems can select operating thresholds and document tradeoffs without retraining the core model. Operationally, decision control refers to separating the model's bounded distribution from the deployment policy that maps scores to routing decisions via recorded thresholds and fallback rules (and, in future validated model versions, auxiliary decision-relative semantic channels).
 
-The auxiliary architecture also matters, but empirical claims should remain scoped. In S12B, decision behavior is validated; emotion metrics are not reported because the emotion head is masked. Future releases can separately validate auxiliary value and emotion behavior as independent outputs.
+The auxiliary architecture also matters, but empirical claims should remain scoped. In the reported evaluation, decision behavior is validated; emotion metrics are not reported because the emotion head is disabled. Future releases can separately validate auxiliary value and emotion behavior as independent outputs.
 
-The result is not an isolated leaderboard metric. It is a learned-deferral decision model evaluated with artifacts that describe classwise behavior, calibration, threshold tradeoffs, stability, and artifact identity. These materials are necessary when a model is used as a decision interface rather than a passive classifier.
+The result is not an isolated leaderboard metric. It is a learned-deferral decision model evaluated with evidence that describes classwise behavior, calibration, threshold tradeoffs, stability, and model identity. These materials are necessary when a model is used as a decision interface rather than a passive classifier.
 
 \subsection{Interpretation of the Score Plateau}
 
-The S12B result is close to the preceding S12 checkpoint in raw Macro F1, but it is better supported by evaluation evidence because the decision metrics are accompanied by corrected evaluation behavior, calibration evidence, stability checks, abstention baselines, error audits, and a clearer artifact structure. This distinction matters. A slightly higher score without reliable evaluation handling, traceable artifacts, or threshold evidence would be less informative for external review.
+The reported result is close to the preceding parent model in raw Macro F1, but it is better supported by evaluation evidence because the decision metrics are accompanied by corrected evaluation behavior, calibration evidence, stability checks, abstention baselines, error audits, and a clearer evidence structure. This distinction matters. A slightly higher score without reliable evaluation handling, traceable evaluation evidence, or threshold evidence would be less informative for external review.
 
 The observed plateau near the low-0.82 Macro F1 range suggests that remaining gains are concentrated in the semantic deferral boundary rather than in generic optimization. The model already distinguishes NO well. The hard cases are those where the input contains familiar words or plausible structure but does not supply enough evidence for action. Further improvement is therefore more likely to come from better boundary labeling, domain-specific validation, longer-context handling, and operating-threshold selection than from simply increasing dataset size.
 
@@ -510,29 +507,29 @@ The observed plateau near the low-0.82 Macro F1 range suggests that remaining ga
 
 The practical implication is that AI decision systems should expose uncertainty as a routable outcome. A deployment owner can then decide how uncertain cases move through the workflow: manual review, evidence request, policy escalation, or rejection by default. This is different from treating uncertainty as a hidden property of a model confidence score. It also makes operational control explicit: changing the workflow response to uncertainty becomes a documented policy change, not a hidden model change.
 
-The model makes this separation explicit. It learns a deferral class, while the operating policy selects thresholds and routing behavior. This separation supports review because the model artifact and the deployment rule can be examined independently. If an organization changes its risk tolerance, it can adjust thresholds and document the change without altering the underlying checkpoint.
+The model makes this separation explicit. It learns a deferral class, while the operating policy selects thresholds and routing behavior. This separation supports review because the model and the deployment rule can be examined independently. If an organization changes its risk tolerance, it can adjust thresholds and document the change without altering the underlying model.
 
 \section{Limitations}
 
-Results are specific to DS-L, the S12B checkpoint, and the evaluation setup reported here. The control interface is domain-agnostic, but the reported performance is not a domain-transfer result. Additional domains require separate validation, calibration review, threshold selection, policy-version review, and error audit. Inputs are truncated to 128 tokens, so long-context use cases require chunking or preprocessing. The emotion head is masked in this lineage, so this paper does not claim validated emotion-head performance for S12B. The dataset composition includes public NLP sources and curated decision examples, but raw training data is not redistributed in this repository. Users should consult original dataset licenses before reusing source datasets.
+Results are specific to the evaluated corpus, the reported model version, and the evaluation setup described here. The control interface is domain-agnostic, but the reported performance is not a domain-transfer result. Additional domains require separate validation, calibration review, threshold selection, policy-version review, and error audit. Inputs are truncated to 128 tokens, so long-context use cases require chunking or preprocessing. The emotion head is disabled in this evaluation, so this paper does not claim validated emotion-head performance for the reported model version. The dataset composition includes public NLP sources and curated decision examples, but raw training data is not redistributed in this repository. Users should consult original dataset licenses before reusing source datasets.
 
 The paper also does not claim that TBD is always the correct action under uncertainty. TBD is a model output and an operating-policy option, not a substitute for domain governance. Deployment owners must decide how deferred cases are routed and what thresholds are acceptable for their risk environment. Similarly, the reported calibration value is tied to the validation split and should be remeasured after domain transfer, threshold changes, or additional fine-tuning.
 
-The abstention experiments are diagnostic baselines, not a complete comparison against independently trained abstention systems. The forced binary baseline tests the loss of the TBD class, while confidence, entropy, and margin rejection test retained-set behavior under thresholded abstention. A stronger conference version should include separately trained binary and selective-classification baselines, conformal abstention, and domain-transfer evaluations.
+The abstention experiments are diagnostic baselines, not a complete comparison against independently trained abstention systems. The forced binary baseline tests the loss of the TBD class, while confidence, entropy, and margin rejection test retained-set behavior under thresholded abstention. A more complete follow-up study should include separately trained binary and selective-classification baselines, conformal abstention, and domain-transfer evaluations.
 
 Finally, the audit evidence should be understood as a review aid, not as a guarantee of universal safety. It makes the evidence inspectable, but each deployment still requires application-specific validation and monitoring.
 
 \section{Future Work}
 
-Three extensions would strengthen the research claim beyond the current arXiv version. First, independently trained baselines should be added, including binary classifiers with rejection, selective-classification objectives, conformal prediction wrappers, and abstention-trained models. Second, domain-transfer evaluations should test whether learned deferral and calibration behavior hold outside DS-L, for example in policy approval, moderation escalation, compliance review, financial triage, or enterprise workflow routing. Third, auxiliary value and emotion heads should be re-enabled and evaluated as independent decision-semantic outputs before they are treated as validated model claims. A further deployment study should evaluate whether auxiliary channels can be used as real-time policy controls while preserving auditability, calibration, and separation between model scores and operating policy.
+Three extensions would strengthen the research claim beyond the present study. First, independently trained baselines should be added, including binary classifiers with rejection, selective-classification objectives, conformal prediction wrappers, and abstention-trained models. Second, domain-transfer evaluations should test whether learned deferral and calibration behavior hold outside the evaluated corpus, for example in policy approval, moderation escalation, compliance review, financial triage, or enterprise workflow routing. Third, auxiliary value and emotion heads should be re-enabled and evaluated as independent decision-relative semantic outputs before they are treated as validated model claims. A further deployment study should evaluate whether auxiliary channels can be used as real-time policy controls while preserving auditability, calibration, and separation between model scores and operating policy.
 
 \section{Conclusion}
 
 This paper presented a bounded decision-control model with learned deferral. The motivating problem is that operational AI systems often need to decide whether to act, reject, or defer, and a forced binary or generative output can hide uncertainty from the surrounding workflow. The model addresses this problem with a three-way learned decision interface: YES, NO, and TBD.
 
-On the full DS-L test split, S12B achieves Accuracy = 0.8260 and Macro F1 = 0.8252, with per-class F1 scores of 0.8314 (YES), 0.8486 (NO), and 0.7956 (TBD). A forced binary YES/NO view of the same task drops to Macro F1 = 0.4945 because it cannot represent deferral. The S12B boundary-pack pass does not materially improve raw F1 over S12, but it reduces calibration error and high-confidence error rates. The result is accompanied by calibration evidence, threshold sweeps, stability checks, confusion matrices, abstention baselines, error audits, and reproducibility materials. The paper's claim is therefore not only that the model reaches a particular score, but that learned deferral can be evaluated as an auditable decision-control surface whose runtime behavior can be governed through documented operating policy.
+On the full fixed test split, the reported model achieves Accuracy = 0.8260 and Macro F1 = 0.8252, with per-class F1 scores of 0.8314 (YES), 0.8486 (NO), and 0.7956 (TBD). A forced binary YES/NO view of the same task drops to Macro F1 = 0.4945 because it cannot represent deferral. The boundary-refinement pass does not materially improve raw F1 over its parent model, but it reduces calibration error and high-confidence error rates. The result is accompanied by calibration evidence, threshold sweeps, stability checks, confusion matrices, abstention baselines, error audits, and reproducibility materials. The paper's claim is therefore not only that the model reaches a particular score, but that learned deferral can be evaluated as an auditable decision-control interface whose inference-time behavior can be governed through documented operating policy.
 
-The remaining work is clear: improve the semantic boundary between direct action and deferral, validate auxiliary value and emotion outputs as independent empirical claims, test auxiliary channels as policy controls, and repeat calibration and threshold review for each deployment domain. Within the evaluated scope, S12B provides a concrete checkpoint for bounded decision routing under ambiguity.
+The remaining work is clear: improve the semantic boundary between direct action and deferral, validate auxiliary value and emotion outputs as independent empirical claims, test auxiliary channels as policy controls, and repeat calibration and threshold review for each deployment domain. Within the evaluated scope, the reported model provides a concrete model version for bounded decision routing under ambiguity.
 
 \bibliographystyle{plain}
 \bibliography{references}
