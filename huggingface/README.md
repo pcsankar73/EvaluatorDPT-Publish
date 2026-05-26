@@ -90,8 +90,9 @@ Evaluation (DS-L):
 | TBD | 0.7955 | 0.7958 | 0.7956 | 14,064 |
 
 Notes:
-- Emotion head is **masked** in DS-L lineage (0 valid samples after mask), so emotion metrics are intentionally skipped for this publish candidate.
-- Decision threshold sweep artifacts (TBD-fallback) are stored for auditability: `experiments/S12B_20260526/certification/threshold_sweep_decision_20260526/`.
+- Emotion head is masked in DS-L lineage (0 valid samples after mask), so emotion metrics are intentionally skipped for this publish candidate.
+- Certification pack (self-contained evidence bundle): certification/runs/S12B_20260526/
+- Decision threshold sweep artifacts (TBD-fallback): experiments/S12B_20260526/certification/threshold_sweep_decision_20260526/
 
 
 ## Training Data & Licensing Notes
@@ -176,3 +177,4 @@ Model artifacts: [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
 Code and documentation: see repository [LICENSE](https://github.com/pcsankar73/EvaluatorDPT-Publish/blob/main/LICENSE).
 
 ---
+
