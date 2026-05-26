@@ -73,6 +73,16 @@ This formulation differs from binary classification with a reject threshold in t
 
 The practical requirement is not only high aggregate performance. A decision-control model should also expose the evidence needed to review its behavior: per-class outcomes, confusion patterns, calibration, threshold tradeoffs, stability under repeated evaluation, and artifact identity. These requirements motivate the certification-oriented release structure described later in the paper.
 
+\subsection{Operational Risk}
+
+The operational risk of a bounded decision model depends on both the predicted label and the action policy attached to that label. Let $a(g(x))$ denote the downstream action selected after applying a routing rule $g$. A simple deployment loss can be written as
+\[
+R(g) = \mathbb{E}_{(x,y)} \left[ C(y, g(x)) \right],
+\]
+where $C$ assigns different costs to different errors. In a decision-routing setting, confusing a true TBD case with YES or NO can be more costly than routing a true YES or NO case to TBD, because over-commitment may trigger an unsupported action while false deferral usually triggers review. This asymmetry motivates reporting false-action behavior, high-confidence errors, and threshold sweeps in addition to Macro F1.
+
+This paper does not estimate application-specific costs. Instead, it reports classwise errors and coverage-sensitive operating points so that downstream users can choose thresholds consistent with their own cost matrix. This keeps the model evaluation separate from deployment-specific policy selection.
+
 \subsection{Learned Deferral and Reject-Threshold Abstention}
 
 Let $p_\theta(y \mid x)$ be the model distribution over $\mathcal{Y}_d$. In a standard reject-threshold design, a binary classifier first estimates $p_\theta(y \in \{\text{YES}, \text{NO}\}\mid x)$ and then abstains when confidence, entropy, or margin fails a threshold. Deferral is therefore an operating rule applied after the classifier has learned a binary decision boundary.
@@ -221,6 +231,14 @@ The labels are defined by decision sufficiency rather than by surface sentiment.
 The auxiliary value and emotion/sentiment channels are designed to represent structured context, not to replace the primary decision label. Their intended semantics are decision-relative: the labels describe values and affective context as they bear on the decision event, not merely the linguistic tone of the text. For example, lexical positivity does not imply a YES label, and lexical negativity does not imply a NO label. The relevant question is whether the text provides decision-sufficient support, rejection, or uncertainty.
 
 In S12B, the empirical claims are restricted to the decision head because the emotion head is masked in the DS-L lineage. This avoids overstating auxiliary performance and keeps the paper aligned with the validated artifact. Future auxiliary-head evaluation should therefore test decision-semantic alignment rather than only agreement with surface sentiment or keyword-based labels.
+
+Representative label examples are:
+\begin{itemize}[leftmargin=1.5em]
+  \item YES: ``All employees received a 10\% pay raise this year'' supports ``Employee salaries increased this year.''
+  \item NO: ``The company reported zero profit for the quarter'' contradicts ``The company was profitable this quarter.''
+  \item TBD: ``The manager approved one new project this quarter'' does not establish ``The manager approved all new projects this quarter.''
+  \item TBD: ``The policy may allow expedited review in limited cases'' does not establish ``The request is approved.''
+\end{itemize}
 
 \subsection{Boundary Refinement}
 
