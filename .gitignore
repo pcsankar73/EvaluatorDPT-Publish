@@ -45,6 +45,7 @@ assets/Background_color.png
 
 # Internal-only resume work (never publish)
 Resume-Update/
+Resume-Update-dontpublish/
 
 # Dataset publishing artifacts (added later via Git LFS or external upload)
 VEGD/data/*.parquet
@@ -57,3 +58,10 @@ VEGD/data/*.csv
 *.tar
 *.tar.gz
 *.parquet
+
+# Never commit Word docs
+docs/*.docx
+
+# Local-only scratch files
+F18211-score.txt
+
