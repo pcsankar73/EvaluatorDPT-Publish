@@ -73,6 +73,24 @@ This formulation differs from binary classification with a reject threshold in t
 
 The practical requirement is not only high aggregate performance. A decision-control model should also expose the evidence needed to review its behavior: per-class outcomes, confusion patterns, calibration, threshold tradeoffs, stability under repeated evaluation, and artifact identity. These requirements motivate the certification-oriented release structure described later in the paper.
 
+\subsection{Learned Deferral and Reject-Threshold Abstention}
+
+Let $p_\theta(y \mid x)$ be the model distribution over $\mathcal{Y}_d$. In a standard reject-threshold design, a binary classifier first estimates $p_\theta(y \in \{\text{YES}, \text{NO}\}\mid x)$ and then abstains when confidence, entropy, or margin fails a threshold. Deferral is therefore an operating rule applied after the classifier has learned a binary decision boundary.
+
+In this work, deferral is part of the supervised decision space. The training objective includes examples labeled TBD, so the model can assign probability mass directly to an insufficient-evidence outcome:
+\[
+\hat{y} = \arg\max_{y \in \{\text{YES},\text{NO},\text{TBD}\}} p_\theta(y \mid x).
+\]
+A deployment threshold $\tau_y$ may still be applied:
+\[
+g(x) =
+\begin{cases}
+\arg\max_y p_\theta(y \mid x), & \exists y: p_\theta(y \mid x) \ge \tau_y,\\
+\text{TBD}, & \text{otherwise.}
+\end{cases}
+\]
+The distinction is not that thresholds are avoided. The distinction is that thresholds operate over a distribution that already contains a learned deferral class. This paper does not claim empirical superiority over all abstention baselines; it reports the evaluated behavior of a learned-deferral formulation and identifies abstention baselines as a necessary next comparison for a conference version.
+
 \section{What Is Novel in This Work}
 
 The novelty is not the use of a transformer encoder by itself. The contribution lies in the way the model and evaluation protocol are organized around bounded decision control.
@@ -90,6 +108,18 @@ The evaluation package includes calibration data, threshold-sweep artifacts, mul
 The development process identifies deferral boundaries as the key failure region and uses targeted boundary examples rather than undifferentiated data growth. This is especially relevant for negation, contradiction, lexical-overlap traps, long-text stress cases, and hedged statements.
 
 Together, these choices define the scope of the paper. The model is presented as a bounded formulation for decision routing, not as a new language-model backbone. The empirical question is whether a learned deferral class, evaluated with classwise and calibration evidence, can support controlled decision workflows.
+
+\subsection{Design Principles}
+
+The work is guided by six design principles for auditable decision routing:
+\begin{enumerate}[leftmargin=1.5em]
+  \item Uncertainty should be explicit, not hidden inside a forced YES/NO decision.
+  \item Deferral should be represented as a first-class outcome when training data supports it.
+  \item Operating thresholds should remain external to the checkpoint and be recorded as policy.
+  \item Confidence should be accompanied by calibration evidence.
+  \item Evaluation should report classwise behavior, not only aggregate accuracy.
+  \item The evaluated artifact, split, threshold policy, and commands should be reconstructable.
+\end{enumerate}
 
 \section{Related Work}
 
@@ -150,6 +180,10 @@ The architecture uses a BERT-base encoder \cite{devlin2019bert} with a maximum s
 
 For S12B, the decision head is the validated output reported in this paper. The emotion head is masked in the DS-L lineage, so emotion metrics are intentionally not claimed for this checkpoint. The auxiliary-head architecture remains part of the model design, but this paper scopes empirical claims to the validated S12B decision behavior and evaluation evidence.
 
+\subsection{Training Configuration}
+
+S12B starts from the S12 DS-L checkpoint and applies one boundary-pack sharpening epoch. The training configuration uses BERT-base-uncased, maximum sequence length 128, batch size 32, evaluation batch size 64, cosine scheduling with warmup ratio 0.05, label smoothing 0.05, and loss weights 1.0, 0.3, and 0.3 for the decision, value, and emotion/sentiment heads respectively. Encoder layers 9--11 are unfrozen with layer-wise learning rates $1.0{\times}10^{-6}$, $7.5{\times}10^{-7}$, and $5.0{\times}10^{-7}$. The global learning rate is $5.0{\times}10^{-6}$ and the recorded seed is 42. The emotion head is masked in the DS-L lineage during evaluation, so no emotion-head metric is reported for S12B.
+
 \subsection{Data and Source Scope}
 
 The DS-L lineage is a curated decision-event corpus built from public NLP sources and curated decision examples. The corpus is organized around bounded decision labels and auxiliary context signals. The repository does not redistribute raw training data. Instead, it provides dataset documentation, processing notes, and artifact pointers sufficient for review of the evaluated checkpoint.
@@ -157,6 +191,19 @@ The DS-L lineage is a curated decision-event corpus built from public NLP source
 The dataset should be interpreted as a research and evaluation corpus for bounded decision behavior, not as a universal production benchmark. The paper evaluates learned deferral under the reported distribution; it does not claim universal generalization to all domains.
 
 The lineage includes three broad kinds of material. First, it uses natural-language inference style examples to expose entailment, contradiction, and neutral/insufficient-evidence patterns. Second, it includes curated decision examples that map language contexts into the bounded YES/NO/TBD control space. Third, it adds targeted boundary material for cases that were difficult in earlier diagnostics, including number changes, role changes, negation, high-overlap contradiction, low-overlap support, long-context stress, and modal or hedged language. These categories are described at a level suitable for publication; reuse of upstream datasets must follow the licenses of the original sources.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Split & YES & NO & TBD \\
+\midrule
+Validation & 14,962 & 15,534 & 13,908 \\
+Test & 14,883 & 15,650 & 14,064 \\
+\bottomrule
+\end{tabular}
+\caption{Decision-class support for the evaluated DS-L validation and test splits.}
+\end{table}
 
 \subsection{Label Semantics}
 
@@ -262,6 +309,20 @@ The evaluation also includes a multi-seed stability check over validation seeds 
 The most important residual error is not a simple lack of class balance. YES, NO, and TBD have comparable support in the test split, and the model performs strongly on NO. The remaining difficulty is semantic: a true TBD case may resemble a YES or NO case because it shares terms, roles, or surface structure while lacking decisive evidence. This is why the boundary pack emphasizes contradiction, negation, role and number swaps, high-overlap non-entailment, and hedged or modal statements.
 
 From an operational perspective, the highest-risk error is a true TBD routed as YES or NO. Such cases reduce the value of deferral because they turn ambiguous inputs into direct actions. The threshold-sweep artifacts are therefore not optional supplementary material; they are part of how a deployment owner decides how much automation to allow.
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\linewidth}
+\centering
+\includegraphics[width=\linewidth]{confusion_matrix_s12b.png}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\linewidth}
+\centering
+\includegraphics[width=\linewidth]{calibration_curve_s12b.png}
+\end{minipage}
+\caption{Evaluation artifacts derived from the S12B certification record. Left: validation confusion matrix. Right: validation calibration curve with ECE = 0.0338.}
+\end{figure}
 
 \section{Audit-Oriented Evaluation Evidence}
 
