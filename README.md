@@ -99,8 +99,7 @@ python inference/predict.py
 - HuggingFace: [pcsankar73s/EvaluatorModel](https://huggingface.co/pcsankar73s/EvaluatorModel)
 - OSF preprint: [https://osf.io/ztnya/](https://osf.io/ztnya/)
 - arXiv: TBD
-- Pareto optimization notes: [`docs/pareto_optimization.md`](docs/pareto_optimization.md)
-- “90 score” objective spec: [`docs/analysis/objective_90_spec.md`](docs/analysis/objective_90_spec.md)
+- Pareto optimization notes: [`docs/methodology/pareto_optimization.md`](docs/methodology/pareto_optimization.md)
 - Contact: sankar@smsquared.ai
 
 ---
@@ -110,4 +109,5 @@ python inference/predict.py
 - Repository code + documentation: MIT (see LICENSE).
 - Model weights (Hugging Face): CC BY-NC 4.0 (see huggingface/README.md).
 - Training data is not redistributed; public datasets remain under their original licenses/terms.
+
 

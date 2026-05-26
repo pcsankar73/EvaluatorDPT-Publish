@@ -1,43 +1,35 @@
-# Certification Checklist
+# Certification Checklist (Public)
 
-## Model Artifacts
+Purpose: quick visibility into which artifacts exist for a given run.
 
-- [x] final checkpoint
-- [x] HF export
-- [ ] tokenizer files
-- [ ] config files
-- [x] threshold policy
-- [x] artifact manifest
+Canonical run pointers live under:
+- `certification/runs/<RUN_ID>/ARTIFACT_POINTERS.md`
 
-## Data Artifacts
+## Required (S12B publish candidate)
 
-- [ ] dataset datasheet
-- [ ] class distributions
-- [ ] split definitions
-- [ ] v6 correction log
-- [ ] audit record
+### Model
+- [x] Final checkpoint pointer (S1/S2)
+- [x] HF export pointer (S1/S2)
+- [x] Threshold sweep artifacts (decision)
+- [x] Calibration artifacts (ECE + bins)
 
-## Evaluation Artifacts
+### Data
+- [x] Dataset datasheet (publish-safe)
+- [ ] Public dataset release (if/when applicable)
 
-- [x] final evaluation report
-- [x] calibration report
-- [ ] robustness report
-- [ ] ablation report
-- [x] multi-seed stability report
-- [x] threshold sweep report
+### Evaluation
+- [x] Evaluation report (val + test)
+- [x] Confusion matrix
+- [x] Multi-seed stability report
 
-## Governance Artifacts
+### Governance
+- [x] Model card
+- [x] Threshold policy (governance)
+- [x] Safety/limitations notes
 
-- [x] model card
-- [ ] governance and safety document
-- [ ] logging policy
-- [ ] rollback policy
-- [ ] escalation policy
+### Paper
+- [x] Current preprint package (PDF + figures)
 
-## Paper Artifacts
-
-- [ ] final paper PDF
-- [ ] appendix PDF
-- [ ] references
-- [ ] figures
-- [ ] reproducibility appendix
+Notes:
+- This repo does not ship raw training data.
+- Do not commit secrets (SAS tokens, credentials).
