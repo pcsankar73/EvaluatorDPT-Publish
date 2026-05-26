@@ -43,6 +43,10 @@ extra_gated_fields:
 
 Most AI systems are built to always give an answer — even when they shouldn't. EvaluatorDPT is built differently: it reads structured signals, doesn't generate text, and produces a bounded decision of **YES**, **NO**, or **defer to a human**.
 
+It is designed for governed decision routing: it outputs a bounded label plus confidence and preserves audit evidence (threshold sweep, calibration, and multi-seed stability) for the published release candidate.
+
+For the current candidate (S12B), full-split evaluation results and certification evidence are referenced below and bundled under `certification/runs/S12B_20260526/`.
+
 EvaluatorDPT is a BERT-based multi-task model for **auditable decision control under ambiguity**. It produces a bounded three-class decision (YES / NO / TBD) alongside structured auxiliary outputs that remain available at inference time as explainability signals and control variables.
 
 Unlike conventional classifiers that force a binary output regardless of evidence quality, EvaluatorDPT treats **TBD (defer)** as a trained first-class outcome — enabling uncertain cases to be routed to conservative handling without retraining the core model.
@@ -177,4 +181,6 @@ Model artifacts: [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
 Code and documentation: see repository [LICENSE](https://github.com/pcsankar73/EvaluatorDPT-Publish/blob/main/LICENSE).
 
 ---
+
+
 
