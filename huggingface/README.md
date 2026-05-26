@@ -75,24 +75,23 @@ All inputs are tokenized to a maximum sequence length of 128 tokens.
 
 ## Performance
 
-Trained on **181,000** curated decision events. Evaluated on a stratified held-out test split of **22,748 examples** (TBD majority class at 60.3%).
+Latest publish candidate: **S12B** (`exp_t90_S12B_boundarypack_ep1_fromS12ep3`, DS-L + boundary pack).
 
-| Method | Accuracy | Macro F1 | Micro F1 | Weighted F1 |
-|---|---|---|---|---|
-| Majority baseline (always TBD) | 0.6030 | 0.2508 | 0.6030 | 0.4537 |
-| **EvaluatorDPT** | **0.8485** | **0.8215** | **0.8485** | **0.8506** |
+Evaluation (DS-L):
+- Validation split (n=44,404): Accuracy **0.8224**, Macro F1 **0.8213**
+- Test split (n=44,597): Accuracy **0.8260**, Macro F1 **0.8252**
 
-**Per-class breakdown:**
+**Per-class breakdown (test):**
 
 | Class | Precision | Recall | F1 | Support |
-|---|---|---|---|---|
-| YES | 0.7683 | 0.9029 | 0.8302 | 5,871 |
-| NO | 0.7164 | 0.7923 | 0.7524 | 3,159 |
-| TBD | 0.9306 | 0.8381 | 0.8819 | 13,718 |
+|---|---:|---:|---:|---:|
+| YES | 0.8205 | 0.8425 | 0.8314 | 14,883 |
+| NO | 0.8598 | 0.8376 | 0.8486 | 15,650 |
+| TBD | 0.7955 | 0.7958 | 0.7956 | 14,064 |
 
-**Inference latency** (NVIDIA Tesla T4 GPU, 200 runs): p50 = 200 ms · p95 = 415 ms
-
----
+Notes:
+- Emotion head is **masked** in DS-L lineage (0 valid samples after mask), so emotion metrics are intentionally skipped for this publish candidate.
+- Decision threshold sweep artifacts (TBD-fallback) are stored for auditability: `experiments/S12B_20260526/certification/threshold_sweep_decision_20260526/`.
 
 ## Data Processing Modules
 

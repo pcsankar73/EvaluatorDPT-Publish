@@ -1,0 +1,24 @@
+=================================================================
+  MULTI-SEED STABILITY REPORT
+  Experiment : exp_t90_S12B_boundarypack_ep1_fromS12ep3_cert_stability_val_20260526
+  Checkpoint : best_model_epoch_1.pt
+  Split      : validation
+  Generated  : 2026-05-26 02:08
+=================================================================
+
+    Seed    Macro F1    YES F1     NO F1    TBD F1       Acc
+  ------  ----------  --------  --------  --------  --------
+      42    0.821317    0.8252    0.8496    0.7892    0.8224
+       0    0.821317    0.8252    0.8496    0.7892    0.8224
+       7    0.821317    0.8252    0.8496    0.7892    0.8224
+
+  ── Statistics ─────────────────────────────────────────────
+  Mean F1    : 0.821317
+  Std dev    : 0.000000   (gate: < 0.005)
+  Range      : 0.000000
+
+  ── Certification Gate ──────────────────────────────────────
+  ✅ PASS  — std=0.000000  < 0.005 — F1 is stable across seeds
+
+  Full results: reports/multi_seed/exp_t90_S12B_boundarypack_ep1_fromS12ep3_cert_stability_val_20260526/seed_results.json
+=================================================================

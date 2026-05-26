@@ -1,0 +1,44 @@
+{
+  "ece": 0.03381,
+  "bins": [
+    {
+      "conf": 0.377,
+      "acc": 0.361,
+      "n": 155
+    },
+    {
+      "conf": 0.464,
+      "acc": 0.444,
+      "n": 1253
+    },
+    {
+      "conf": 0.551,
+      "acc": 0.501,
+      "n": 2764
+    },
+    {
+      "conf": 0.652,
+      "acc": 0.562,
+      "n": 3070
+    },
+    {
+      "conf": 0.753,
+      "acc": 0.65,
+      "n": 3904
+    },
+    {
+      "conf": 0.857,
+      "acc": 0.774,
+      "n": 7269
+    },
+    {
+      "conf": 0.95,
+      "acc": 0.948,
+      "n": 25989
+    }
+  ],
+  "experiment": "exp_t90_S12B_boundarypack_ep1_fromS12ep3_cert_calibration_val_20260526",
+  "checkpoint": "output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt",
+  "split": "validation",
+  "generated": "2026-05-26 04:10"
+}

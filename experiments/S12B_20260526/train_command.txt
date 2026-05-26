@@ -1,0 +1,37 @@
+Experiment: exp_t90_S12B_boundarypack_ep1_fromS12ep3
+Date: 2026-05-26
+
+Train (boundary pack sharpen, 1 epoch):
+  nohup /data1tb/envs/evaluator_model_venv/bin/python scripts/fine_tune_only.py \
+    --experiment exp_t90_S12B_boundarypack_ep1_fromS12ep3 \
+    --start_from checkpoint \
+    --load_from /data1tb/evaluator-model-dev/output/checkpoints/exp_t90_S12_L9-11_Hds_dsl/best_model_epoch_3.pt \
+    --checkpoint_dir /data1tb/evaluator-model-dev/output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3 \
+    --model_name bert-base-uncased \
+    --tokenized_dir /data1tb/data/tokenized_s12_boundarypack_20260526 \
+    --epochs 1 --batch_size 32 --eval_batch_size 64 \
+    --learning_rate 5e-6 \
+    --encoder_lr_map '9:1e-6,10:7.5e-7,11:5e-7' \
+    --unfreeze_layers 9,10,11 \
+    --label_smoothing 0.05 \
+    --loss_weights 1.0,0.3,0.3 \
+    --warmup_ratio 0.05 --scheduler cosine --seed 42 \
+    > /data1tb/evaluator-model-dev/logs/exp_t90_S12B_boundarypack_ep1_fromS12ep3.log 2>&1 &
+
+Evaluate (full splits):
+  python scripts/evaluate_only.py --checkpoint output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt --tokenized_pt /data1tb/data/tokenized_s12_20260525_dsl/validation_tokenized.pt --out_dir reports/exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL --limit 0
+  python scripts/evaluate_only.py --checkpoint output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt --tokenized_pt /data1tb/data/tokenized_s12_20260525_dsl/test_tokenized.pt       --out_dir reports/exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLTEST --limit 0
+
+Certification checks (validation):
+  python scripts/multi_seed_eval.py --checkpoint output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt --tokenized_dir /data1tb/data/tokenized_s12_20260525_dsl --experiment exp_t90_S12B_boundarypack_ep1_fromS12ep3_cert_stability_val_20260526 --seeds 42,0,7 --split validation
+  python scripts/calibration_plots.py --checkpoint output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt --tokenized_dir /data1tb/data/tokenized_s12_20260525_dsl --experiment exp_t90_S12B_boundarypack_ep1_fromS12ep3_cert_calibration_val_20260526 --split validation
+
+Decision threshold sweep (from logits, TBD-fallback):
+  python scripts/threshold_sweep_logits.py \
+    --val_logits  reports/exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL/**/decision_logits.npy \
+    --val_labels  reports/exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL/**/decision_labels.npy \
+    --test_logits reports/exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLTEST/**/decision_logits.npy \
+    --test_labels reports/exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLTEST/**/decision_labels.npy \
+    --fallback_mode tbd --steps 9 \
+    --out_dir reports/threshold_sweep/exp_t90_S12B_boundarypack_ep1_fromS12ep3_20260526
+

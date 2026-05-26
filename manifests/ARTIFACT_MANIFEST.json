@@ -1,0 +1,25 @@
+{
+  "notes": "Updated to S12B boundary-pack sharpen. Multi-seed stability PASS; calibration_data_val.json captured; threshold sweep artifacts copied into experiments/S12B_20260526/certification.",
+  "created": "2026-05-26T05:04:10Z",
+  "commit": "TODO",
+  "artifact_version": "best_up_to_s12b_2026-05-26",
+  "threshold_policy": {
+    "sha256": "TODO",
+    "directory": "experiments/S12B_20260526/certification/threshold_sweep_decision_20260526"
+  },
+  "project": "EvaluatorDPT",
+  "dataset": {
+    "version": "DS-L (tokenized_s12_20260525_dsl)",
+    "sha256": "TODO",
+    "tokenized_s2_url": "https://myevaluatorstorage.blob.core.windows.net/modelartifacts/EvaluatorDPT-ModelArtifacts/data/tokenized_s12_20260525_dsl/",
+    "tokenized_s1_url": "https://evaluatorstorageaccount.blob.core.windows.net/modelartifacts/data/tokenized_s12_20260525_dsl/"
+  },
+  "model": {
+    "checkpoint_s2_url": "https://myevaluatorstorage.blob.core.windows.net/modelartifacts/EvaluatorDPT-ModelArtifacts/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt",
+    "sha256": "TODO",
+    "hf_export_s1_url": "https://evaluatorstorageaccount.blob.core.windows.net/modelartifacts/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/exp_t90_S12B_boundarypack_ep1_fromS12ep3/hf_format/",
+    "checkpoint": "exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt",
+    "hf_export_s2_url": "https://myevaluatorstorage.blob.core.windows.net/modelartifacts/EvaluatorDPT-ModelArtifacts/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/exp_t90_S12B_boundarypack_ep1_fromS12ep3/hf_format/",
+    "checkpoint_s1_url": "https://evaluatorstorageaccount.blob.core.windows.net/modelartifacts/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt"
+  }
+}

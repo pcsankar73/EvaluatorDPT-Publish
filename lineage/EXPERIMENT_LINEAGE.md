@@ -2,9 +2,11 @@
 
 ## Current Best Known Checkpoint
 
-- Stage: S3A-v2 ep3 — production best. S3B confirmed no improvement.
-- Checkpoint: `output/checkpoints/exp_t90_S3A_v2_L9-11_Hds_v6nli_F8196_ep8/best_model_epoch_3.pt`
-- Macro F1: 0.8215 | ValLoss: 0.8219
+- Stage: S12B — boundary-pack sharpen
+- Checkpoint: `output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt`
+- Macro F1: 0.8213 (val) / 0.8252 (test)
+
+
 
 ## Stage Summary
 
@@ -19,6 +21,9 @@
 | S4      | S4_threshold_sweep_S3A_v2_ep3                 | Threshold sweep + policy lock  | 0.8222       | v6-corrected| TBD fallback certified ✅  |
 | S5      | exp_t90_S5_AuxHeads_v6nli_ep3                 | Aux head calibration (frozen)  | 0.8215       | v6-corrected| Encoder frozen insufficient; S6 needed |
 | S6      | exp_t90_S6_AuxEncoderAnchor01_v6nli_ep3       | Encoder-anchor aux fix (ABORTED)| 0.8210      | v6-corrected| Emotion 0.027/1.000 unchanged 2 epochs; data problem confirmed |
+| S7A     | exp_t90_S7A_AuxHeads_v6b                          | Aux heads recovery (decision frozen) | 0.8215*      | v6b (DS-G)   | Training/val macro F1 held at 0.8215; post-stage diagnostic on 10k test subset Macro F1=0.8266 |
+| S7B     | exp_t90_S7B_L10-11_AuxAdapt_v6b                   | Unfreeze encoder L10-11 (aux adapt)  | 0.8201       | v6b (DS-G)   | Val set 44,404; encoder unfreeze alone insufficient |
+| S7C     | exp_t90_S7C_HeadsOnly_v6b                         | Unfreeze heads (calibration)         | 0.8211       | v6b (DS-G)   | Val set 44,404; best calibration ECE=0.0310 |
 
 ## S3A-v2 Reproducibility Configuration
 
@@ -83,3 +88,11 @@
 | S4      | experiments/S4_threshold_20260521/    |
 | S5      | No blob push (no decision F1 improvement; diagnostic only)  |
 | S6      | experiments/S6_20260521/ (ABORTED — emotion collapse root cause confirmed) |
+| S7A     | experiments/S7A_20260523/          |
+| S7B     | experiments/S7B_20260523/          |
+| S7C     | experiments/S7C_20260523/          |
+| S12     | exp_t90_S12_L9-11_Hds_dsl                         | DS-L baseline (no focal, label smoothing) | 0.8211       | DS-L        | Stable; boundary pack created for TBD sharpening |
+| S12B ⭐  | exp_t90_S12B_boundarypack_ep1_fromS12ep3          | Boundary pack sharpen                    | 0.8213 (val) / 0.8252 (test) | DS-L + BP   | Cert: multi-seed PASS; ECE=0.0338; threshold sweep saved |
+
+
+
