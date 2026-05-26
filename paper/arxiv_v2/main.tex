@@ -97,6 +97,8 @@ The proposed model is related to selective classification and reject-option mode
 
 The architecture builds on transformer language models such as BERT \cite{devlin2019bert} and multi-task learning \cite{caruana1997multitask}. Here, auxiliary outputs are treated as structured context signals available at inference time rather than only as training regularizers.
 
+The auxiliary channels also differ from conventional sentiment or lexical classification tasks. In this work, value and emotion/sentiment signals are interpreted relative to the decision event. They are intended to encode decision-relevant semantic context rather than surface affect alone. This distinction is important because a sentence can contain positive or negative language without providing sufficient support for a YES or NO decision.
+
 Neural confidence scores can be miscalibrated \cite{guo2017calibration}, so the evaluation pairs decision outputs with calibration evidence and threshold-sweep artifacts. This is relevant for governance because the operating policy should be inspectable rather than implicit.
 
 The paper is also related to model cards and governance-oriented reporting practices. Such artifacts often document intended use, limitations, and evaluation results after training. In this work, these materials are treated as part of the evaluation record: the model is accompanied by structured metrics, calibration data, threshold sweeps, stability checks, and reproducibility commands.
@@ -160,7 +162,9 @@ The lineage includes three broad kinds of material. First, it uses natural-langu
 
 The labels are defined by decision sufficiency rather than by surface sentiment. YES means the input provides enough support for the affirmative action or decision. NO means the input provides enough support to reject or block. TBD means the input lacks sufficient support for either direct action or direct rejection under the modeled policy. This distinction matters because a positive-sounding sentence may still be TBD if it does not provide enough evidence, and a negative-sounding sentence may be YES if it supports an affirmative control decision in context.
 
-The auxiliary value and emotion/sentiment channels are designed to represent structured context, not to replace the primary decision label. In S12B, the empirical claims are restricted to the decision head because the emotion head is masked in the DS-L lineage. This avoids overstating auxiliary performance and keeps the paper aligned with the validated artifact.
+The auxiliary value and emotion/sentiment channels are designed to represent structured context, not to replace the primary decision label. Their intended semantics are decision-relative: the labels describe values and affective context as they bear on the decision event, not merely the linguistic tone of the text. For example, lexical positivity does not imply a YES label, and lexical negativity does not imply a NO label. The relevant question is whether the text provides decision-sufficient support, rejection, or uncertainty.
+
+In S12B, the empirical claims are restricted to the decision head because the emotion head is masked in the DS-L lineage. This avoids overstating auxiliary performance and keeps the paper aligned with the validated artifact. Future auxiliary-head evaluation should therefore test decision-semantic alignment rather than only agreement with surface sentiment or keyword-based labels.
 
 \subsection{Boundary Refinement}
 
