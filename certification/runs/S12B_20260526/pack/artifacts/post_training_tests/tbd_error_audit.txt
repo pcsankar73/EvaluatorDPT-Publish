@@ -1,0 +1,410 @@
+====================================================================================================
+  TBD QUALITATIVE ERROR AUDIT — exp_t90_S12B_boundarypack_ep1_fromS12ep3  split=test
+====================================================================================================
+  N=44597   Correct=36839 (82.6%)   Errors=7758 (17.4%)
+
+  Error categories:
+    TBD→YES / TBD→NO : True label TBD, model over-commits to a binary decision
+    YES→TBD / NO→TBD : True label YES/NO, model false-abstains (under-commits)
+    YES→NO / NO→YES  : Hard binary confuse (decision error, high operational risk)
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  TBD→YES (over-commit to YES)   n=1729
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  max_prob: mean=0.7391 median=0.7619 p25=0.6074 p75=0.8852
+  margin:   mean=0.5386 median=0.5793 p25=0.2860 p75=0.7988
+
+  [idx=18156] p_YES=0.972 p_NO=0.013 p_TBD=0.015 max_prob=0.972 margin=0.957
+  TEXT: today it houses a small museum?­. [sep] in the current day, the building holds within it a small museum.
+
+  [idx=2666] p_YES=0.971 p_NO=0.011 p_TBD=0.018 max_prob=0.971 margin=0.953
+  TEXT: happily, the restored theater leads a bustling, active life, with a regular schedule of plays and concerts. [sep] theater leads had a regular schedule of plays and concerts.
+
+  [idx=5987] p_YES=0.970 p_NO=0.013 p_TBD=0.017 max_prob=0.970 margin=0.953
+  TEXT: new hostess cupcakes come when you call them. [sep] hostess has new cupcakes available.
+
+  [idx=235] p_YES=0.968 p_NO=0.010 p_TBD=0.022 max_prob=0.968 margin=0.945
+  TEXT: a post could also rationalize its prices by reflecting the cost of service to different areas. [sep] it is possible to rationalize the price based on service areas.
+
+  [idx=13086] p_YES=0.966 p_NO=0.009 p_TBD=0.025 max_prob=0.966 margin=0.941
+  TEXT: saved a lot of wiring, or something. [sep] some stuff was saved, i think wiring.
+
+  [idx=28326] p_YES=0.966 p_NO=0.018 p_TBD=0.017 max_prob=0.966 margin=0.948
+  TEXT: shortly after stepping out on the bridge, jon felt the entire walkway narrow. [sep] shortly after stepping out on the bridge, jon felt the wobbly walkway narrow.
+
+  [idx=34049] p_YES=0.964 p_NO=0.021 p_TBD=0.015 max_prob=0.964 margin=0.943
+  TEXT: with a couple of bikes on board, you can always explore the countryside as you travel. [sep] if you bring a bike, you can explore the countryside as you travel through your journey.
+
+  [idx=41008] p_YES=0.964 p_NO=0.017 p_TBD=0.018 max_prob=0.964 margin=0.946
+  TEXT: they are just they have such a better more mature outlook on life and i think they're better people because of it they're much more responsible i know um [sep] because they have a better outlooks on l
+
+  [idx=3767] p_YES=0.964 p_NO=0.015 p_TBD=0.021 max_prob=0.964 margin=0.943
+  TEXT: yeats wants to leave his traces/ on munster grass and connemara skies. [sep] leaving traces is something yeats would like to do.
+
+  [idx=36477] p_YES=0.964 p_NO=0.011 p_TBD=0.025 max_prob=0.964 margin=0.938
+  TEXT: the existence of iras and 401(k)s serves to raise public awareness about retirement saving opportunities. [sep] retirement saving opportunities and the awareness of public knowledge is aided by the ex
+
+  [idx=13182] p_YES=0.964 p_NO=0.017 p_TBD=0.020 max_prob=0.964 margin=0.944
+  TEXT: he listened for any sign of detection, a cry of alarm or a shout of new orders, but nothing came. [sep] he listened for a noise from someone sounding an alert but there was nothing.
+
+  [idx=6084] p_YES=0.962 p_NO=0.014 p_TBD=0.024 max_prob=0.962 margin=0.939
+  TEXT: yes, my friend. [sep] yes, my acquaintance.
+
+  [idx=12141] p_YES=0.961 p_NO=0.008 p_TBD=0.031 max_prob=0.961 margin=0.930
+  TEXT: i would be too yeah yep yeah [sep] yes, that sounds like something i would be as well.
+
+  [idx=26418] p_YES=0.961 p_NO=0.011 p_TBD=0.029 max_prob=0.961 margin=0.932
+  TEXT: guangdong province has some of china's most fertile land, and grows two crops of rice a year, along with vegetables of all kinds. [sep] it has some of china's most fertile land.
+
+  [idx=43388] p_YES=0.961 p_NO=0.016 p_TBD=0.023 max_prob=0.961 margin=0.938
+  TEXT: each faith worships a single god and recognizes elements of the others' beliefs. [sep] aspects of each faith are recognized by each denomination and all worship one god.
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  TBD→NO  (over-commit to NO)   n=1143
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  max_prob: mean=0.6698 median=0.6678 p25=0.5484 p75=0.7905
+  margin:   mean=0.4125 median=0.4035 p25=0.1859 p75=0.6300
+
+  [idx=33980] p_YES=0.011 p_NO=0.960 p_TBD=0.029 max_prob=0.960 margin=0.930
+  TEXT: no nope we uh our family's grown in fact we've just been retired for about a year we took early retirement and [sep] we have more than enough money saved for retirement.
+
+  [idx=7585] p_YES=0.029 p_NO=0.955 p_TBD=0.015 max_prob=0.955 margin=0.925
+  TEXT: uh no right now i'm in uh washington dc area [sep] i am not in ny now, i'm in the dc area.
+
+  [idx=6578] p_YES=0.025 p_NO=0.948 p_TBD=0.027 max_prob=0.948 margin=0.921
+  TEXT: 21 managing for federal managers' views on key management issues vary widely across agencies (gao-01-592, may 25, 2001). [sep] different agencies have no official, standard management style.
+
+  [idx=30835] p_YES=0.006 p_NO=0.948 p_TBD=0.046 max_prob=0.948 margin=0.901
+  TEXT: but uh even the small towns now though has really changed from when i was a kid but now i'm raising children it just it really is [sep] even the modest towns have changed from when i was younger, fill
+
+  [idx=963] p_YES=0.016 p_NO=0.946 p_TBD=0.038 max_prob=0.946 margin=0.907
+  TEXT: if anything should arise, i shall be glad to advise you in any way i can." his words gave tuppence an extraordinarily desolate feeling. [sep] "stay in touch," the door shut and along with it any hope 
+
+  [idx=2826] p_YES=0.015 p_NO=0.941 p_TBD=0.044 max_prob=0.941 margin=0.897
+  TEXT: two days later she began to receive phone calls from friends and acquaintances with praise for her incredibly creative wishes. [sep] she was not worthy of the praise issued by her friends and acquaint
+
+  [idx=3247] p_YES=0.022 p_NO=0.941 p_TBD=0.037 max_prob=0.941 margin=0.903
+  TEXT: a group of greyhounds race on a track. [sep] the dogs are neck and neck.
+
+  [idx=15853] p_YES=0.021 p_NO=0.940 p_TBD=0.040 max_prob=0.940 margin=0.900
+  TEXT: occupants of a large neighborhood traveling along a busy alley. [sep] some people are racing through an alley.
+
+  [idx=5139] p_YES=0.013 p_NO=0.936 p_TBD=0.051 max_prob=0.936 margin=0.885
+  TEXT: the two men departed and the door slammed. [sep] the men didn't care if their exit was loud or quiet.
+
+  [idx=41230] p_YES=0.024 p_NO=0.936 p_TBD=0.040 max_prob=0.936 margin=0.896
+  TEXT: his ideas were not made official until 1752, and it was another 14 years before plans were put into place for a competition to create a design for this new development, to be called the new town. [sep
+
+  [idx=31762] p_YES=0.021 p_NO=0.931 p_TBD=0.049 max_prob=0.931 margin=0.882
+  TEXT: if such evidence is present, return kennewick man to his rightful tribal reservation. [sep] kennewick man has been gone for long enough from his tribe.
+
+  [idx=9287] p_YES=0.020 p_NO=0.930 p_TBD=0.050 max_prob=0.930 margin=0.881
+  TEXT: although the views about how an organization can change its culture vary considerably, the organizations we studied identified leadership as the most important factor in successfully making cultural c
+
+  [idx=21267] p_YES=0.019 p_NO=0.929 p_TBD=0.052 max_prob=0.929 margin=0.877
+  TEXT: oh, well, that's all right, then, and you must go to tea with cynthia another day. i told him about the letter. [sep] i spoke with him about the letter from his grandfather.
+
+  [idx=38544] p_YES=0.022 p_NO=0.929 p_TBD=0.049 max_prob=0.929 margin=0.879
+  TEXT: right the only time you know about it is when it comes due and they'll say you know well you've got to reinvest it back in this or that or whatever [sep] if it is not due, you have no idea that it eve
+
+  [idx=15461] p_YES=0.019 p_NO=0.928 p_TBD=0.052 max_prob=0.928 margin=0.876
+  TEXT: a girl in a baseball cap is enjoying a salad. [sep] a girl is sitting in her dining room enjoying a salad
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  YES→TBD (false abstention on YES)   n=1350
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  max_prob: mean=0.7207 median=0.7253 p25=0.5850 p75=0.8681
+  margin:   mean=0.5063 median=0.5191 p25=0.2487 p75=0.7750
+
+  [idx=13977] p_YES=0.012 p_NO=0.013 p_TBD=0.975 max_prob=0.975 margin=0.962
+  TEXT: no not really i'm not that up on that sort of thing [sep] i would have to learn more about it before i could do it.
+
+  [idx=43641] p_YES=0.016 p_NO=0.013 p_TBD=0.971 max_prob=0.971 margin=0.955
+  TEXT: in addition, it identified a significant role for the towing industry in the marine safety program and looked for opportunities to work with its stakeholders in the towing industry to reduce casualtie
+
+  [idx=11420] p_YES=0.019 p_NO=0.011 p_TBD=0.970 max_prob=0.970 margin=0.951
+  TEXT: a man on stilts walks behind a woman holding a suitcase and wearing yellow sungl [sep] a tall man and a woman
+
+  [idx=33213] p_YES=0.020 p_NO=0.010 p_TBD=0.970 max_prob=0.970 margin=0.950
+  TEXT: lateran treaty establishes separate vatican state [sep] the separate vatican state was put in place after the lateran treaty was finalized.
+
+  [idx=9689] p_YES=0.017 p_NO=0.014 p_TBD=0.969 max_prob=0.969 margin=0.952
+  TEXT: we said because we massachusetters weren't like that we never did anything to it except mow it and and it always looked nice [sep] we weren't like that in massachusetts.
+
+  [idx=7138] p_YES=0.014 p_NO=0.019 p_TBD=0.967 max_prob=0.967 margin=0.949
+  TEXT: with the economy rebounding smartly from the brief 1971 recession and inflation temporarily in check, even the unpopularity of the raging vietnam war couldn't shake the power of nixon's incumbency. [s
+
+  [idx=1683] p_YES=0.019 p_NO=0.014 p_TBD=0.967 max_prob=0.967 margin=0.948
+  TEXT: two women are sitting at a table and drinking beer. [sep] two ladies have a beer after work.
+
+  [idx=21952] p_YES=0.025 p_NO=0.008 p_TBD=0.967 max_prob=0.967 margin=0.942
+  TEXT: he expanded melaka's power along the west coast and down to singapore and the neighboring bintan islands. [sep] he was impressed with melaka, so he expanded his power along the west coast, to singapor
+
+  [idx=20801] p_YES=0.019 p_NO=0.017 p_TBD=0.964 max_prob=0.964 margin=0.945
+  TEXT: most accessible is lampis bay, with a couple of good tavernas. [sep] lampis bay had many good traditional greek restaurants.
+
+  [idx=4585] p_YES=0.023 p_NO=0.014 p_TBD=0.963 max_prob=0.963 margin=0.940
+  TEXT: you get us a working franklin in two weeks, and we'll pretend everything is happening exactly as it should. [sep] there was a deadline imposed to get franklin working in two weeks, otherwise there wou
+
+  [idx=39376] p_YES=0.019 p_NO=0.020 p_TBD=0.962 max_prob=0.962 margin=0.942
+  TEXT: newsweek 's coverage says the web beats the it's easier to find what you want, it's often cheaper, and you don't need to find parking. [sep] the internet is easier to access then books and scientific 
+
+  [idx=17937] p_YES=0.024 p_NO=0.015 p_TBD=0.961 max_prob=0.961 margin=0.938
+  TEXT: a lot of them just know me by name and phone voice [sep] many of them have spoken to me several times on the phone.
+
+  [idx=40162] p_YES=0.024 p_NO=0.015 p_TBD=0.961 max_prob=0.961 margin=0.937
+  TEXT: francois brought leonardo da vinci to work at blois, and rosso and primaticcio to decorate fontainebleau. [sep] leonardo da vinci was a genius designer, as shown by his work at fontainebleau.
+
+  [idx=28688] p_YES=0.023 p_NO=0.017 p_TBD=0.960 max_prob=0.960 margin=0.937
+  TEXT: we could use another war. [sep] we could use another war in this country.
+
+  [idx=9128] p_YES=0.025 p_NO=0.014 p_TBD=0.960 max_prob=0.960 margin=0.935
+  TEXT: this is new country where it doesn't, or shouldn't, matter whether a man wore a blue coat or marched under the stars and bars. [sep] this is a new nation where it doesn't or shouldn't matter who a man
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  NO→TBD  (false abstention on NO)   n=1528
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  max_prob: mean=0.7376 median=0.7626 p25=0.6025 p75=0.8795
+  margin:   mean=0.5355 median=0.5719 p25=0.2879 p75=0.7906
+
+  [idx=4767] p_YES=0.011 p_NO=0.012 p_TBD=0.976 max_prob=0.976 margin=0.964
+  TEXT: you can join the japanese visitors down at the isuzu river, where they perform a rite of purification by washing their mouths with its clear, fresh waters. [sep] there are hundreds of japanese visitor
+
+  [idx=19031] p_YES=0.011 p_NO=0.013 p_TBD=0.976 max_prob=0.976 margin=0.963
+  TEXT: most houseboats are moored on dal lake, but for those seeking seclusion, there are others on the smaller nagin lake to the west. [sep] nagin lake sees more tourists every year than dal lake.
+
+  [idx=40545] p_YES=0.009 p_NO=0.015 p_TBD=0.976 max_prob=0.976 margin=0.960
+  TEXT: from the earliest days egyptians recorded their activities on papyrus paper, helping us to piece together the pivotal moments in the great days of the ancient egyptian empire. [sep] egyptians recorded
+
+  [idx=29470] p_YES=0.007 p_NO=0.019 p_TBD=0.974 max_prob=0.974 margin=0.955
+  TEXT: the man was not large, perhaps as tall as ca'daan himself. [sep] the man was not large, perhaps only 6 feet taller than ca'daan himself.
+
+  [idx=27115] p_YES=0.010 p_NO=0.018 p_TBD=0.973 max_prob=0.973 margin=0.955
+  TEXT: big long strips so what had happened is that professional painters had not prepared the surface properly and some of that still has to be redone [sep] painters spent a week prepping it.
+
+  [idx=11723] p_YES=0.011 p_NO=0.017 p_TBD=0.972 max_prob=0.972 margin=0.956
+  TEXT: the only thing that they had a great abundance of was uh you know human beings [sep] they had a large amount of resources such as fruit and wheat.
+
+  [idx=24986] p_YES=0.015 p_NO=0.016 p_TBD=0.970 max_prob=0.970 margin=0.954
+  TEXT: a 1992 study estimated that some 8 percent of russia's industrial output at the time was being produced by factories that even russian analysts called value-subtractors . the study noted that the coll
+
+  [idx=16438] p_YES=0.011 p_NO=0.020 p_TBD=0.968 max_prob=0.968 margin=0.948
+  TEXT: a band on stage in front of a body of water. [sep] a band in front of a couple of friends.
+
+  [idx=37272] p_YES=0.013 p_NO=0.019 p_TBD=0.968 max_prob=0.968 margin=0.949
+  TEXT: the painted blue arabesques in the domes and upper walls are restorations; to see the original version, look at the wall beneath the sultan's loge. [sep] those blue arabesques are the same ones that h
+
+  [idx=22946] p_YES=0.014 p_NO=0.019 p_TBD=0.968 max_prob=0.968 margin=0.949
+  TEXT: 1.4, formerly methodology transfer paper 4. using structured interviewing techniques. [sep] structured interviewing techniques are very unreliable.
+
+  [idx=39711] p_YES=0.015 p_NO=0.018 p_TBD=0.968 max_prob=0.968 margin=0.950
+  TEXT: 6. boys don't cry . starkly beautiful, kimberly peirce's debut film has at its core a tragicomic that the cross-dressing brandon teena, a k a teena brandon (the rapturous hillary swank) feels most at 
+
+  [idx=13201] p_YES=0.012 p_NO=0.020 p_TBD=0.968 max_prob=0.968 margin=0.947
+  TEXT: bush has milked this protective anguish for months. [sep] bush milked it for years to avoid paying taxes.
+
+  [idx=25373] p_YES=0.009 p_NO=0.024 p_TBD=0.966 max_prob=0.966 margin=0.942
+  TEXT: the opponent laughed so hard that he couldn't get himself to brain him with his hammer. [sep] he wasn't able to brain him with his hammer because he was sinking into the ground.
+
+  [idx=40558] p_YES=0.010 p_NO=0.024 p_TBD=0.966 max_prob=0.966 margin=0.942
+  TEXT: another series of free music and dance programs is presented all year round on the three outdoor performance stages of the watercourt, in the california plaza downtown. [sep] the programs are offered 
+
+  [idx=5965] p_YES=0.018 p_NO=0.017 p_TBD=0.966 max_prob=0.966 margin=0.948
+  TEXT: during his chair recovery period, his duties were transferred to the programmers' chief, the one who used to like to laugh at cod. [sep] his table recovery period was going to be a lot longer.
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  YES→NO  (hard binary confuse)   n=994
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  max_prob: mean=0.7059 median=0.7103 p25=0.5498 p75=0.8651
+  margin:   mean=0.4887 median=0.4934 p25=0.2200 p75=0.7695
+
+  [idx=17887] p_YES=0.014 p_NO=0.976 p_TBD=0.010 max_prob=0.976 margin=0.961
+  TEXT: a man in a tractor wearing headphones driving down a paved street. [sep] the driver of the tractor is not plowing a field.
+
+  [idx=35172] p_YES=0.015 p_NO=0.972 p_TBD=0.013 max_prob=0.972 margin=0.958
+  TEXT: take a siesta after lunch. [sep] go to sleep after lunch.
+
+  [idx=25985] p_YES=0.018 p_NO=0.972 p_TBD=0.010 max_prob=0.972 margin=0.954
+  TEXT: a crowd of people rushed from the entrance of a building of sandstone and marble. [sep] the crowd ran away from the entrance.
+
+  [idx=34066] p_YES=0.017 p_NO=0.971 p_TBD=0.013 max_prob=0.971 margin=0.954
+  TEXT: controllable cost - a cost that can be influenced by the action of the responsible manager. [sep] controllable cost is a cost not influenced by action of a responsible manager
+
+  [idx=12138] p_YES=0.018 p_NO=0.971 p_TBD=0.011 max_prob=0.971 margin=0.953
+  TEXT: there does seem to be a relationship between the state of the economy and the amount of free legal service that big firms, at least, are willing or able to perform. [sep] the state of the economy has 
+
+  [idx=34328] p_YES=0.015 p_NO=0.971 p_TBD=0.014 max_prob=0.971 margin=0.956
+  TEXT: when iraq was shooting missiles into israel during the gulf war, a delegation of serbs traveled to tel aviv to show solidarity. [sep] iraq shot missiles into israel during the golf war.
+
+  [idx=33757] p_YES=0.016 p_NO=0.971 p_TBD=0.014 max_prob=0.971 margin=0.955
+  TEXT: allow me to interest myself in my coffee-cups, and i will respect your coco. [sep] it's none of your business what i put in my coffee cups.
+
+  [idx=43666] p_YES=0.017 p_NO=0.970 p_TBD=0.013 max_prob=0.970 margin=0.954
+  TEXT: anyway, the main point is that when genetic parents give up a child for adoption and have second thoughts weeks, months, or even years later, their appeals to blood ties should count for zilch. [sep] 
+
+  [idx=40575] p_YES=0.017 p_NO=0.970 p_TBD=0.013 max_prob=0.970 margin=0.952
+  TEXT: right yeah because we don't you know we don't charge anything that we can't pay off by the end of the month [sep] everything we charge, we can pay by the end of the month.
+
+  [idx=9366] p_YES=0.020 p_NO=0.969 p_TBD=0.010 max_prob=0.969 margin=0.949
+  TEXT: he was older and leaned heavy on a shaft of oak. [sep] the man was not young and was leaning on an oak shaft.
+
+  [idx=5549] p_YES=0.017 p_NO=0.969 p_TBD=0.014 max_prob=0.969 margin=0.951
+  TEXT: a fertile island of vines, olive groves, and pine forest, that lies just 3 km (2 miles) from the turkish coast, samos has taken a back seat in aegean history since its golden age in the fifth century 
+
+  [idx=22927] p_YES=0.020 p_NO=0.968 p_TBD=0.012 max_prob=0.968 margin=0.949
+  TEXT: the villager swung his hammer but missed as the bald man turned away. [sep] the villager didn't hit anyone with the hammer.
+
+  [idx=34479] p_YES=0.018 p_NO=0.968 p_TBD=0.015 max_prob=0.968 margin=0.950
+  TEXT: um or if it's their style or or just understanding the material and then i you know it some of those it's like i said it's like school you have to work at it but to me it's worthwhile in the end i fee
+
+  [idx=6744] p_YES=0.016 p_NO=0.967 p_TBD=0.017 max_prob=0.967 margin=0.951
+  TEXT: also in the palace is a fascinating musee de la voiture. [sep] inside the palace is a car museum.
+
+  [idx=18039] p_YES=0.021 p_NO=0.967 p_TBD=0.012 max_prob=0.967 margin=0.946
+  TEXT: the model rules have been adopted (usually with amendments) in more than 40 u.s. jurisdictions (not including new york). [sep] the model rules haven't been adopted in new york.
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  NO→YES  (hard binary confuse — highest operational risk)   n=1014
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  max_prob: mean=0.7165 median=0.7319 p25=0.5776 p75=0.8606
+  margin:   mean=0.5107 median=0.5421 p25=0.2642 p75=0.7667
+
+  [idx=8080] p_YES=0.966 p_NO=0.011 p_TBD=0.023 max_prob=0.966 margin=0.943
+  TEXT: the salon de los halberdiers contains remarkably preserved ancient flemish and spanish tapestries. [sep] you can find a collection of ancient literature in the salon de los halberdiers.
+
+  [idx=14807] p_YES=0.964 p_NO=0.013 p_TBD=0.022 max_prob=0.964 margin=0.942
+  TEXT: well, well, my friend, i will be guided by you. [sep] i will guide my friend.
+
+  [idx=9192] p_YES=0.963 p_NO=0.019 p_TBD=0.017 max_prob=0.963 margin=0.944
+  TEXT: in 1811 mohamed organized a grand banquet and called all the notable mamelukes to attend. [sep] in 1811, mohamed attended a banquet.
+
+  [idx=41498] p_YES=0.960 p_NO=0.014 p_TBD=0.026 max_prob=0.960 margin=0.934
+  TEXT: sibutramine, with fen-phen's effects in one pill, and orlistat, which prevents fat absorption from the intestines, are undergoing food and drug administration approval testing. [sep] sibutramine has b
+
+  [idx=44465] p_YES=0.960 p_NO=0.015 p_TBD=0.025 max_prob=0.960 margin=0.935
+  TEXT: in drafting the corporation's fiscal year (fy) 1984 appropriations act, congress for the first time replaced the language resident of the united states with present in the united states. [sep] there w
+
+  [idx=32064] p_YES=0.959 p_NO=0.022 p_TBD=0.020 max_prob=0.959 margin=0.937
+  TEXT: under the altar, a silver disc surrounds a hole marking the place where, tradition says, jesus's crosewas raised alongside those of the two thieves on either side. [sep] there is a gold disc that surr
+
+  [idx=332] p_YES=0.958 p_NO=0.017 p_TBD=0.025 max_prob=0.958 margin=0.933
+  TEXT: get an idea of how we could defend it," said jon. [sep] jon said he had an idea of how they could defend it.
+
+  [idx=43929] p_YES=0.957 p_NO=0.019 p_TBD=0.023 max_prob=0.957 margin=0.934
+  TEXT: other critics add that the university's current presence in northwest gives many washingtonians a valuable opportunity to leave their troubled neighborhoods behind. [sep] the washingtonians give the u
+
+  [idx=1709] p_YES=0.957 p_NO=0.018 p_TBD=0.026 max_prob=0.957 margin=0.931
+  TEXT: let us see if something can't be managed. [sep] let's see why something can't be managed.
+
+  [idx=32309] p_YES=0.957 p_NO=0.019 p_TBD=0.024 max_prob=0.957 margin=0.933
+  TEXT: in 2001, lsc devised a method to measure other significant responsibilities that programs undertake to help clients, in addition to handling client cases. [sep] lsc borrowed a way to measure client ca
+
+  [idx=25249] p_YES=0.955 p_NO=0.024 p_TBD=0.022 max_prob=0.955 margin=0.931
+  TEXT: miss howard goes back to middlingham. [sep] miss howard leaves middlingham.
+
+  [idx=36320] p_YES=0.955 p_NO=0.023 p_TBD=0.022 max_prob=0.955 margin=0.931
+  TEXT: the real british legacy is in the tea gardens, all indian-run, which offer a beautiful green setting for the town and insight into tea growing and processing methods . [sep] the indian legacy is in th
+
+  [idx=216] p_YES=0.954 p_NO=0.016 p_TBD=0.030 max_prob=0.954 margin=0.924
+  TEXT: if you come to formentera just for a day, then the best option is car rental (or scooter/moped): although the island is small, it is too large to see all in one day by bicycle. [sep] the island of for
+
+  [idx=20885] p_YES=0.954 p_NO=0.019 p_TBD=0.027 max_prob=0.954 margin=0.927
+  TEXT: at first, the journalists were somewhat irritated, but later, upon seeing suwak's phenomenally good mood, started to change their minds. [sep] the journalists started out happy but became irritated.
+
+  [idx=38169] p_YES=0.953 p_NO=0.030 p_TBD=0.017 max_prob=0.953 margin=0.923
+  TEXT: readers should recognize, however, that as time shortens, so may the value of the method as a way of presenting a comprehensive understanding of the event as a whole. [sep] readers should recognize, h
+
+====================================================================================================
+  HIGH-CONFIDENCE ERRORS (max_prob >= 0.85): n=2167
+====================================================================================================
+  These are the most dangerous errors — model is highly confident but wrong.
+
+  [NO→TBD] [idx=4767] max_prob=0.976 margin=0.964
+  TEXT: you can join the japanese visitors down at the isuzu river, where they perform a rite of purification by washing their mouths with its clear, fresh waters. [sep] there are hundreds of japanese visitor
+
+  [NO→TBD] [idx=19031] max_prob=0.976 margin=0.963
+  TEXT: most houseboats are moored on dal lake, but for those seeking seclusion, there are others on the smaller nagin lake to the west. [sep] nagin lake sees more tourists every year than dal lake.
+
+  [NO→TBD] [idx=40545] max_prob=0.976 margin=0.960
+  TEXT: from the earliest days egyptians recorded their activities on papyrus paper, helping us to piece together the pivotal moments in the great days of the ancient egyptian empire. [sep] egyptians recorded
+
+  [YES→NO] [idx=17887] max_prob=0.976 margin=0.961
+  TEXT: a man in a tractor wearing headphones driving down a paved street. [sep] the driver of the tractor is not plowing a field.
+
+  [YES→TBD] [idx=13977] max_prob=0.975 margin=0.962
+  TEXT: no not really i'm not that up on that sort of thing [sep] i would have to learn more about it before i could do it.
+
+  [NO→TBD] [idx=29470] max_prob=0.974 margin=0.955
+  TEXT: the man was not large, perhaps as tall as ca'daan himself. [sep] the man was not large, perhaps only 6 feet taller than ca'daan himself.
+
+  [NO→TBD] [idx=27115] max_prob=0.973 margin=0.955
+  TEXT: big long strips so what had happened is that professional painters had not prepared the surface properly and some of that still has to be redone [sep] painters spent a week prepping it.
+
+  [NO→TBD] [idx=11723] max_prob=0.972 margin=0.956
+  TEXT: the only thing that they had a great abundance of was uh you know human beings [sep] they had a large amount of resources such as fruit and wheat.
+
+  [YES→NO] [idx=35172] max_prob=0.972 margin=0.958
+  TEXT: take a siesta after lunch. [sep] go to sleep after lunch.
+
+  [TBD→YES] [idx=18156] max_prob=0.972 margin=0.957
+  TEXT: today it houses a small museum?­. [sep] in the current day, the building holds within it a small museum.
+
+  [YES→NO] [idx=25985] max_prob=0.972 margin=0.954
+  TEXT: a crowd of people rushed from the entrance of a building of sandstone and marble. [sep] the crowd ran away from the entrance.
+
+  [TBD→YES] [idx=2666] max_prob=0.971 margin=0.953
+  TEXT: happily, the restored theater leads a bustling, active life, with a regular schedule of plays and concerts. [sep] theater leads had a regular schedule of plays and concerts.
+
+  [YES→NO] [idx=34066] max_prob=0.971 margin=0.954
+  TEXT: controllable cost - a cost that can be influenced by the action of the responsible manager. [sep] controllable cost is a cost not influenced by action of a responsible manager
+
+  [YES→TBD] [idx=43641] max_prob=0.971 margin=0.955
+  TEXT: in addition, it identified a significant role for the towing industry in the marine safety program and looked for opportunities to work with its stakeholders in the towing industry to reduce casualtie
+
+  [YES→NO] [idx=12138] max_prob=0.971 margin=0.953
+  TEXT: there does seem to be a relationship between the state of the economy and the amount of free legal service that big firms, at least, are willing or able to perform. [sep] the state of the economy has 
+
+  [YES→NO] [idx=34328] max_prob=0.971 margin=0.956
+  TEXT: when iraq was shooting missiles into israel during the gulf war, a delegation of serbs traveled to tel aviv to show solidarity. [sep] iraq shot missiles into israel during the golf war.
+
+  [YES→NO] [idx=33757] max_prob=0.971 margin=0.955
+  TEXT: allow me to interest myself in my coffee-cups, and i will respect your coco. [sep] it's none of your business what i put in my coffee cups.
+
+  [YES→NO] [idx=43666] max_prob=0.970 margin=0.954
+  TEXT: anyway, the main point is that when genetic parents give up a child for adoption and have second thoughts weeks, months, or even years later, their appeals to blood ties should count for zilch. [sep] 
+
+  [TBD→YES] [idx=5987] max_prob=0.970 margin=0.953
+  TEXT: new hostess cupcakes come when you call them. [sep] hostess has new cupcakes available.
+
+  [YES→TBD] [idx=11420] max_prob=0.970 margin=0.951
+  TEXT: a man on stilts walks behind a woman holding a suitcase and wearing yellow sungl [sep] a tall man and a woman
+
+  [YES→TBD] [idx=33213] max_prob=0.970 margin=0.950
+  TEXT: lateran treaty establishes separate vatican state [sep] the separate vatican state was put in place after the lateran treaty was finalized.
+
+  [NO→TBD] [idx=24986] max_prob=0.970 margin=0.954
+  TEXT: a 1992 study estimated that some 8 percent of russia's industrial output at the time was being produced by factories that even russian analysts called value-subtractors . the study noted that the coll
+
+  [YES→NO] [idx=40575] max_prob=0.970 margin=0.952
+  TEXT: right yeah because we don't you know we don't charge anything that we can't pay off by the end of the month [sep] everything we charge, we can pay by the end of the month.
+
+  [YES→NO] [idx=9366] max_prob=0.969 margin=0.949
+  TEXT: he was older and leaned heavy on a shaft of oak. [sep] the man was not young and was leaning on an oak shaft.
+
+  [YES→TBD] [idx=9689] max_prob=0.969 margin=0.952
+  TEXT: we said because we massachusetters weren't like that we never did anything to it except mow it and and it always looked nice [sep] we weren't like that in massachusetts.
+
+  [YES→NO] [idx=5549] max_prob=0.969 margin=0.951
+  TEXT: a fertile island of vines, olive groves, and pine forest, that lies just 3 km (2 miles) from the turkish coast, samos has taken a back seat in aegean history since its golden age in the fifth century 
+
+  [NO→TBD] [idx=16438] max_prob=0.968 margin=0.948
+  TEXT: a band on stage in front of a body of water. [sep] a band in front of a couple of friends.
+
+  [YES→NO] [idx=22927] max_prob=0.968 margin=0.949
+  TEXT: the villager swung his hammer but missed as the bald man turned away. [sep] the villager didn't hit anyone with the hammer.
+
+  [TBD→YES] [idx=235] max_prob=0.968 margin=0.945
+  TEXT: a post could also rationalize its prices by reflecting the cost of service to different areas. [sep] it is possible to rationalize the price based on service areas.
+
+  [NO→TBD] [idx=37272] max_prob=0.968 margin=0.949
+  TEXT: the painted blue arabesques in the domes and upper walls are restorations; to see the original version, look at the wall beneath the sultan's loge. [sep] those blue arabesques are the same ones that h

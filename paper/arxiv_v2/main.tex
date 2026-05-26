@@ -89,7 +89,7 @@ g(x) =
 \text{TBD}, & \text{otherwise.}
 \end{cases}
 \]
-The distinction is not that thresholds are avoided. The distinction is that thresholds operate over a distribution that already contains a learned deferral class. This paper does not claim empirical superiority over all abstention baselines; it reports the evaluated behavior of a learned-deferral formulation and identifies abstention baselines as a necessary next comparison for a conference version.
+The distinction is not that thresholds are avoided. The distinction is that thresholds operate over a distribution that already contains a learned deferral class. The experiments below therefore evaluate two separate questions: the value of a learned three-way decision space at full coverage, and the operating tradeoff obtained by applying reject thresholds to model confidence.
 
 \section{What Is Novel in This Work}
 
@@ -198,12 +198,21 @@ The lineage includes three broad kinds of material. First, it uses natural-langu
 \toprule
 Split & YES & NO & TBD \\
 \midrule
+Train & 137,168 & 149,071 & 132,486 \\
 Validation & 14,962 & 15,534 & 13,908 \\
 Test & 14,883 & 15,650 & 14,064 \\
 \bottomrule
 \end{tabular}
 \caption{Decision-class support for the evaluated DS-L validation and test splits.}
 \end{table}
+
+DS-L contains 418,725 training examples, 44,404 validation examples, and 44,597 test examples. The validation and test splits are fixed from the DS-J lineage and are reused unchanged for the S12/S12B evaluations. The S12B boundary pack contains 323 training examples mined from S12 diagnostics; it is used only for one sharpening epoch and is less than 0.1\% of the DS-L training volume.
+
+\subsection{Annotation and Construction Transparency}
+
+The decision labels are derived from a natural-language inference formulation. Entailment maps to YES, contradiction maps to NO, and neutral or insufficient evidence maps to TBD. No new project-specific inter-annotator agreement study was conducted for S12B. The project inherits the annotation assumptions of the source NLI datasets, including reported agreement for SNLI and MultiNLI, and applies documented correction passes where diagnostics identified systematic label errors.
+
+The main dataset construction steps are also recorded. DS-B contained approximately 814K examples after initial cleaning. DS-E reduced the corpus to the NLI-compatible subset, producing the largest quality gain in the lineage. DS-J became the canonical fixed split baseline. DS-L expanded the DS-J training split to 418,725 rows by adding targeted hard cases and capped pattern boosts while keeping validation and test splits unchanged. The exact per-source breakdown inside the 323-row boundary pack was not preserved in the final CSV; this is recorded as a dataset-transparency limitation rather than inferred after the fact.
 
 \subsection{Label Semantics}
 
@@ -282,6 +291,32 @@ TBD & 0.7955 & 0.7958 & 0.7956 & 14,064 \\
 
 NO has the highest class F1 in the S12B test result (F1 = 0.8486), indicating that the model learned a useful rejection boundary. TBD remains the hardest class (F1 = 0.7956), which is expected in a defer-aware system because the deferral region is defined by ambiguity rather than by a single semantic pattern. For this reason, the evaluation includes threshold sweeps and calibration evidence rather than relying only on a single argmax policy.
 
+\subsection{Abstention and Coverage Baselines}
+
+The full-coverage comparison separates learned deferral from forced binary classification. When the same outputs are collapsed into a binary YES/NO decision with no abstention, Macro F1 drops to 0.4945 and TBD F1 is zero because the model can no longer represent deferral. The learned three-way model at full coverage achieves Macro F1 = 0.8252.
+
+Reject-threshold baselines answer a different question: what happens if a system abstains on a fraction of cases and evaluates only the retained subset? At 90\% retained coverage, confidence, entropy, and margin rejection produce similar Macro F1 values near 0.863. These numbers are not directly comparable to the full-coverage learned-TBD score because 10\% of cases are withheld from the retained set. They do show that thresholding remains a useful operating-policy layer on top of the learned distribution.
+
+\begin{center}
+\begin{tabular}{lrrrr}
+\toprule
+Method & Coverage & Macro F1 & YES F1 & TBD F1 \\
+\midrule
+Learned TBD, argmax & 1.00 & 0.8252 & 0.8314 & 0.7956 \\
+Binary YES/NO, no abstention & 1.00 & 0.4945 & 0.7482 & 0.0000 \\
+Confidence reject & 0.90 & 0.8631 & 0.8667 & 0.8358 \\
+Entropy reject & 0.90 & 0.8624 & 0.8681 & 0.8329 \\
+Margin reject & 0.90 & 0.8625 & 0.8662 & 0.8358 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{abstention_coverage_s12b.png}
+\caption{Coverage-sensitive abstention baselines. Reject methods improve retained-set Macro F1 as coverage decreases; learned TBD and forced binary classification are shown as full-coverage reference points.}
+\end{figure}
+
 \subsection{Validation Confusion Matrix}
 
 \begin{center}
@@ -304,11 +339,51 @@ The S12B evaluation reports validation ECE = 0.0338. This value indicates that t
 
 The evaluation also includes a multi-seed stability check over validation seeds 42, 0, and 7, which produced identical Macro F1 values in the published validation procedure (std = 0.0). This is not a claim that all future training runs will be identical. It shows that the evaluated inference and scoring procedure is deterministic under the recorded configuration.
 
+\subsection{S12 to S12B Boundary-Pack Effect}
+
+S12B should not be interpreted as a material raw-F1 improvement over S12. On the fixed test split, Macro F1 is essentially unchanged: S12 = 0.8254 and S12B = 0.8252. The measurable effect of the 323-row boundary pack is instead calibration and high-confidence error reduction. In the paired S12/S12B comparison script, validation ECE improves from 0.0461 to 0.0413, test ECE improves from 0.0426 to 0.0411, and high-confidence error rate at threshold 0.85 drops from 0.0558 to 0.0485 on the test split. These paired-comparison ECE values are reported separately from the certification calibration report, which records validation ECE = 0.0338 under its stored binning procedure.
+
+\begin{center}
+\begin{tabular}{lrrrr}
+\toprule
+Metric & S12 val & S12B val & S12 test & S12B test \\
+\midrule
+Macro F1 & 0.8211 & 0.8213 & 0.8254 & 0.8252 \\
+ECE & 0.0461 & 0.0413 & 0.0426 & 0.0411 \\
+High-conf. error @0.85 & 0.0574 & 0.0499 & 0.0558 & 0.0485 \\
+TBD rate & 0.3183 & 0.3120 & 0.3221 & 0.3155 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{s12_s12b_calibration_hc_errors.png}
+\caption{S12 to S12B comparison. The boundary-pack sharpening pass leaves Macro F1 nearly flat but reduces calibration error and high-confidence error rates.}
+\end{figure}
+
 \subsection{Interpretation of the Remaining Error Mode}
 
 The most important residual error is not a simple lack of class balance. YES, NO, and TBD have comparable support in the test split, and the model performs strongly on NO. The remaining difficulty is semantic: a true TBD case may resemble a YES or NO case because it shares terms, roles, or surface structure while lacking decisive evidence. This is why the boundary pack emphasizes contradiction, negation, role and number swaps, high-overlap non-entailment, and hedged or modal statements.
 
 From an operational perspective, the highest-risk error is a true TBD routed as YES or NO. Such cases reduce the value of deferral because they turn ambiguous inputs into direct actions. The threshold-sweep artifacts are therefore not optional supplementary material; they are part of how a deployment owner decides how much automation to allow.
+
+The qualitative audit on the full test split records 7,758 errors out of 44,597 examples (17.4\%). The largest error categories are TBD routed to YES (1,729), NO routed to TBD (1,528), YES routed to TBD (1,350), and TBD routed to NO (1,143). Hard binary confusions are smaller but operationally important: YES routed to NO occurs 994 times and NO routed to YES occurs 1,014 times. The audit examples indicate that the residual errors concentrate around lexical overlap, missing evidence, negation/polarity ambiguity, and cases where a plausible inference goes beyond the premise.
+
+\begin{center}
+\begin{tabular}{lrrr}
+\toprule
+Error category & Count & Mean confidence & Mean margin \\
+\midrule
+TBD$\rightarrow$YES & 1,729 & 0.7391 & 0.5386 \\
+TBD$\rightarrow$NO & 1,143 & 0.6698 & 0.4125 \\
+YES$\rightarrow$TBD & 1,350 & 0.7207 & 0.5063 \\
+NO$\rightarrow$TBD & 1,528 & 0.7376 & 0.5355 \\
+YES$\rightarrow$NO & 994 & 0.7059 & 0.4887 \\
+NO$\rightarrow$YES & 1,014 & 0.7165 & 0.5107 \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 \begin{figure}[htbp]
 \centering
@@ -337,6 +412,7 @@ The directory includes:
   \item calibration data with validation ECE = 0.0338;
   \item threshold-sweep artifacts for TBD-fallback operating policies;
   \item multi-seed stability evidence, with validation seeds 42, 0, and 7 producing identical Macro F1 (std = 0.0);
+  \item post-training abstention, dataset-transparency, annotation-policy, TBD-audit, and S12/S12B comparison reports;
   \item run metrics, confusion matrix, diagnostics, and reproducibility commands.
 \end{itemize}
 
@@ -353,6 +429,7 @@ Calibration data & Assess whether confidence supports threshold policies \\
 Threshold sweeps & Select operating points for automation versus deferral \\
 Stability checks & Confirm deterministic evaluation behavior for the release \\
 Reproducibility commands & Reconstruct the evaluated checkpoint and procedure \\
+Post-training tests & Review abstention, dataset, annotation, and error-audit evidence \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -375,7 +452,7 @@ The result is not an isolated leaderboard metric. It is a learned-deferral decis
 
 \subsection{Interpretation of the Score Plateau}
 
-The S12B result is close to earlier high-performing decision checkpoints, but it is better supported by evaluation evidence because the decision metrics are accompanied by corrected evaluation behavior, calibration evidence, stability checks, and a clearer artifact structure. This distinction matters. A slightly higher score without reliable auxiliary handling, traceable artifacts, or threshold evidence would be less informative for external review.
+The S12B result is close to the preceding S12 checkpoint in raw Macro F1, but it is better supported by evaluation evidence because the decision metrics are accompanied by corrected evaluation behavior, calibration evidence, stability checks, abstention baselines, error audits, and a clearer artifact structure. This distinction matters. A slightly higher score without reliable evaluation handling, traceable artifacts, or threshold evidence would be less informative for external review.
 
 The observed plateau near the low-0.82 Macro F1 range suggests that remaining gains are concentrated in the semantic deferral boundary rather than in generic optimization. The model already distinguishes NO well. The hard cases are those where the input contains familiar words or plausible structure but does not supply enough evidence for action. Further improvement is therefore more likely to come from better boundary labeling, domain-specific validation, longer-context handling, and operating-threshold selection than from simply increasing dataset size.
 
@@ -391,13 +468,15 @@ Results are specific to DS-L, the S12B checkpoint, and the evaluation setup repo
 
 The paper also does not claim that TBD is always the correct action under uncertainty. TBD is a model output and an operating-policy option, not a substitute for domain governance. Deployment owners must decide how deferred cases are routed and what thresholds are acceptable for their risk environment. Similarly, the reported calibration value is tied to the validation split and should be remeasured after domain transfer, threshold changes, or additional fine-tuning.
 
+The abstention experiments are diagnostic baselines, not a complete comparison against independently trained abstention systems. The forced binary baseline tests the loss of the TBD class, while confidence, entropy, and margin rejection test retained-set behavior under thresholded abstention. A stronger conference version should include separately trained binary and selective-classification baselines, conformal abstention, and domain-transfer evaluations.
+
 Finally, the audit evidence should be understood as a review aid, not as a guarantee of universal safety. It makes the evidence inspectable, but each deployment still requires application-specific validation and monitoring.
 
 \section{Conclusion}
 
 This paper presented a bounded decision-control model with learned deferral. The motivating problem is that operational AI systems often need to decide whether to act, reject, or defer, and a forced binary or generative output can hide uncertainty from the surrounding workflow. The model addresses this problem with a three-way learned decision interface: YES, NO, and TBD.
 
-On the full DS-L test split, S12B achieves Accuracy = 0.8260 and Macro F1 = 0.8252, with per-class F1 scores of 0.8314 (YES), 0.8486 (NO), and 0.7956 (TBD). The result is accompanied by calibration evidence, threshold sweeps, stability checks, confusion matrices, and reproducibility materials. The paper's claim is therefore not only that the model reaches a particular score, but that learned deferral can be evaluated as an auditable decision-control surface.
+On the full DS-L test split, S12B achieves Accuracy = 0.8260 and Macro F1 = 0.8252, with per-class F1 scores of 0.8314 (YES), 0.8486 (NO), and 0.7956 (TBD). A forced binary YES/NO view of the same task drops to Macro F1 = 0.4945 because it cannot represent deferral. The S12B boundary-pack pass does not materially improve raw F1 over S12, but it reduces calibration error and high-confidence error rates. The result is accompanied by calibration evidence, threshold sweeps, stability checks, confusion matrices, abstention baselines, error audits, and reproducibility materials. The paper's claim is therefore not only that the model reaches a particular score, but that learned deferral can be evaluated as an auditable decision-control surface.
 
 The remaining work is clear: improve the semantic boundary between direct action and deferral, validate auxiliary value and emotion outputs as independent empirical claims, and repeat calibration and threshold review for each deployment domain. Within the evaluated scope, S12B provides a concrete checkpoint for bounded decision routing under ambiguity.
 

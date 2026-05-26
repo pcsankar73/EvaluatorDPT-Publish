@@ -1,6 +1,6 @@
 # S12B Certification Pack (Run ID: S12B_20260526)
 
-This folder contains the certification handoff artifacts for the EvaluatorDPT publish candidate **S12B**.
+This folder contains the certification handoff artifacts for the EvaluatorDPT S12B checkpoint.
 
 ## What to Review (start here)
 
@@ -8,8 +8,9 @@ This folder contains the certification handoff artifacts for the EvaluatorDPT pu
 2. **Calibration evidence:** `pack/reports/CALIBRATION_REPORT.md`
 3. **Decision threshold sweep:** `pack/artifacts/threshold_sweep_decision_20260526/`
 4. **Multi-seed stability:** `pack/artifacts/multi_seed_00_summary.txt`
-5. **Governance / policy:** `pack/governance/THRESHOLD_POLICY.md`
-6. **Model/data pointers:** `ARTIFACT_POINTERS.md`
+5. **Post-training evidence tests:** `pack/artifacts/post_training_tests/`
+6. **Governance / policy:** `pack/governance/THRESHOLD_POLICY.md`
+7. **Model/data pointers:** `ARTIFACT_POINTERS.md`
 
 ## Run Scope
 
@@ -28,6 +29,7 @@ All artifacts are vendored under `pack/` so the certifier does not need to chase
   - `calibration_data_val.json`
   - `multi_seed_00_summary.txt`, `multi_seed_seed_results.json`
   - `threshold_sweep_decision_20260526/` (CSV + thresholds + summary)
+  - `post_training_tests/` (abstention baselines, risk/coverage curves, TBD error audit, dataset transparency, annotation policy, and S12/S12B comparison)
   - `ARTIFACT_POINTERS.md` (storage pointers copy)
 - `pack/reports/`
   - `EVALUATION_REPORT.md`
@@ -43,3 +45,10 @@ All artifacts are vendored under `pack/` so the certifier does not need to chase
 
 Model weights and tokenized datasets are not stored inside this repository. They are referenced in:
 - `ARTIFACT_POINTERS.md`
+
+## Defensible Interpretation
+
+- S12B full-test Macro F1 is 0.8252 on DS-L test (n=44,597).
+- Forced binary YES/NO classification without a deferral class drops to Macro F1=0.4945.
+- Reject-threshold baselines are retained-coverage operating policies, not direct full-coverage replacements for learned TBD.
+- The S12B boundary-pack pass should be interpreted as improving calibration and high-confidence error behavior, not as a material raw-F1 improvement over S12.

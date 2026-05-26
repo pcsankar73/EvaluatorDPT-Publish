@@ -1,0 +1,186 @@
+{
+  "s12_val": {
+    "tag": "S12_ep3_val",
+    "n": 44404,
+    "label_counts": {
+      "YES": 14962,
+      "NO": 15534,
+      "TBD": 13908
+    },
+    "macro_f1": 0.8211,
+    "per_class_f1": {
+      "YES": 0.8244,
+      "NO": 0.8495,
+      "TBD": 0.7893
+    },
+    "per_class_precision": {
+      "YES": 0.8171,
+      "NO": 0.8635,
+      "TBD": 0.783
+    },
+    "per_class_recall": {
+      "YES": 0.8318,
+      "NO": 0.8358,
+      "TBD": 0.7958
+    },
+    "tbd_rate": 0.3183,
+    "ece": 0.046086,
+    "high_conf_error_rate_85": 0.057427,
+    "high_conf_error_rate_90": 0.038735,
+    "confusion_matrix_normalised": [
+      [
+        0.8318,
+        0.0657,
+        0.1025
+      ],
+      [
+        0.0653,
+        0.8358,
+        0.0988
+      ],
+      [
+        0.1273,
+        0.0769,
+        0.7958
+      ]
+    ]
+  },
+  "s12_test": {
+    "tag": "S12_ep3_test",
+    "n": 44597,
+    "label_counts": {
+      "YES": 14883,
+      "NO": 15650,
+      "TBD": 14064
+    },
+    "macro_f1": 0.8254,
+    "per_class_f1": {
+      "YES": 0.831,
+      "NO": 0.8487,
+      "TBD": 0.7966
+    },
+    "per_class_precision": {
+      "YES": 0.8224,
+      "NO": 0.8662,
+      "TBD": 0.7882
+    },
+    "per_class_recall": {
+      "YES": 0.8398,
+      "NO": 0.832,
+      "TBD": 0.8051
+    },
+    "tbd_rate": 0.3221,
+    "ece": 0.042603,
+    "high_conf_error_rate_85": 0.055766,
+    "high_conf_error_rate_90": 0.036527,
+    "confusion_matrix_normalised": [
+      [
+        0.8398,
+        0.0652,
+        0.0949
+      ],
+      [
+        0.0638,
+        0.832,
+        0.1042
+      ],
+      [
+        0.1209,
+        0.074,
+        0.8051
+      ]
+    ]
+  },
+  "s12b_val": {
+    "tag": "S12B_ep1_val",
+    "n": 44404,
+    "label_counts": {
+      "YES": 14962,
+      "NO": 15534,
+      "TBD": 13908
+    },
+    "macro_f1": 0.8213,
+    "per_class_f1": {
+      "YES": 0.8252,
+      "NO": 0.8496,
+      "TBD": 0.7892
+    },
+    "per_class_precision": {
+      "YES": 0.8155,
+      "NO": 0.8582,
+      "TBD": 0.7907
+    },
+    "per_class_recall": {
+      "YES": 0.8352,
+      "NO": 0.8411,
+      "TBD": 0.7877
+    },
+    "tbd_rate": 0.312,
+    "ece": 0.041295,
+    "high_conf_error_rate_85": 0.04986,
+    "high_conf_error_rate_90": 0.030583,
+    "confusion_matrix_normalised": [
+      [
+        0.8352,
+        0.0668,
+        0.098
+      ],
+      [
+        0.0666,
+        0.8411,
+        0.0922
+      ],
+      [
+        0.1289,
+        0.0834,
+        0.7877
+      ]
+    ]
+  },
+  "s12b_test": {
+    "tag": "S12B_ep1_test",
+    "n": 44597,
+    "label_counts": {
+      "YES": 14883,
+      "NO": 15650,
+      "TBD": 14064
+    },
+    "macro_f1": 0.8252,
+    "per_class_f1": {
+      "YES": 0.8314,
+      "NO": 0.8486,
+      "TBD": 0.7956
+    },
+    "per_class_precision": {
+      "YES": 0.8205,
+      "NO": 0.8598,
+      "TBD": 0.7955
+    },
+    "per_class_recall": {
+      "YES": 0.8425,
+      "NO": 0.8376,
+      "TBD": 0.7958
+    },
+    "tbd_rate": 0.3155,
+    "ece": 0.04111,
+    "high_conf_error_rate_85": 0.048546,
+    "high_conf_error_rate_90": 0.029172,
+    "confusion_matrix_normalised": [
+      [
+        0.8425,
+        0.0668,
+        0.0907
+      ],
+      [
+        0.0648,
+        0.8376,
+        0.0976
+      ],
+      [
+        0.1229,
+        0.0813,
+        0.7958
+      ]
+    ]
+  }
+}

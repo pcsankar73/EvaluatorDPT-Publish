@@ -1,0 +1,190 @@
+{
+  "dsl_val_class_dist_confirmed": {
+    "YES": 14962,
+    "NO": 15534,
+    "TBD": 13908
+  },
+  "dsl_test_class_dist_confirmed": {
+    "YES": 14883,
+    "NO": 15650,
+    "TBD": 14064
+  },
+  "dsl_train_class_dist_vm_confirmed": {
+    "YES": 137168,
+    "NO": 149071,
+    "TBD": 132486
+  },
+  "bp_source_breakdown_train_confirmed": {
+    "total_rows_confirmed": 323,
+    "source_breakdown": "NOT_IN_CSV \u2014 source_file column not written to final output"
+  },
+  "dataset_lineage": [
+    {
+      "label": "DS-B (clean)",
+      "description": "Full collected corpus \u2014 all available labelled data after noise removal",
+      "role": "Starting point for all modelling. Establishes the full task distribution.",
+      "tokenized_path_vm": "/data1tb/data/tokenized_v2_final",
+      "build_date": "2026-05-14",
+      "splits": {
+        "train": 651240,
+        "val": 81372,
+        "test": 81384,
+        "total": 813996
+      },
+      "train_class_dist": {
+        "YES": "36.3%",
+        "NO": "33.2%",
+        "TBD": "30.5%"
+      },
+      "sources": [
+        "SemEval 2017 (~5K)",
+        "FinancialPhraseBank (~5K)",
+        "TweetEval (~60K)",
+        "GoEmotions (~50K)",
+        "Ethics commonsense (~30K)",
+        "Ethics virtue (~30K)",
+        "SNLI / MultiNLI NLI pairs",
+        "Empathetic Dialogues (later removed after DS-B noisy)"
+      ],
+      "quality_actions": [
+        "Removed sentiment140, imdb, empathetic_dialogues (sentiment\u2192label corruption)",
+        "Removed short texts <5 tokens (~43K rows)",
+        "Fixed HTML/encoding artifacts (~9K rows)",
+        "Upgraded emotion/value vectors from class-level to per-sample (100% coverage)"
+      ],
+      "dedup_leakage": "No cross-split leakage check at this stage",
+      "notes": "DS-B noisy (820K) was the intermediate; DS-B clean (814K) is the stable corpus used going forward."
+    },
+    {
+      "label": "DS-E (NLI-only)",
+      "description": "NLI-filtered subset: only entailment/contradiction pairs retained",
+      "role": "Key refinement: removed non-NLI rows that mapped polarity sentiment to YES/NO, corrupting the decision boundary. This was the biggest single F1 jump (+0.033).",
+      "tokenized_path_vm": "/data1tb/data/tokenized_v5_nli_only_20260519",
+      "build_date": "2026-05-19",
+      "splits": {
+        "train": 355408,
+        "val": 44404,
+        "test": 44597,
+        "total": 444409
+      },
+      "train_class_dist": {
+        "NOTE": "Not separately confirmed \u2014 derived from NLI filter"
+      },
+      "sources": [
+        "DS-B clean (NLI pairs subset only \u2014 SNLI/MultiNLI/SemEval NLI)"
+      ],
+      "quality_actions": [
+        "Retained only textual entailment/contradiction pairs",
+        "Excluded sentiment/opinion-only sources"
+      ],
+      "dedup_leakage": "Cross-split leakage check applied",
+      "f1_impact": "+0.033 vs DS-B (largest single-step improvement in programme)",
+      "notes": "Volume reduction 814K\u2192444K was intentional: better task fit, not data loss."
+    },
+    {
+      "label": "DS-F",
+      "description": "DS-E + 3,462 TBD\u2192NO label corrections",
+      "role": "Label quality pass. These were NLI pairs where hypothesis was clearly false (contradicted by premise) but had been labelled TBD. Correcting them sharpened the NO boundary.",
+      "tokenized_path_vm": "/data1tb/data/tokenized_v6_nli_20260520",
+      "build_date": "2026-05-20",
+      "splits": {
+        "train": 355408,
+        "val": 44404,
+        "test": 44597,
+        "total": 444409
+      },
+      "quality_actions": [
+        "3,462 TBD\u2192NO label corrections"
+      ],
+      "f1_impact": "+0.013 vs DS-E",
+      "notes": "Production text+label baseline. All subsequent datasets share this text."
+    },
+    {
+      "label": "DS-G",
+      "description": "DS-F text + diversity-corrected aux vectors (value dimension bug fix)",
+      "role": "Corrected a value-vector dimension bug that caused collapsed diversity in the V10 head. Same texts and decision labels as DS-F.",
+      "tokenized_path_vm": "/data1tb/data/tokenized_v6b_20260522",
+      "build_date": "2026-05-22",
+      "splits": {
+        "train": 355408,
+        "val": 44404,
+        "test": 44597,
+        "total": 444409
+      },
+      "quality_actions": [
+        "100% emotion binary diversity (target >90%)",
+        "100% value binary diversity",
+        "Corrected value dimension encoding bug"
+      ],
+      "notes": "Text and decision labels unchanged from DS-F."
+    },
+    {
+      "label": "DS-J (canonical, read-only)",
+      "description": "DS-G + hypothesis filter + correct value dims + emotion alignment fix. Final consolidated canonical dataset. Never alter.",
+      "role": "Canonical dataset \u2014 all subsequent datasets build from DS-J CSVs. Val and test splits are permanently fixed here.",
+      "tokenized_path_vm": "/data1tb/data/tokenized_s9_20260524",
+      "csv_path_vm": "/data1tb/data/clean_s9_20260524/  [CANONICAL \u2014 READ-ONLY]",
+      "build_date": "2026-05-24",
+      "splits": {
+        "train": 355408,
+        "val": 44404,
+        "test": 44597,
+        "total": 444409
+      },
+      "quality_actions": [
+        "Hypothesis-only filter applied (removes trivially predictable pairs)",
+        "Emotion label alignment fix",
+        "Value dimension correction confirmed",
+        "Cross-split leakage: 0 rows"
+      ],
+      "dedup_leakage": "0 cross-split leakage rows confirmed",
+      "notes": "Val=44,404 and Test=44,597 rows are the fixed evaluation splits for all subsequent stages including DS-L. DS-J train is the text/label base for DS-L train."
+    },
+    {
+      "label": "DS-L (current training set)",
+      "description": "DS-J base + DS-K unique hard cases + capped reasoning/negation pattern boost. Masks: emotion_mask=0.0 (skip emotion supervision), value_mask=0.3 (weak).",
+      "role": "Primary training dataset for S12 and S12B. Adds targeted hard cases (negation, numbers, role/value swaps) without the oversampling explosion of DS-K (which was rejected at 908K train rows).",
+      "tokenized_path_vm": "/data1tb/data/tokenized_s12_20260525_dsl",
+      "csv_path_vm": "/data1tb/data/clean_s12_20260525_dsl/",
+      "build_date": "2026-05-25",
+      "build_script": "scripts/build_ds_l_middle_ground.py",
+      "splits": {
+        "train": 418725,
+        "val": 44404,
+        "test": 44597,
+        "total": 507726
+      },
+      "train_class_dist_CONFIRMED": "see below (computed from CSV)",
+      "val_class_dist_CONFIRMED": "see below (computed from CSV)",
+      "test_class_dist_CONFIRMED": "see below (from metrics.json)",
+      "train_composition": {
+        "DS-J_base_train": 355408,
+        "DS-K_unique_additions": "confirmed in build log [NOT_STORED_LOCALLY \u2014 see build script]",
+        "DS-K_capped_boost": "up to 12,000 rows (boost_cap=12000 in build script)",
+        "boost_regex_patterns": "negation, numbers, quantity words (not|more|less|\\d+|one|two...)",
+        "boost_distribution": "YES=40%, NO=20%, TBD=40% of boost budget"
+      },
+      "masks": {
+        "emotion_mask": 0.0,
+        "value_mask": 0.3
+      },
+      "notes": "Val and test splits are identical to DS-J (build script writes dsj_val/dsj_test unchanged). Train is DS-J train + DS-K unique rows + capped boost (max 2 duplicates per text). Emotion head intentionally masked (emotion_mask=0) \u2014 E28 metrics skipped."
+    },
+    {
+      "label": "BP-S12 (boundary pack \u2014 correction only)",
+      "description": "323 training examples mined from S12 ep3 diagnostics. Used for 1 targeted sharpening epoch after S12 ep3 checkpoint.",
+      "role": "Targeted correction of high-confidence boundary errors. NOT the primary training dataset \u2014 represents <0.1% of total training volume. Sourced from: high_conf_errors, hardest_examples, disagreement_audit from S12 ep3 5k-slice diagnostic run.",
+      "tokenized_path_vm": "/data1tb/data/tokenized_s12_boundarypack_20260526",
+      "csv_path_vm": "/data1tb/data/clean_s12_boundarypack_20260526/",
+      "build_date": "2026-05-26",
+      "build_script": "scripts/build_boundary_pack.py",
+      "splits": {
+        "train": 323,
+        "val": 500,
+        "test": 500
+      },
+      "source_breakdown": "see below (computed from CSV)",
+      "notes": "S12B FULLVAL/FULLTEST evaluation was run against DS-L val/test (44,404/44,597 rows), NOT against the boundary pack val/test. The boundary pack val/test (500 rows each) were used only during the 1-epoch sharpening training run for checkpoint selection."
+    }
+  ]
+}

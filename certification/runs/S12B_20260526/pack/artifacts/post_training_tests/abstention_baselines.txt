@@ -1,0 +1,66 @@
+====================================================================================================
+  ABSTENTION BASELINE ANALYSIS — exp_t90_S12B_boundarypack_ep1_fromS12ep3  split=test
+====================================================================================================
+  N=44597  Labels: YES=14883 NO=15650 TBD=14064
+
+  Columns: coverage | MacroF1 | YES_F1 | NO_F1 | TBD_F1 | YES_precision | FAR (false-action-rate) | TBD_rate
+
+── SECTION A: Full-coverage methods (no abstention) ─────────────────────────────
+
+  learned_TBD (argmax, no abstention threshold) cov=1.000  MacroF1=0.8252  YES_F1=0.8314  NO_F1=0.8486  TBD_F1=0.7956  YES_prec=0.8205  FAR=0.1795  TBD_rate=0.3155
+  binary_YES_NO (no abstention)                 cov=1.000  MacroF1=0.4945  YES_F1=0.7482  NO_F1=0.7352  TBD_F1=0.0000  YES_prec=0.6343  FAR=0.3657  TBD_rate=0.0000
+
+── SECTION B: Confidence-reject baselines (matched coverage points) ──────────────
+    Coverage is fraction of samples retained (not abstained).
+
+  confidence_reject(tau=0.61)                   cov=0.900  MacroF1=0.8631  YES_F1=0.8667  NO_F1=0.8869  TBD_F1=0.8358  YES_prec=0.8540  FAR=0.1460  TBD_rate=0.3108
+  confidence_reject(tau=0.75)                   cov=0.800  MacroF1=0.8966  YES_F1=0.8970  NO_F1=0.9186  TBD_F1=0.8741  YES_prec=0.8858  FAR=0.1142  TBD_rate=0.3043
+  confidence_reject(tau=0.84)                   cov=0.700  MacroF1=0.9252  YES_F1=0.9207  NO_F1=0.9470  TBD_F1=0.9078  YES_prec=0.9104  FAR=0.0896  TBD_rate=0.2976
+  confidence_reject(tau=0.89)                   cov=0.600  MacroF1=0.9460  YES_F1=0.9400  NO_F1=0.9644  TBD_F1=0.9335  YES_prec=0.9343  FAR=0.0657  TBD_rate=0.2920
+  confidence_reject(tau=0.92)                   cov=0.500  MacroF1=0.9625  YES_F1=0.9556  NO_F1=0.9772  TBD_F1=0.9548  YES_prec=0.9546  FAR=0.0454  TBD_rate=0.2861
+
+── SECTION C: Entropy-reject baselines ──────────────────────────────────────────
+
+  entropy_reject(tau=0.82)                      cov=0.900  MacroF1=0.8624  YES_F1=0.8681  NO_F1=0.8863  TBD_F1=0.8329  YES_prec=0.8572  FAR=0.1428  TBD_rate=0.3129
+  entropy_reject(tau=0.68)                      cov=0.800  MacroF1=0.8960  YES_F1=0.8971  NO_F1=0.9191  TBD_F1=0.8718  YES_prec=0.8850  FAR=0.1150  TBD_rate=0.3050
+  entropy_reject(tau=0.52)                      cov=0.700  MacroF1=0.9250  YES_F1=0.9209  NO_F1=0.9471  TBD_F1=0.9070  YES_prec=0.9102  FAR=0.0898  TBD_rate=0.2981
+  entropy_reject(tau=0.40)                      cov=0.600  MacroF1=0.9459  YES_F1=0.9400  NO_F1=0.9647  TBD_F1=0.9331  YES_prec=0.9345  FAR=0.0655  TBD_rate=0.2928
+  entropy_reject(tau=0.31)                      cov=0.500  MacroF1=0.9626  YES_F1=0.9555  NO_F1=0.9775  TBD_F1=0.9550  YES_prec=0.9542  FAR=0.0458  TBD_rate=0.2860
+
+── SECTION D: Margin-reject baselines ───────────────────────────────────────────
+
+  margin_reject(tau=0.30)                       cov=0.900  MacroF1=0.8625  YES_F1=0.8662  NO_F1=0.8856  TBD_F1=0.8358  YES_prec=0.8536  FAR=0.1464  TBD_rate=0.3102
+  margin_reject(tau=0.56)                       cov=0.800  MacroF1=0.8968  YES_F1=0.8969  NO_F1=0.9189  TBD_F1=0.8747  YES_prec=0.8859  FAR=0.1141  TBD_rate=0.3042
+  margin_reject(tau=0.73)                       cov=0.700  MacroF1=0.9250  YES_F1=0.9205  NO_F1=0.9465  TBD_F1=0.9078  YES_prec=0.9105  FAR=0.0895  TBD_rate=0.2965
+  margin_reject(tau=0.82)                       cov=0.600  MacroF1=0.9462  YES_F1=0.9400  NO_F1=0.9643  TBD_F1=0.9344  YES_prec=0.9344  FAR=0.0656  TBD_rate=0.2908
+  margin_reject(tau=0.87)                       cov=0.500  MacroF1=0.9624  YES_F1=0.9556  NO_F1=0.9768  TBD_F1=0.9548  YES_prec=0.9536  FAR=0.0464  TBD_rate=0.2848
+
+── SECTION E: Selective classifier (coverage vs MacroF1, top-confidence ranking) ─
+    See selective_curve.csv for full curve.
+
+    cov=0.00  MacroF1=1.0000  YES_F1=0.0000  FAR=nan  min_conf=0.984
+    cov=0.10  MacroF1=0.9779  YES_F1=0.9417  FAR=0.0202  min_conf=0.970
+    cov=0.20  MacroF1=0.9829  YES_F1=0.9624  FAR=0.0211  min_conf=0.963
+    cov=0.30  MacroF1=0.9813  YES_F1=0.9686  FAR=0.0245  min_conf=0.954
+    cov=0.40  MacroF1=0.9734  YES_F1=0.9644  FAR=0.0341  min_conf=0.942
+    cov=0.50  MacroF1=0.9628  YES_F1=0.9558  FAR=0.0453  min_conf=0.925
+    cov=0.60  MacroF1=0.9465  YES_F1=0.9407  FAR=0.0647  min_conf=0.896
+    cov=0.70  MacroF1=0.9259  YES_F1=0.9214  FAR=0.0887  min_conf=0.844
+    cov=0.80  MacroF1=0.8977  YES_F1=0.8979  FAR=0.1131  min_conf=0.754
+    cov=0.90  MacroF1=0.8647  YES_F1=0.8682  FAR=0.1445  min_conf=0.615
+    cov=1.00  MacroF1=0.8275  YES_F1=0.8338  FAR=0.1774  min_conf=0.404
+
+── SECTION F: Learned TBD — risk/coverage vs TBD threshold ─────────────────────
+    See coverage_curves.csv for full curve.
+
+    tbd_thr=0.00  TBD_rate=1.000  cov_act=0.000  MacroF1=0.1598  YES_F1=0.0000  FAR=nan
+    tbd_thr=0.10  TBD_rate=0.469  cov_act=0.531  MacroF1=0.7822  YES_F1=0.7648  FAR=0.1115
+    tbd_thr=0.20  TBD_rate=0.395  cov_act=0.605  MacroF1=0.8143  YES_F1=0.8111  FAR=0.1413
+    tbd_thr=0.30  TBD_rate=0.357  cov_act=0.643  MacroF1=0.8213  YES_F1=0.8230  FAR=0.1597
+    tbd_thr=0.40  TBD_rate=0.328  cov_act=0.672  MacroF1=0.8245  YES_F1=0.8285  FAR=0.1733
+    tbd_thr=0.50  TBD_rate=0.304  cov_act=0.696  MacroF1=0.8252  YES_F1=0.8314  FAR=0.1795
+    tbd_thr=0.60  TBD_rate=0.282  cov_act=0.718  MacroF1=0.8252  YES_F1=0.8314  FAR=0.1795
+    tbd_thr=0.70  TBD_rate=0.257  cov_act=0.743  MacroF1=0.8252  YES_F1=0.8314  FAR=0.1795
+    tbd_thr=0.80  TBD_rate=0.227  cov_act=0.773  MacroF1=0.8252  YES_F1=0.8314  FAR=0.1795
+    tbd_thr=0.90  TBD_rate=0.171  cov_act=0.829  MacroF1=0.8252  YES_F1=0.8314  FAR=0.1795
+    tbd_thr=1.00  TBD_rate=0.000  cov_act=1.000  MacroF1=0.8252  YES_F1=0.8314  FAR=0.1795

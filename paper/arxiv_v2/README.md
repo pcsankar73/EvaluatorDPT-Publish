@@ -8,7 +8,7 @@ Primary framing:
 - audit-ready release evidence: calibration, threshold sweep, multi-seed stability, confusion matrix, and certification pack
 
 Current result source:
-- S12B publish candidate: `exp_t90_S12B_boundarypack_ep1_fromS12ep3`
+- S12B evaluated checkpoint: `exp_t90_S12B_boundarypack_ep1_fromS12ep3`
 - Summary file: `paper/RESULTS_UPDATE_20260526.md`
 - Certification pack: `certification/runs/S12B_20260526/`
 
