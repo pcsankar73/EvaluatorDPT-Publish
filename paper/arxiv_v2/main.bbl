@@ -8,6 +8,12 @@ Francesco Barbieri, Jose Camacho-Collados, Luis Espinosa~Anke, and Leonardo
 \newblock In {\em Findings of the Association for Computational Linguistics:
   EMNLP 2020}, pages 1644--1650, 2020.
 
+\bibitem{bowman2015snli}
+Samuel~R. Bowman, Gabor Angeli, Christopher Potts, and Christopher~D. Manning.
+\newblock A large annotated corpus for learning natural language inference.
+\newblock In {\em Proceedings of the 2015 Conference on Empirical Methods in
+  Natural Language Processing}, pages 632--642, 2015.
+
 \bibitem{caruana1997multitask}
 Rich Caruana.
 \newblock Multitask learning.

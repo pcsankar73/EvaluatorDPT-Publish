@@ -14,7 +14,7 @@
 
 \geometry{margin=1in}
 
-\title{\textbf{Learned Deferral for Auditable Bounded Decision Control}}
+\title{\textbf{Operational Decision Control with Learned Deferral}}
 
 \author{
 Sankaranarayanan Palamadai Chandrasekaran \\
@@ -38,7 +38,7 @@ Many deployed systems now connect language inputs to downstream actions. In such
 
 The issue appears when language models or automated agents are connected to business workflows, policy enforcement, moderation, approvals, safety checks, or other action-taking systems. In these environments, a model output is not merely a label. It becomes a control signal. A false YES may trigger an unsafe or unauthorized action; a false NO may block a valid action; and a failure to defer may hide uncertainty from the surrounding workflow. A useful decision model therefore needs an explicit representation of uncertainty, rather than a confidence score attached to a forced label.
 
-The model is designed for this setting. It is not a general-purpose language generator or a replacement for domain-specific review. It is a bounded classifier that converts a context signal into a constrained decision with confidence and supporting evaluation evidence. Downstream policies can inspect the decision distribution, choose operating thresholds, route deferred cases, and preserve a review trail.
+The model is designed for this setting. It is not a general-purpose language generator or a replacement for domain-specific review. It is a bounded decision interface that converts a context signal into a constrained routing decision with confidence and supporting evaluation evidence. Downstream policies can inspect the decision distribution, choose operating thresholds, route deferred cases, and preserve a review trail.
 
 The proposed formulation models decision control as a bounded three-way output space:
 \[
@@ -53,9 +53,9 @@ This framing is intentionally narrower than many general language-model evaluati
 \paragraph{Contributions.}
 \begin{itemize}[leftmargin=1.5em]
   \item We formulate decision routing as bounded control over YES, NO, and learned TBD deferral.
-  \item We show how runtime operating thresholds turn the model distribution into an auditable steering surface for decision control.
+  \item We show how runtime operating thresholds turn the model distribution into an auditable control surface for decision routing.
   \item We present a transformer-based multi-head architecture that separates primary decision prediction from structured auxiliary context signals.
-  \item We define auxiliary value and emotion/sentiment channels as decision-semantic signals that can support auditable steering when they are enabled and separately validated.
+  \item We define auxiliary value and emotion/sentiment channels as decision-semantic signals that can support auditable policy control when they are enabled and separately validated.
   \item We describe targeted boundary refinement for hard ambiguity cases, including negation, contradiction, lexical-overlap traps, and modal/hedged statements.
   \item We evaluate the S12B checkpoint on full validation and test splits and report per-class behavior, calibration, threshold-sweep evidence, and stability checks.
   \item We organize evaluation results, calibration data, threshold sweeps, and reproducibility materials into a coherent review structure.
@@ -119,8 +119,8 @@ The bounded distribution is also a runtime control interface. A deployment can i
 \paragraph{Domain-agnostic control interface.}
 The output space is intentionally independent of any single downstream domain. A moderation system, approval workflow, compliance review, or financial triage system can attach different operating thresholds and escalation rules to the same bounded labels. This does not imply zero-shot production readiness across domains; it means that the interface separates domain policy from the model's learned decision distribution, making domain transfer a validation question rather than a redesign of the output space.
 
-\paragraph{Auxiliary decision steering.}
-The multi-head design allows auxiliary value and emotion/sentiment signals to be treated as structured decision-semantic channels. When those channels are enabled and validated, they can be logged, thresholded, or used by a downstream policy engine to steer behavior in real time without changing the checkpoint. In the evaluated S12B lineage, empirical claims remain limited to the decision head because the emotion head is masked; auxiliary steering is therefore presented as an architectural capability and a future empirical claim, not as a validated S12B result.
+\paragraph{Auxiliary policy control.}
+The multi-head design allows auxiliary value and emotion/sentiment signals to be treated as structured decision-semantic channels. When those channels are enabled and validated, they can be logged, thresholded, or used by a downstream policy engine to control routing behavior in real time without changing the checkpoint. In the evaluated S12B lineage, empirical claims remain limited to the decision head because the emotion head is masked; auxiliary policy control is therefore presented as an architectural capability and a future empirical claim, not as a validated S12B result.
 
 \paragraph{Release-level auditability.}
 The evaluation package includes calibration data, threshold-sweep artifacts, multi-seed stability checks, confusion matrices, reproducibility commands, and model/data pointers. These artifacts make the evaluated behavior reviewable. This is a different standard from publishing only model weights and a top-line score.
@@ -128,7 +128,7 @@ The evaluation package includes calibration data, threshold-sweep artifacts, mul
 \paragraph{Boundary-focused refinement.}
 The development process identifies deferral boundaries as the key failure region and uses targeted boundary examples rather than undifferentiated data growth. This is especially relevant for negation, contradiction, lexical-overlap traps, long-text stress cases, and hedged statements.
 
-Together, these choices define the scope of the paper. The model is presented as a bounded formulation for decision routing, not as a new language-model backbone. The empirical question is whether a learned deferral class, evaluated with classwise and calibration evidence, can support controlled decision workflows.
+Together, these choices define the scope of the paper. The model is presented as a bounded execution interface for decision routing, not as a new language-model backbone. The empirical question is whether a learned deferral class, evaluated with classwise and calibration evidence, can support controlled decision workflows.
 
 \subsection{Design Principles}
 
@@ -187,7 +187,7 @@ In an operational setting, each prediction produces a record containing the inpu
 
 The interface also supports conservative fallback and runtime decision control. A downstream system can treat low-confidence YES or NO predictions as TBD without retraining the model. Conversely, if a use case tolerates more automation, it can lower the deferral threshold while preserving the same model artifact. The same mechanism can be changed by operating condition: for example, a high-risk workflow can increase TBD routing during audit periods, while a lower-risk workflow can accept more direct YES or NO decisions. This is the reason threshold selection is treated as release evidence rather than as an implementation detail.
 
-Auxiliary channels extend this steering pattern when they are validated for a lineage. A policy engine can use auxiliary value or emotion/sentiment scores as additional routing conditions, for example by requiring review when the primary decision is high-confidence but an auxiliary signal indicates a sensitive or adversarial context. This paper does not claim validated auxiliary steering for S12B; it defines the interface and reports the validated decision-head evidence.
+Auxiliary channels extend this control pattern when they are validated for a lineage. A policy engine can use auxiliary value or emotion/sentiment scores as additional routing conditions, for example by requiring review when the primary decision is high-confidence but an auxiliary signal indicates a sensitive or adversarial context. This paper does not claim validated auxiliary policy control for S12B; it defines the interface and reports the validated decision-head evidence.
 
 \subsection{Operational Lifecycle}
 
@@ -207,7 +207,7 @@ Let $x$ be a decision-event input. The model predicts a primary decision distrib
 
 Deployment policies may still choose operating thresholds over the predicted probabilities. In this formulation, thresholding is an operating policy layered over a bounded decision model, not the sole mechanism by which uncertainty is represented.
 
-This formulation gives the system two mechanisms for risk control. The first is learned: ambiguous or insufficient contexts can be labeled TBD during training. The second is operational: deployment owners can choose thresholds over the learned distribution to match risk tolerance. A high-assurance setting may route more cases to TBD, while a lower-risk setting may accept a smaller margin for YES or NO. The model separates the representation of uncertainty from the policy decision about how much uncertainty is acceptable. Runtime steering is therefore expressed as a change in recorded policy rather than as an untracked change to model behavior.
+This formulation gives the system two mechanisms for risk control. The first is learned: ambiguous or insufficient contexts can be labeled TBD during training. The second is operational: deployment owners can choose thresholds over the learned distribution to match risk tolerance. A high-assurance setting may route more cases to TBD, while a lower-risk setting may accept a smaller margin for YES or NO. The model separates the representation of uncertainty from the policy decision about how much uncertainty is acceptable. Runtime control is therefore expressed as a change in recorded policy rather than as an untracked change to model behavior.
 
 \subsection{Architecture}
 
@@ -230,7 +230,7 @@ The DS-L lineage is a curated decision-event corpus built from public NLP source
 
 The dataset should be interpreted as a research and evaluation corpus for bounded decision behavior, not as a universal production benchmark. The paper evaluates learned deferral under the reported distribution; it does not claim universal generalization to all domains.
 
-The lineage includes three broad kinds of material. First, it uses natural-language inference style examples to expose entailment, contradiction, and neutral/insufficient-evidence patterns. Second, it includes curated decision examples that map language contexts into the bounded YES/NO/TBD control space. Third, it adds targeted boundary material for cases that were difficult in earlier diagnostics, including number changes, role changes, negation, high-overlap contradiction, low-overlap support, long-context stress, and modal or hedged language. These categories are described at a level suitable for publication; reuse of upstream datasets must follow the licenses of the original sources.
+The lineage includes three broad kinds of material. First, it uses natural-language inference style examples to expose entailment, contradiction, and neutral/insufficient-evidence patterns, including sources in the SNLI and MultiNLI family \cite{bowman2015snli,williams2018broad}. Second, it includes curated decision examples that map language contexts into the bounded YES/NO/TBD control space. Third, it adds targeted boundary material for cases that were difficult in earlier diagnostics, including number changes, role changes, negation, high-overlap contradiction, low-overlap support, long-context stress, and modal or hedged language. These categories are described at a level suitable for publication; reuse of upstream datasets must follow the licenses of the original sources.
 
 \begin{table}[htbp]
 \centering
@@ -258,7 +258,7 @@ The main dataset construction steps are also recorded. DS-B contained approximat
 
 The labels are defined by decision sufficiency rather than by surface sentiment. YES means the input provides enough support for the affirmative action or decision. NO means the input provides enough support to reject or block. TBD means the input lacks sufficient support for either direct action or direct rejection under the modeled policy. This distinction matters because a positive-sounding sentence may still be TBD if it does not provide enough evidence, and a negative-sounding sentence may be YES if it supports an affirmative control decision in context.
 
-The auxiliary value and emotion/sentiment channels are designed to represent structured context, not to replace the primary decision label. Their intended semantics are decision-relative: the labels describe values and affective context as they bear on the decision event, not merely the linguistic tone of the text. For example, lexical positivity does not imply a YES label, and lexical negativity does not imply a NO label. The relevant question is whether the text provides decision-sufficient support, rejection, or uncertainty.
+The auxiliary value and emotion/sentiment channels are designed to represent structured context, not to replace the primary decision label. Their intended semantics are decision-relative: the labels describe values and affective context as they bear on the decision event, not merely the linguistic tone of the text. The project documentation references established value, sentiment, emotion, and social-norm resources when describing auxiliary source scope \cite{schwartz2012overview,rosenthal2017semeval,malo2014good,barbieri2020tweeteval,demszky2020goemotions,ziems2023normbank,hoover2020mftc,poria2019meld,rashkin2019empathetic,sap2020socialbias,hendrycks2021ethics,go2009twitter,maas2011learning}. For example, lexical positivity does not imply a YES label, and lexical negativity does not imply a NO label. The relevant question is whether the text provides decision-sufficient support, rejection, or uncertainty.
 
 In S12B, the empirical claims are restricted to the decision head because the emotion head is masked in the DS-L lineage. This avoids overstating auxiliary performance and keeps the paper aligned with the validated artifact. Future auxiliary-head evaluation should therefore test decision-semantic alignment rather than only agreement with surface sentiment or keyword-based labels.
 
@@ -524,7 +524,7 @@ Finally, the audit evidence should be understood as a review aid, not as a guara
 
 \section{Future Work}
 
-Three extensions would strengthen the research claim beyond the current arXiv version. First, independently trained baselines should be added, including binary classifiers with rejection, selective-classification objectives, conformal prediction wrappers, and abstention-trained models. Second, domain-transfer evaluations should test whether learned deferral and calibration behavior hold outside DS-L, for example in policy approval, moderation escalation, compliance review, financial triage, or enterprise workflow routing. Third, auxiliary value and emotion heads should be re-enabled and evaluated as independent decision-semantic outputs before they are treated as validated model claims. A further deployment study should evaluate whether auxiliary channels can be used as real-time steering controls while preserving auditability, calibration, and separation between model scores and operating policy.
+Three extensions would strengthen the research claim beyond the current arXiv version. First, independently trained baselines should be added, including binary classifiers with rejection, selective-classification objectives, conformal prediction wrappers, and abstention-trained models. Second, domain-transfer evaluations should test whether learned deferral and calibration behavior hold outside DS-L, for example in policy approval, moderation escalation, compliance review, financial triage, or enterprise workflow routing. Third, auxiliary value and emotion heads should be re-enabled and evaluated as independent decision-semantic outputs before they are treated as validated model claims. A further deployment study should evaluate whether auxiliary channels can be used as real-time policy controls while preserving auditability, calibration, and separation between model scores and operating policy.
 
 \section{Conclusion}
 
@@ -532,7 +532,7 @@ This paper presented a bounded decision-control model with learned deferral. The
 
 On the full DS-L test split, S12B achieves Accuracy = 0.8260 and Macro F1 = 0.8252, with per-class F1 scores of 0.8314 (YES), 0.8486 (NO), and 0.7956 (TBD). A forced binary YES/NO view of the same task drops to Macro F1 = 0.4945 because it cannot represent deferral. The S12B boundary-pack pass does not materially improve raw F1 over S12, but it reduces calibration error and high-confidence error rates. The result is accompanied by calibration evidence, threshold sweeps, stability checks, confusion matrices, abstention baselines, error audits, and reproducibility materials. The paper's claim is therefore not only that the model reaches a particular score, but that learned deferral can be evaluated as an auditable decision-control surface whose runtime behavior can be governed through documented operating policy.
 
-The remaining work is clear: improve the semantic boundary between direct action and deferral, validate auxiliary value and emotion outputs as independent empirical claims, test auxiliary channels as steering controls, and repeat calibration and threshold review for each deployment domain. Within the evaluated scope, S12B provides a concrete checkpoint for bounded decision routing under ambiguity.
+The remaining work is clear: improve the semantic boundary between direct action and deferral, validate auxiliary value and emotion outputs as independent empirical claims, test auxiliary channels as policy controls, and repeat calibration and threshold review for each deployment domain. Within the evaluated scope, S12B provides a concrete checkpoint for bounded decision routing under ambiguity.
 
 \bibliographystyle{plain}
 \bibliography{references}
