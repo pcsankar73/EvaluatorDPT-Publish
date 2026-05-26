@@ -1,0 +1,15 @@
+{
+  "best_thresholds": {
+    "NO": 0.1,
+    "TBD": 0.1,
+    "YES": 0.4
+  },
+  "best_val_macro_f1": 0.8215467660262559,
+  "fallback_mode": "tbd",
+  "steps": 9,
+  "test_labels": "reports\\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLTEST\\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLTEST\\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLTEST\\decision_labels.npy",
+  "test_logits": "reports\\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLTEST\\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLTEST\\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLTEST\\decision_logits.npy",
+  "test_macro_f1": 0.8251630858089101,
+  "val_labels": "reports\\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL\\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL\\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL\\decision_labels.npy",
+  "val_logits": "reports\\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL\\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL\\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL\\decision_logits.npy"
+}

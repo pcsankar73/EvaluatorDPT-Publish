@@ -1,35 +1,34 @@
-# Certification Checklist (Public)
+# Certification Checklist (S12B)
 
-Purpose: quick visibility into which artifacts exist for a given run.
+Run ID: `S12B_20260526`
 
-Canonical run pointers live under:
-- `certification/runs/<RUN_ID>/ARTIFACT_POINTERS.md`
+Start here:
+- `certification/runs/S12B_20260526/CERTIFIER_README.md`
 
-## Required (S12B publish candidate)
+## Included in this repo (vendored under the run pack)
 
-### Model
-- [x] Final checkpoint pointer (S1/S2)
-- [x] HF export pointer (S1/S2)
-- [x] Threshold sweep artifacts (decision)
-- [x] Calibration artifacts (ECE + bins)
+All items below are present under:
+- `certification/runs/S12B_20260526/pack/`
 
-### Data
-- [x] Dataset datasheet (publish-safe)
-- [ ] Public dataset release (if/when applicable)
-
-### Evaluation
+### Evaluation evidence
 - [x] Evaluation report (val + test)
 - [x] Confusion matrix
+- [x] Calibration report + reliability bins (ECE)
+- [x] Decision threshold sweep artifacts (TBD-fallback)
 - [x] Multi-seed stability report
 
-### Governance
+### Governance / policy
 - [x] Model card
-- [x] Threshold policy (governance)
-- [x] Safety/limitations notes
+- [x] Threshold policy
+- [x] Governance & safety notes
+
+### Reproducibility
+- [x] Train/eval commands and seed config
 
 ### Paper
-- [x] Current preprint package (PDF + figures)
+- [x] Preprint package present under `paper/`
 
-Notes:
-- This repo does not ship raw training data.
-- Do not commit secrets (SAS tokens, credentials).
+## Referenced (not stored in this repo)
+
+- Model checkpoint and HF export (refer to `certification/runs/S12B_20260526/ARTIFACT_POINTERS.md`)
+- Tokenized datasets (refer to `certification/runs/S12B_20260526/ARTIFACT_POINTERS.md`)

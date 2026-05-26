@@ -1,0 +1,43 @@
+{
+  "experiment": "exp_t90_S12B_boundarypack_ep1_fromS12ep3",
+  "checkpoint": "output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt",
+  "decision": {
+    "full_validation_macro_f1": 0.8213,
+    "full_test_macro_f1": 0.8252,
+    "full_test_by_class_f1": {
+      "YES": 0.8314,
+      "NO": 0.8486,
+      "TBD": 0.7956
+    }
+  },
+  "value_head": {
+    "full_validation_macro_f1": 0.4433,
+    "full_test_macro_f1": 0.4440
+  },
+  "emotion_head": {
+    "status": "masked",
+    "note": "0 valid samples after mask; metrics intentionally skipped."
+  },
+  "certification": {
+    "multi_seed_stability_val": {
+      "result": "PASS",
+      "std_gate": "std < 0.005",
+      "std": 0.0
+    },
+    "calibration_val": {
+      "ece": 0.03381,
+      "note": "PNG plots skipped on VM due to missing matplotlib; calibration_data.json captured."
+    }
+  },
+  "threshold_sweep_decision": {
+    "fallback_mode": "tbd",
+    "best_val_macro_f1": 0.821547,
+    "best_thresholds": {
+      "YES": 0.4,
+      "NO": 0.1,
+      "TBD": 0.1
+    },
+    "test_macro_f1_with_best_thresholds": 0.825163
+  }
+}
+
