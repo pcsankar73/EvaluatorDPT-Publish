@@ -71,7 +71,6 @@ Additional evidence:
 - Paper package: `paper/arxiv_v2/`
 - Compiled PDF: `paper/arxiv_v2/main.pdf`
 - OSF preprint: <https://osf.io/ztnya/>
-- arXiv: submitted — pending announcement and ID assignment
 
 ## License
 
