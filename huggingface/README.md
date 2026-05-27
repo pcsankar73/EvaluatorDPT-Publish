@@ -142,5 +142,6 @@ The training data is not redistributed with this model. The evaluated corpus is 
 ## Links
 
 - Publication repository: <https://github.com/pcsankar73/EvaluatorDPT-Publish>
-- OSF preprint record: <https://osf.io/ztnya/>
+- OSF preprint: <https://osf.io/ztnya/>
+- arXiv: submitted — pending announcement and ID assignment
 - Contact: sankar@smsquared.ai

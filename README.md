@@ -66,11 +66,12 @@ Additional evidence:
 
 ## Paper
 
-Current arXiv submission title: **Auditable Decision Models with Learned Abstention and Real-Time Steering**.
+**Auditable Decision Models with Learned Abstention and Real-Time Steering**
 
 - Paper package: `paper/arxiv_v2/`
 - Compiled PDF: `paper/arxiv_v2/main.pdf`
-- OSF preprint record: <https://osf.io/ztnya/>
+- OSF preprint: <https://osf.io/ztnya/>
+- arXiv: submitted — pending announcement and ID assignment
 
 ## License
 

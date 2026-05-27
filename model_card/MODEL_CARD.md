@@ -11,7 +11,7 @@
 | Base model | `bert-base-uncased` |
 | Max sequence length | 128 |
 | Primary output | YES / NO / TBD |
-| Evaluation dataset | DS-L validation and test splits |
+| Evaluation dataset | Fixed held-out validation and test splits |
 
 ## Purpose
 
@@ -57,7 +57,7 @@ Additional evidence:
 
 ## Auxiliary Outputs
 
-The architecture includes value and emotion/sentiment auxiliary heads. In the S12B DS-L lineage, the emotion head is masked during evaluation, so no emotion-head performance claim is made. Auxiliary channels should be treated as architectural signals requiring separate validation before they are used as deployment claims or policy controls.
+The architecture includes value and emotion/sentiment auxiliary heads. For the evaluated model version, the emotion head is masked during evaluation, so no emotion-head performance claim is made. Auxiliary channels should be treated as architectural signals requiring separate validation before they are used as deployment claims or policy controls.
 
 ## Threshold Policy
 
@@ -72,7 +72,7 @@ S12B threshold-sweep evidence is included under `certification/runs/S12B_2026052
 
 ## Limitations
 
-- Results are specific to DS-L and the S12B evaluation setup.
+- Results are specific to the evaluated corpus and the S12B setup.
 - New domains require separate validation, calibration review, threshold selection, and error audit.
 - The model truncates inputs to 128 tokens.
 - TBD is a policy-governed deferral output, not a guarantee of correctness.

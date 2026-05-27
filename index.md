@@ -27,6 +27,7 @@ EvaluatorDPT is a bounded operational decision-control layer for AI workflows wh
 - GitHub publication repository: `https://github.com/pcsankar73/EvaluatorDPT-Publish`
 - Hugging Face model page: `https://huggingface.co/pcsankar73s/EvaluatorModel`
 - OSF preprint: `https://osf.io/ztnya/`
+- arXiv: submitted — pending announcement and ID assignment
 - Docs hub: `https://docs.smsquared.ai/docs-next/index.html`
 - Trust Center: `https://demo.smsquared.ai/trust-center/trust-center.html`
 
