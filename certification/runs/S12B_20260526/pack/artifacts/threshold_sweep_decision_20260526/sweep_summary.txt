@@ -1,9 +1,0 @@
-=== Decision threshold sweep (from logits) ===
-val_logits: reports\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL\decision_logits.npy
-val_labels: reports\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL\exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL\decision_labels.npy
-fallback_mode: tbd
-steps: 9 (combos=729)
-best_val_macro_f1: 0.821547
-best_thresholds: YES=0.4000 NO=0.1000 TBD=0.1000
-
-test_macro_f1_with_best_thresholds: 0.825163

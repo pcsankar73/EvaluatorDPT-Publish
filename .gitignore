@@ -76,3 +76,7 @@ VEGD/
 
 # Local reviewer notes for paper iteration
 paper/arxiv_v2/Reviewer-Comment-*
+
+# Internal certification evidence pack (keep private)
+certification/
+

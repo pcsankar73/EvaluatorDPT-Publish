@@ -1,9 +1,0 @@
-{
-  "primary_seed": 42,
-  "certification_seeds": [
-    42,
-    123,
-    777
-  ],
-  "notes": "Use multi-seed validation for final stability reporting. Threshold sweep should be deterministic unless randomized search is used."
-}
