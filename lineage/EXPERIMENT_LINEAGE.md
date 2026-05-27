@@ -1,38 +1,37 @@
-# Experiment Lineage
+# Experiment Lineage (Publication Summary)
 
-## Current Release Candidate
+This document summarizes the publication lineage at a level appropriate for a public repository. Internal run identifiers are intentionally omitted.
+
+## Current Evaluated Release
 
 | Field | Value |
 |---|---|
-| Stage | S12B |
-| Experiment | `exp_t90_S12B_boundarypack_ep1_fromS12ep3` |
-| Checkpoint | `best_model_epoch_1.pt` |
-| Dataset | DS-L validation/test with S12B boundary-pack sharpening |
+| Release date | 2026-05-26 |
+| Output contract | YES / NO / TBD |
 | Validation Macro F1 | 0.8213 |
 | Test Macro F1 | 0.8252 |
 | Validation ECE | 0.0338 |
 
-## Publication Lineage Summary
+## Lineage Summary (High level)
 
 | Stage family | Purpose | Outcome |
 |---|---|---|
-| DS-E / v5 | NLI-compatible decision corpus construction | Improved semantic fit for YES / NO / TBD labels |
-| DS-F / v6 | TBD-to-NO correction pass | Corrected systematic contradiction boundary issues |
-| DS-J | Fixed split baseline | Established stable validation/test splits |
-| DS-L | Current primary decision dataset | Added targeted hard cases while preserving fixed evaluation splits |
-| S12 | DS-L decision checkpoint | Stable decision baseline |
-| S12B | Boundary-pack sharpening | Preserved raw F1 while improving calibration and high-confidence error behavior |
+| Corpus construction | Build NLI-compatible decision examples for YES/NO/TBD boundaries | Established initial decision-routing behavior |
+| Boundary correction | Correct systematic contradiction/insufficient-evidence boundary issues | Reduced recurring label-boundary failure modes |
+| Fixed-split baseline | Establish stable held-out validation and test splits | Enabled comparable evaluation across iterations |
+| Targeted hard-case enrichment | Add targeted stress cases (negation, role/number changes, high-overlap contradictions, long-context) | Improved robustness and auditability under ambiguity |
+| Boundary refinement pass | One short sharpening step on targeted hard examples | Preserved raw F1 while improving calibration and high-confidence error behavior in paired comparison |
 
-## S12B Interpretation
+## Interpretation
 
-S12B is the current publication and certification candidate. It should be described as an auditable operational decision-control checkpoint with learned deferral. Its strongest claim is not raw-F1 improvement over S12; it is the combination of learned TBD behavior, calibration evidence, threshold-sweep artifacts, stability checks, and reviewable certification packaging.
+The evaluated release should be described as an auditable operational decision-control checkpoint with learned deferral. Its strongest claim is not raw-F1 improvement over the baseline comparison; it is the combination of learned deferral behavior, calibration evidence, threshold-policy separability, and reviewable evaluation reporting.
 
-## Artifact Index
+## Index
 
 | Artifact | Location |
 |---|---|
-| Certification pack | `certification/runs/S12B_20260526/` |
+| Model card | `model_card/MODEL_CARD.md` |
 | Evaluation reports | `evaluation/` |
 | Governance policy | `governance/` |
-| Reproducibility commands | `reproducibility/` |
+| Reproducibility templates | `reproducibility/` |
 | Paper package | `paper/arxiv_v2/` |

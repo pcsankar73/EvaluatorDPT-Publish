@@ -1,32 +1,33 @@
 {
-  "validated_output": "YES/NO/TBD decision head",
+  "project": "EvaluatorDPT",
+  "release": {
+    "release_date": "2026-05-26",
+    "validated_output": "YES/NO/TBD decision head",
+    "model_hosting": {
+      "channel": "Hugging Face",
+      "identifier": "pcsankar73s/EvaluatorModel",
+      "access": "public model hosting channel"
+    }
+  },
   "metrics": {
     "validation_accuracy": 0.8224,
-    "test_macro_f1": 0.8252,
     "validation_macro_f1": 0.8213,
-    "test_accuracy": 0.826,
-    "validation_ece": 0.0338
+    "test_accuracy": 0.8260,
+    "test_macro_f1": 0.8252,
+    "validation_ece": 0.0338,
+    "forced_binary_no_deferral_test_macro_f1": 0.4945
   },
-  "model": {
-    "checkpoint_identifier": "checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt",
-    "access": "controlled artifact storage or approved model-hosting channel",
-    "hf_export_identifier": "checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/hf_format/"
-  },
-  "paper_title": "Auditable Operational Decision Control with Learned Deferral",
-  "project": "EvaluatorDPT",
-  "certification_pack": "certification/runs/S12B_20260526/pack/",
   "dataset": {
-    "tokenized_identifier": "data/tokenized_s12_20260525_dsl/",
-    "boundary_pack_identifier": "data/tokenized_s12_boundarypack_20260526/",
-    "version": "DS-L",
-    "test_rows": 44597,
-    "validation_rows": 44404
+    "name": "Evaluated decision corpus (held-out splits)",
+    "validation_rows": 44404,
+    "test_rows": 44597
   },
-  "artifact_version": "s12b_2026-05-26",
-  "threshold_policy": {
-    "fallback_mode": "TBD",
-    "evidence_directory": "certification/runs/S12B_20260526/pack/artifacts/threshold_sweep_decision_20260526/"
+  "paper": {
+    "title": "Auditable Decision Models with Learned Abstention and Real-Time Steering",
+    "source_directory": "paper/arxiv_v2/"
   },
-  "release_candidate": "S12B_20260526",
-  "created_utc": "2026-05-26T05:04:10Z"
+  "notes": [
+    "This repository does not redistribute training data or tokenized datasets.",
+    "Raw evaluation artifacts are maintained separately as an audit evidence package."
+  ]
 }

@@ -1,29 +1,36 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Full validation and test evaluation for S12B.
+# Evaluated release (2026-05-26) — evaluation command templates.
+
+CHECKPOINT="${CHECKPOINT:-/path/to/best_model.pt}"
+TOKENIZED_VALIDATION_PT="${TOKENIZED_VALIDATION_PT:-/path/to/validation_tokenized.pt}"
+TOKENIZED_TEST_PT="${TOKENIZED_TEST_PT:-/path/to/test_tokenized.pt}"
+TOKENIZED_DIR="${TOKENIZED_DIR:-/path/to/tokenized_dir}"
+OUT_DIR_VAL="${OUT_DIR_VAL:-reports/release_2026-05-26_FULLVAL}"
+OUT_DIR_TEST="${OUT_DIR_TEST:-reports/release_2026-05-26_FULLTEST}"
 
 python scripts/evaluate_only.py \
-  --checkpoint output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt \
-  --tokenized_pt data/tokenized_s12_20260525_dsl/validation_tokenized.pt \
-  --out_dir reports/exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLVAL \
+  --checkpoint "$CHECKPOINT" \
+  --tokenized_pt "$TOKENIZED_VALIDATION_PT" \
+  --out_dir "$OUT_DIR_VAL" \
   --limit 0
 
 python scripts/evaluate_only.py \
-  --checkpoint output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt \
-  --tokenized_pt data/tokenized_s12_20260525_dsl/test_tokenized.pt \
-  --out_dir reports/exp_t90_S12B_boundarypack_ep1_fromS12ep3_FULLTEST \
+  --checkpoint "$CHECKPOINT" \
+  --tokenized_pt "$TOKENIZED_TEST_PT" \
+  --out_dir "$OUT_DIR_TEST" \
   --limit 0
 
 python scripts/multi_seed_eval.py \
-  --checkpoint output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt \
-  --tokenized_dir data/tokenized_s12_20260525_dsl \
-  --experiment exp_t90_S12B_boundarypack_ep1_fromS12ep3_cert_stability_val_20260526 \
+  --checkpoint "$CHECKPOINT" \
+  --tokenized_dir "$TOKENIZED_DIR" \
+  --experiment release_2026-05-26_stability_val \
   --seeds 42,0,7 \
   --split validation
 
 python scripts/calibration_plots.py \
-  --checkpoint output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3/best_model_epoch_1.pt \
-  --tokenized_dir data/tokenized_s12_20260525_dsl \
-  --experiment exp_t90_S12B_boundarypack_ep1_fromS12ep3_cert_calibration_val_20260526 \
+  --checkpoint "$CHECKPOINT" \
+  --tokenized_dir "$TOKENIZED_DIR" \
+  --experiment release_2026-05-26_calibration_val \
   --split validation

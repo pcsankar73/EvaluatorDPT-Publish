@@ -1,16 +1,23 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# S12B boundary-pack sharpening command.
-# Paths are shown as reproducibility identifiers for the evaluated environment.
+# Evaluated release (2026-05-26) — boundary-refinement training template.
+#
+# Notes:
+# - This repository does not redistribute tokenized datasets or checkpoints.
+# - Provide the paths/identifiers used in your environment.
+
+CHECKPOINT_IN="${CHECKPOINT_IN:-/path/to/base_checkpoint.pt}"
+TOKENIZED_BOUNDARY_PACK_DIR="${TOKENIZED_BOUNDARY_PACK_DIR:-/path/to/tokenized_boundary_pack}"
+CHECKPOINT_OUT_DIR="${CHECKPOINT_OUT_DIR:-/path/to/output_checkpoints}"
 
 python scripts/fine_tune_only.py \
-  --experiment exp_t90_S12B_boundarypack_ep1_fromS12ep3 \
+  --experiment release_2026-05-26_boundary_refined \
   --start_from checkpoint \
-  --load_from output/checkpoints/exp_t90_S12_L9-11_Hds_dsl/best_model_epoch_3.pt \
-  --checkpoint_dir output/checkpoints/exp_t90_S12B_boundarypack_ep1_fromS12ep3 \
+  --load_from "$CHECKPOINT_IN" \
+  --checkpoint_dir "$CHECKPOINT_OUT_DIR" \
   --model_name bert-base-uncased \
-  --tokenized_dir data/tokenized_s12_boundarypack_20260526 \
+  --tokenized_dir "$TOKENIZED_BOUNDARY_PACK_DIR" \
   --epochs 1 \
   --batch_size 32 \
   --eval_batch_size 64 \
