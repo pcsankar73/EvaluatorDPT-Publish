@@ -1,2 +1,0 @@
-epoch,n_samples,true_yes_pred_yes,true_yes_pred_no,true_yes_pred_tbd,true_no_pred_yes,true_no_pred_no,true_no_pred_tbd,true_tbd_pred_yes,true_tbd_pred_no,true_tbd_pred_tbd
-2,5000,1418,95,172,107,1512,142,202,116,1236

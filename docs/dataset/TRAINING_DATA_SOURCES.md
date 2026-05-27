@@ -17,11 +17,11 @@ Public source datasets remain governed by their original licenses and terms. Use
 
 ## Current Evaluation Dataset
 
-S12B is evaluated on DS-L validation and test splits:
+The evaluated release uses fixed held-out validation and test splits:
 
 | Split | Rows |
 |---|---:|
 | Validation | 44,404 |
 | Test | 44,597 |
 
-The S12B boundary pack contains 323 targeted training examples used for one sharpening epoch. It is not a separate benchmark and is not used as the full validation or test split.
+A 323-row targeted boundary refinement pack was used for one sharpening epoch. It is not a separate benchmark and is not used as the validation or test split.

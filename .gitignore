@@ -80,3 +80,10 @@ paper/arxiv_v2/Reviewer-Comment-*
 # Internal certification evidence pack (keep private)
 certification/
 
+
+# Internal experiment artifacts (private)
+experiments/
+
+# Internal paper iteration notes
+paper/RESULTS_UPDATE_*.md
+

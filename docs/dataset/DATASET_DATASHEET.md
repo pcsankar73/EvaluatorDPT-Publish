@@ -1,8 +1,8 @@
-# Dataset Datasheet — DS-L
+# Dataset Datasheet — Evaluated Decision Corpus (held-out splits)
 
 ## Dataset Purpose
 
-DS-L supports evaluation of auditable operational decision control with learned deferral. The primary labels are YES, NO, and TBD.
+This corpus supports evaluation of auditable operational decision control with learned deferral. The primary labels are YES, NO, and TBD.
 
 ## Current Evaluation Splits
 
@@ -13,7 +13,7 @@ DS-L supports evaluation of auditable operational decision control with learned 
 
 ## Training Scope
 
-DS-L contains 418,725 training examples. S12B adds a 323-row boundary pack for one sharpening epoch. The validation and test splits remain fixed for S12 and S12B evaluation.
+The evaluated training corpus contains 418,725 training examples. A 323-row targeted boundary refinement pack was used for one additional sharpening epoch during the evaluated release process. The validation and test splits remain fixed.
 
 ## Label Semantics
 
@@ -25,11 +25,11 @@ DS-L contains 418,725 training examples. S12B adds a 323-row boundary pack for o
 
 ## Data Transparency
 
-The dataset lineage uses public NLP sources and curated decision examples. Raw training data is not redistributed in this repository. Source datasets retain their original licenses and terms.
+The corpus lineage uses public NLP sources and curated decision examples. Raw training data is not redistributed in this repository. Source datasets retain their original licenses and terms.
 
 ## Known Limitations
 
 - Maximum sequence length is 128 tokens.
 - The TBD boundary is semantically difficult because insufficient evidence can resemble support or contradiction at the surface level.
 - Domain transfer requires separate validation and calibration review.
-- Emotion-head evaluation is not claimed for S12B because the emotion head is masked in DS-L.
+- Emotion-head evaluation is not claimed for the evaluated release because the emotion head is disabled in this lineage.

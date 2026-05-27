@@ -1,13 +1,12 @@
-# Model Card — EvaluatorDPT S12B
+# Model Card — EvaluatorDPT (Release: 2026-05-26)
 
 ## Model Identity
 
 | Field | Value |
 |---|---|
 | Model name | EvaluatorDPT |
-| Release candidate | S12B |
-| Run ID | S12B_20260526 |
-| Experiment | `exp_t90_S12B_boundarypack_ep1_fromS12ep3` |
+| Release date | 2026-05-26 |
+| Model version | Boundary-refined release |
 | Base model | `bert-base-uncased` |
 | Max sequence length | 128 |
 | Primary output | YES / NO / TBD |
@@ -68,7 +67,6 @@ The recommended deployment pattern is policy-separable:
 3. The final routed label and policy version are logged.
 4. Deferred cases route to human review, additional evidence collection, or another governed fallback.
 
-S12B threshold-sweep evidence is included under `certification/runs/S12B_20260526/pack/artifacts/threshold_sweep_decision_20260526/`.
 
 ## Limitations
 

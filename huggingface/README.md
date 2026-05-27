@@ -76,7 +76,6 @@ The model is intended as a control layer between probabilistic model inference a
 | Forced binary YES/NO view | Macro F1=0.4945 | Removing deferral collapses the TBD class |
 | Targeted boundary refinement | HC error @0.85: 0.0558 → 0.0485 | Improves high-confidence error behavior more than raw F1 |
 
-Certification and evaluation evidence are stored in the publication repository under `certification/runs/S12B_20260526/`.
 
 ## Intended Use
 

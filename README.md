@@ -2,7 +2,7 @@
 
 **Auditable Decision Models with Learned Abstention and Real-Time Steering**
 
-*Sankaranarayanan Palamadai Chandrasekaran — Simple Machine Mind*
+*Sankar Palamadai — Simple Machine Mind*
 
 EvaluatorDPT is a bounded operational decision-control layer for AI workflows where uncertainty must be routed, governed, and audited. It does not generate free-form decisions. It emits a constrained decision distribution over **YES**, **NO**, and **TBD** so downstream policy can decide whether to act, block, or defer.
 
@@ -56,7 +56,6 @@ Additional evidence:
 | Area | Location |
 |---|---|
 | Hugging Face model card | `huggingface/README.md` |
-| Certification evidence package | `certification/runs/S12B_20260526/CERTIFIER_README.md` |
 | Model card | `model_card/MODEL_CARD.md` |
 | Evaluation reports | `evaluation/` |
 | Governance policy | `governance/` |

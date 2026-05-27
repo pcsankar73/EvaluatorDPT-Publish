@@ -12,12 +12,11 @@ The model receives a decision-event context and emits a bounded decision distrib
 
 A deployment policy applies versioned thresholds and fallback rules to this distribution. The final routed label is therefore policy-governed and auditable.
 
-## Current Release Candidate
+## Current Evaluated Release
 
 | Field | Value |
 |---|---|
-| Candidate | S12B |
-| Run ID | `S12B_20260526` |
+| Release date | 2026-05-26 |
 | Validation Macro F1 | 0.8213 |
 | Test Macro F1 | 0.8252 |
 | Validation ECE | 0.0338 |
@@ -25,4 +24,4 @@ A deployment policy applies versioned thresholds and fallback rules to this dist
 
 ## Audit Record
 
-Each deployment decision should preserve model identifier, policy version, probabilities, final routed label, and fallback reason. Auxiliary channels may be recorded only when validated for the lineage.
+Each deployment decision should preserve model identifier, policy version, probabilities, final routed label, and fallback reason. Auxiliary channels may be recorded only when validated for the deployed lineage.
