@@ -2,8 +2,6 @@
 
 **Auditable Decision Models with Learned Abstention and Real-Time Steering**
 
-*Sankar Palamadai — Simple Machine Mind*
-
 EvaluatorDPT is a bounded operational decision-control layer for AI workflows where uncertainty must be routed, governed, and audited. It does not generate free-form decisions. It emits a constrained decision distribution over **YES**, **NO**, and **TBD** so downstream policy can decide whether to act, block, or defer.
 
 TBD is a learned deferral class, not only a post-hoc confidence rejection rule. This allows insufficient-evidence cases to shape the model representation while still allowing deployment owners to apply external, versioned operating thresholds.
@@ -55,24 +53,16 @@ Additional evidence:
 
 | Area | Location |
 |---|---|
-| Hugging Face model card | `huggingface/README.md` |
 | Model card | `model_card/MODEL_CARD.md` |
-| Evaluation reports | `evaluation/` |
+| Evaluation summary | `evaluation/` |
 | Governance policy | `governance/` |
 | Data schema | `data_schema/` |
-| Reproducibility | `reproducibility/` |
-| Paper source and PDF | `paper/arxiv_v2/` |
-
-## Paper
-
-**Auditable Decision Models with Learned Abstention and Real-Time Steering**
-
-- Paper package: `paper/arxiv_v2/`
-- Compiled PDF: `paper/arxiv_v2/main.pdf`
-- OSF preprint: <https://osf.io/ztnya/>
+| Reproducibility commands | `reproducibility/` |
+| Dataset source notes | `docs/dataset/` |
 
 ## License
 
 - Repository code and documentation: MIT, see `LICENSE`.
 - Model artifacts: CC BY-NC 4.0 for non-commercial research and evaluation use.
 - Training data is not redistributed in this repository. Source datasets remain governed by their original licenses and terms.
+

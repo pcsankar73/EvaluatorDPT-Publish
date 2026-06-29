@@ -1,89 +1,35 @@
 # Python
 __pycache__/
-*.pyc
-.env
+*.py[cod]
+*.pyo
 .venv/
 venv/
 
-# LaTeX intermediates
-*.aux
-*.blg
-*.log
-*.out
-*.toc
-texput.log
+# Environment files
+.env
+.env.*
+*.key
+*.pem
+*.pfx
+*.crt
+*.p12
 
-# Node
-node_modules/
-package-lock.json
-
-# IDE
-*.code-workspace
-
-# OS
+# OS/editor
 .DS_Store
+Thumbs.db
+.vscode/
+.idea/
 
-# Archive (local only, not tracked)
-archive/
+# Build/cache
+.cache/
+build/
+dist/
+*.egg-info/
 
-# Local-only publication and design work
-archive/
-assets/
-media/
-tools/
-Work_Plan-Publish.md
-
-# Intermediate banner design iterations (keep only Banner-3.png + email-banner.png)
-assets/Banner.png
-assets/Banner-2.png
-assets/Banner-Strong Blue.png
-assets/Darker-Background.png
-assets/EvaluatorDPT Email Banner.png
-assets/Top-section.png
-assets/Background_color.jpg
-assets/Background_color.png
-
-# Internal-only resume work (never publish)
-Resume-Update/
-Resume-Update-dontpublish/
-
-# Dataset publishing artifacts (added later via Git LFS or external upload)
-VEGD/data/*.parquet
-VEGD/data/*.arrow
-VEGD/data/*.jsonl
-VEGD/data/*.csv
-
-# Common local build artifacts
-*.zip
-*.tar
-*.tar.gz
-*.parquet
-
-# Never commit Word docs
-docs/*.docx
-
-# Local-only scratch files
-F18211-score.txt
-
-
-# Press/outreach drafts are internal-only (keep in archive/local_only_internal)
-docs/press/
-
-
-# Dataset release repo (internal until finalized)
-VEGD/
-
-
-# Local reviewer notes for paper iteration
-paper/arxiv_v2/Reviewer-Comment-*
-
-# Internal certification evidence pack (keep private)
-certification/
-
-
-# Internal experiment artifacts (private)
-experiments/
-
-# Internal paper iteration notes
-paper/RESULTS_UPDATE_*.md
-
+# Large/generated local artifacts
+*.log
+*.aux
+*.out
+*.spl
+*.tmp
+*.bak
