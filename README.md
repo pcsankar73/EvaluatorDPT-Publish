@@ -1,55 +1,60 @@
 # EvaluatorDPT
 
-**Auditable Decision Models with Learned Abstention and Real-Time Steering**
+**Auditable Operational Decision Infrastructure for Governed AI Systems**
 
-EvaluatorDPT is a bounded operational decision-control layer for AI workflows where uncertainty must be routed, governed, and audited. It does not generate free-form decisions. It emits a constrained decision distribution over **YES**, **NO**, and **TBD** so downstream policy can decide whether to act, block, or defer.
+EvaluatorDPT is a bounded decision component for AI workflows that require reviewability, controlled automation, and explicit fallback behavior. It is built for governed operational settings where systems must expose uncertainty, preserve routing discipline, and support audit records at deployment time.
 
-TBD is a learned deferral class, not only a post-hoc confidence rejection rule. This allows insufficient-evidence cases to shape the model representation while still allowing deployment owners to apply external, versioned operating thresholds.
+This public repository presents EvaluatorDPT as part of a broader approach to dependable AI operations: bounded outputs, versioned runtime control, deployment-time governance, and reproducible evaluation. The repository intentionally focuses on operational artifacts and public validation materials rather than unpublished internal research frameworks.
 
-## What It Produces
+## Public Scope
 
-| Output | Current status | Purpose |
+This repository documents a production-oriented decision layer that:
+
+- emits bounded decision distributions for governed routing
+- separates model outputs from deployment-time control policy
+- supports deferral, escalation, and fallback handling
+- preserves auditable runtime decisions and policy versions
+- exposes reproducible evaluation and documentation artifacts
+
+The repository does not publish private theory drafts, internal naming systems, or unpublished framework materials.
+
+## What the Release Demonstrates
+
+| Capability | Status | Public description |
 |---|---|---|
-| Decision distribution | Validated | Probability distribution over YES / NO / TBD |
-| Decision confidence | Validated | Confidence for threshold and fallback review |
-| Value signals | Architectural / staged validation | Decision-relative auxiliary channel requiring separate validation before deployment claims |
-| Emotion/sentiment signals | Disabled for the evaluated model version | No emotion-head performance claim is made |
+| Bounded decision output | Validated | Constrained output space suitable for governed routing |
+| Uncertainty-aware routing | Validated | Supports defer / escalate behavior instead of forced automation |
+| Policy-separable deployment | Validated | Runtime control can change without retraining the checkpoint |
+| Confidence and calibration evidence | Validated | Supports operational review and threshold selection |
+| Auxiliary signals | Architectural / staged validation | Additional channels require independent validation before use |
 
-## Operational Use
+## Operational Positioning
 
-EvaluatorDPT is intended for governed AI routing workflows:
+EvaluatorDPT is intended for governed AI workflows such as:
 
-- Policy approval or rejection routing
-- Compliance and risk triage
-- Moderation escalation
-- Enterprise workflow gating
-- Human-in-the-loop review queues
+- compliance and risk review
+- moderation escalation
+- enterprise approval routing
+- human-in-the-loop triage
+- controlled workflow gating
 
-A deployment can increase or reduce automation without retraining the model by changing the recorded threshold policy. This separation between model distribution and operating policy is the core auditability mechanism.
+The central operational pattern is separation between model distribution and deployment policy. The checkpoint produces bounded outputs. A recorded runtime policy determines when to approve, reject, defer, or escalate. This design supports controlled automation while preserving auditability.
 
-## Evaluation Evidence
+## Evidence Snapshot
 
 | Split | N | Accuracy | Macro F1 |
 |---|---:|---:|---:|
 | Validation | 44,404 | 0.8224 | 0.8213 |
 | Test | 44,597 | 0.8260 | 0.8252 |
 
-Test per-class F1:
-
-| Class | F1 |
-|---|---:|
-| YES | 0.8314 |
-| NO | 0.8486 |
-| TBD | 0.7956 |
-
-Additional evidence:
+Additional public evidence:
 
 - Validation ECE: **0.0338**
 - Multi-seed validation stability: **PASS** (`std=0.0` over seeds 42, 0, 7)
-- Forced binary YES/NO view without deferral: **Macro F1=0.4945**
-- Targeted boundary refinement keeps raw F1 essentially flat while reducing high-confidence error rate on the test split from **0.0558** to **0.0485** under the paired comparison procedure
+- Forced non-deferral view shows materially weaker behavior: **Macro F1=0.4945**
+- Boundary refinement reduces high-confidence error rate on the test split from **0.0558** to **0.0485** under the paired comparison procedure
 
-## Documentation Map
+## Repository Map
 
 | Area | Location |
 |---|---|
@@ -60,9 +65,12 @@ Additional evidence:
 | Reproducibility commands | `reproducibility/` |
 | Dataset source notes | `docs/dataset/` |
 
+## Public Release Notes
+
+This repository is a curated public release. It is intended to show the operational model, evaluation artifacts, governance pattern, and reproducibility surface needed to understand and assess the released system without disclosing unpublished internal research materials.
+
 ## License
 
 - Repository code and documentation: MIT, see `LICENSE`.
 - Model artifacts: CC BY-NC 4.0 for non-commercial research and evaluation use.
 - Training data is not redistributed in this repository. Source datasets remain governed by their original licenses and terms.
-

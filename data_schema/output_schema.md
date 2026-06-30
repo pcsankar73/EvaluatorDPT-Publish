@@ -5,16 +5,23 @@
   "model_id": "EvaluatorDPT-S12B",
   "policy_version": "deployment-policy-version",
   "decision_probabilities": {
-    "YES": 0.18,
-    "NO": 0.12,
-    "TBD": 0.70
+    "route_a": 0.18,
+    "route_b": 0.12,
+    "defer": 0.70
   },
-  "routed_decision": "TBD",
-  "fallback_reason": "TBD probability selected by policy",
+  "routed_decision": "defer",
+  "fallback_reason": "defer selected by runtime policy",
   "auxiliary_signals": []
 }
 ```
 
-Allowed routed decisions are `YES`, `NO`, and `TBD`.
+This public schema illustrates the required operational fields for a bounded routing deployment:
 
-Auxiliary signals should be included only when the corresponding auxiliary channel has been validated for the deployed lineage.
+- model identifier
+- runtime policy version
+- decision probability distribution
+- final routed decision
+- fallback rationale when applicable
+- optional validated auxiliary signals
+
+Public documentation uses de-identified route labels here to emphasize the operational contract rather than a private internal label vocabulary.
