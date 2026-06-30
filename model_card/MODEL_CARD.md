@@ -35,7 +35,9 @@ The model is not intended to act as a standalone authority. It should be deploye
 
 Do not use the model as a standalone decision authority for medical diagnosis, legal adjudication, emergency response, autonomous weapons, credit decisions, employment decisions, or other regulated decisions without an approved governance process and human oversight.
 
-## Validated Metrics
+## Release-Specific Metrics
+
+The following metrics describe the released evaluation setup. They are evidence for the public release, not the complete statement of the repository's scope or long-term research direction.
 
 | Split | N | Accuracy | Macro F1 |
 |---|---:|---:|---:|

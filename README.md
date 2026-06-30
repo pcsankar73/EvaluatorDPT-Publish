@@ -40,19 +40,11 @@ EvaluatorDPT is intended for governed AI workflows such as:
 
 The central operational pattern is separation between model distribution and deployment policy. The checkpoint produces bounded outputs. A recorded runtime policy determines when to approve, reject, defer, or escalate. This design supports controlled automation while preserving auditability.
 
-## Evidence Snapshot
+## Public Evidence Position
 
-| Split | N | Accuracy | Macro F1 |
-|---|---:|---:|---:|
-| Validation | 44,404 | 0.8224 | 0.8213 |
-| Test | 44,597 | 0.8260 | 0.8252 |
+The public release includes evaluation evidence for the currently released model lineage, but those numbers are supporting release artifacts rather than the main identity of the repository. The primary public claim is operational: bounded routing, governed fallback behavior, policy-separable deployment, and auditable decision handling.
 
-Additional public evidence:
-
-- Validation ECE: **0.0338**
-- Multi-seed validation stability: **PASS** (`std=0.0` over seeds 42, 0, 7)
-- Forced non-deferral view shows materially weaker behavior: **Macro F1=0.4945**
-- Boundary refinement reduces high-confidence error rate on the test split from **0.0558** to **0.0485** under the paired comparison procedure
+Release-specific metrics, calibration summaries, ablations, and robustness notes are maintained under `evaluation/` and the model card.
 
 ## Repository Map
 
