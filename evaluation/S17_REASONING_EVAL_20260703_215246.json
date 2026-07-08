@@ -1,0 +1,29 @@
+{
+  "timestamp": "20260703_215246",
+  "checkpoint": "C:\\Users\\pcsan\\smm\\SMM-Security-Ops\\checkpoints\\S17_epoch5_production.pt",
+  "dataset": "REASONING-ENHANCEMENT-20260619",
+  "results": {
+    "validation": {
+      "split": "validation",
+      "num_samples": 31299,
+      "accuracy": 0.9384325377807597,
+      "macro_f1": 0.9211176209309615,
+      "per_class_f1": {
+        "YES": 0.898954337659608,
+        "NO": 0.9996934709308266,
+        "TBD": 0.8647050542024497
+      }
+    },
+    "test": {
+      "split": "test",
+      "num_samples": 31299,
+      "accuracy": 0.9415955781334867,
+      "macro_f1": 0.9239866733797789,
+      "per_class_f1": {
+        "YES": 0.9025054757198568,
+        "NO": 0.9996654847126514,
+        "TBD": 0.8697890597068287
+      }
+    }
+  }
+}

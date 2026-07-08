@@ -33,3 +33,4 @@ dist/
 *.spl
 *.tmp
 *.bak
+checkpoints/*.pt
